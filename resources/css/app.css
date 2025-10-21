@@ -1,0 +1,277 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+    --primary-color: #0d00bd;
+    --secundary-color: #5bb5ff;
+    --secundaryp-color: #861efc;
+    --dark-color:#000000;
+    --light-color: #fff;
+    --gray-color:#222224;
+    --purpled-color:#0f0044;
+    --purple-color:#310081;
+    --purpleh-color:#4b00ad;
+    --blued-color:#001b42;
+    --blue-color:#0d5fda;
+    --blueh-color:#2b80ff;
+    --greend-color:#004b3e;
+    --green-color: #026151;
+    --greenh-color: #01947b;
+    --text-font: Poppins;
+    --menu-font: Poppins-bold;
+    --title-font: Poppins-extrabold;
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: var(--dark-color);
+}
+@font-face {
+    font-family: Poppins;
+    src: url( './fonts/Poppins-Regular.ttf');
+}
+@font-face {
+    font-family: Poppins-bold;
+    src: url('./fonts/Poppins-Bold.ttf');
+}
+@font-face {
+    font-family: Poppins-extrabold;
+    src: url('./fonts/Poppins-ExtraBold.ttf');
+}
+.txt1{
+    text-align: center;
+    margin: 5px;
+}
+.txt{
+    margin: 10px;
+    margin-left: 25px;
+}
+.title1{
+    color: var(--purpled-color);
+    font-size: 25px;
+    text-align: center;
+    margin: 10px;
+    margin-top: 20px;
+    font-weight: bold;
+    text-transform: uppercase; 
+}
+.title2{
+    color: var(--greend-color);
+    font-size: 23px;
+    text-align: center;
+    margin: 10px;
+    margin-top: 20px;
+    font-weight: bold;
+    text-transform: uppercase; 
+}
+.title3{
+    color: var(--blued-color);
+    font-size: 18px;
+    text-align: center;
+    margin: 10px;
+    font-weight: bold;
+    text-transform: uppercase; 
+}
+.title4{
+    color: var(--blued-color);
+    font-size: 17px;
+    margin: 10px;
+    font-weight: bold;
+    text-transform: uppercase; 
+}
+.error{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    background-color: rgba(179, 15, 255, 0.24);
+    color: white;
+}
+.botton1{
+    color: var(--light-color);
+    background-color: var(--purple-color);
+    text-decoration: none;
+    border-radius: 50px;
+    padding: 10px;
+    padding-inline: 22px;
+    margin: 5px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 17px;
+}
+.botton2{
+    color: var(--light-color);
+    background-color: var(--blue-color);
+    text-decoration: none;
+    border-radius: 50px;
+    margin-right: 10px;
+    padding: 8px;
+    padding-inline: 18px;
+    cursor: pointer;
+    font-size: 15px;
+}
+.botton3{
+    background-color: var(--greend-color);
+    color: var(--light-color);
+    text-decoration: none;
+    border-radius: 50px;
+    margin-right: 10px;
+    padding: 8px;
+    padding-inline: 18px;
+    cursor: pointer;
+    font-size: 15px;
+}
+.botton4{
+    color: var(--light-color);
+    background-color: var(--greend-color);
+    text-decoration: none;
+    border-radius: 50px;
+    padding: 10px;
+    padding-inline: 22px;
+    margin: 5px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 17px;
+}
+.botton5{
+    color: var(--light-color);
+    background-color: var(--blued-color);
+    text-decoration: none;
+    border-radius: 50px;
+    padding: 10px;
+    padding-inline: 22px;
+    margin: 5px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 17px;
+}
+.bottonDelete{
+    background-color: rgb(184, 0, 0);
+    color: var(--light-color);
+    text-decoration: none;
+    border-radius: 50px;
+    margin-right: 10px;
+    padding: 8px;
+    padding-inline: 18px;
+    cursor: pointer;
+    font-size: 15px;
+}
+.btnimg{
+    border-radius: 10px;
+    border: 1px solid var(--blueh-color);
+    padding: 1px;
+    margin: 3px;
+}
+.cards{
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.card{
+    color: var(--light-color);
+    margin: 20px;
+    padding: 20px;
+    border: 2px solid var(--secundary-color);
+    border-radius: 20px;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.card1{
+    color: var(--blue-color);
+    margin: 20px;
+    margin-bottom:40px;
+    padding: 20px;
+    border: 4px solid var(--blue-color);
+    border-radius: 20px;
+    max-width: 230px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.card2{
+    color: var(--light-color);
+    margin: 20px;
+    margin-bottom:40px;
+    padding: 20px;
+    border: 3px solid var(--purpleh-color);
+    border-radius: 20px;
+    max-width: 230px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.card h5{
+    font-size: 20px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+.card1 p{
+    text-align: center;
+    font-size: 12px;
+    color: var(--blued-color);
+}
+.card1 h5{
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    color: var(--blued-color);
+}
+.card1 p{
+    font-size: 14px;
+}
+/*END SERVICES*/
+
+.botton1:hover{
+    border: 2px solid var(--secundaryp-color);
+    background-color: var(--purpleh-color);
+    font-weight: bold;
+}
+.botton2:hover{
+    border: 2px solid var(--secundary-color);
+    background-color: var(--blueh-color);
+    font-weight: bold;
+}
+.botton3:hover{
+    border: 2px solid var(--greenh-color);
+    background-color: var(--green-color);
+    font-weight: bold;
+}
+.botton4:hover{
+    border: 2px solid var(--greenh-color);
+    background-color: var(--green-color);
+    font-weight: bold;
+}
+.botton5:hover{
+    border: 2px solid var(--blueh-color);
+    background-color: var(--blue-color);
+    font-weight: bold;
+}
+.bottonDelete:hover{
+    border: 1px solid rgb(241, 2, 2);
+    background-color: rgb(235, 1, 1);
+    font-weight: bold;
+}
+.btnimg:hover{
+    border: 2px solid var(--blueh-color);
+    padding: 4px;
+}
+.card1:hover{
+    border: 4px solid var(--secundary-color);
+}
+.card2:hover{
+    border: 5px solid var(--purple-color);
+}

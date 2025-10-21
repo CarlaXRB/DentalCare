@@ -1,0 +1,1 @@
+<img src="{{ asset('storage/assets/images/logoD.png') }}" width="114" height="121"/>
