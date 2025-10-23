@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     libzip-dev zip unzip git curl \
     libpq-dev libsqlite3-dev \
     python3 python3-pip \
+    nodejs npm \
     && docker-php-ext-install pdo pdo_sqlite pdo_pgsql pgsql zip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -43,18 +44,24 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
 
 # ------------------------------
-# 7️⃣ Instalar dependencias de Python (opcional)
+# 7️⃣ Instalar dependencias de Node y construir assets con Vite
+# ------------------------------
+RUN npm install \
+    && npm run build
+
+# ------------------------------
+# 8️⃣ Migrar base de datos en producción
+# ------------------------------
+RUN php artisan migrate --force
+
+# ------------------------------
+# 9️⃣ Instalar dependencias de Python (opcional)
 # ------------------------------
 # COPY requirements.txt /var/www/html/requirements.txt
 # RUN pip3 install --no-cache-dir -r requirements.txt
 
 # ------------------------------
-# 8️⃣ Exponer puerto 80
+# 🔹 Exponer puerto 80 y comando para iniciar Apache
 # ------------------------------
 EXPOSE 80
-
-# ------------------------------
-# 🔹 Comando para iniciar Apache
-# ------------------------------
 CMD ["apache2-foreground"]
-
