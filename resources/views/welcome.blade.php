@@ -128,7 +128,7 @@
 
         <!-- Contenido -->
         <div class="hero-content">
-            <img src="{{ asset('assets/images/logoDen.png') }}" alt="Logo Dental Care" class="logo">
+            <img src="{{ asset('assets/images/logoDents.png') }}" alt="Logo Dental Care" class="logo">
             <h1>¡Bienvenido!</h1>
             <p>Tu sonrisa, nuestra prioridad.</p>
 
