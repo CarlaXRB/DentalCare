@@ -124,11 +124,11 @@
 <body>
     <div class="hero">
         <!-- Banner de fondo -->
-        <img src="{{ asset('storage/assets/images/banner.png') }}" alt="Banner Dental Care" class="banner">
+        <img src="{{ asset('assets/images/banner.png') }}" alt="Banner Dental Care" class="banner">
 
         <!-- Contenido -->
         <div class="hero-content">
-            <img src="{{ asset('storage/assets/images/logoDen.png') }}" alt="Logo Dental Care" class="logo">
+            <img src="{{ asset('assets/images/logoDen.png') }}" alt="Logo Dental Care" class="logo">
             <h1>¡Bienvenido!</h1>
             <p>Tu sonrisa, nuestra prioridad.</p>
 
