@@ -1,31 +1,31 @@
 @extends('layouts._partials.layout')
-@section('title', __('Create Treatment'))
+@section('title', __('Crear Tratamiento'))
 @section('subtitle')
-    {{ __('Create Treatment') }}
+    {{ __('Crear Tratamiento') }}
 @endsection
 @section('content')
 
 {{-- Button to go back --}}
 <div class="flex justify-end p-5 pb-1">
-    <a href="{{ route('treatments.index') }}" class="botton1">{{ __('Treatments') }}</a>
+    <a href="{{ route('treatments.index') }}" class="botton1">{{ __('Tratamientos') }}</a>
 </div>
 
 <div class="bg-white rounded-lg max-w-5xl mx-auto p-5">
     <form method="POST" id="treatmentForm" action="{{ route('treatments.store') }}" enctype="multipart/form-data" id="treatmentForm">
         @csrf
-        <h1 class="title1 text-center mb-8">{{ __('Enter Treatment Information') }}</h1>
+        <h1 class="title1 text-center mb-8">{{ __('Información del tratamiento') }}</h1>
 
         {{-- Patient info --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
-                <label class="title4 block mb-2">{{ __('Patient Name') }}:</label>
+                <label class="title4 block mb-2">{{ __('Nombre del paciente') }}:</label>
                 <input type="text" name="name" value="{{ old('name') }}"
                     class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500" />
                 @error('name') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
 
             <div>
-                <label class="title4 block mb-2">{{ __('Identity Card') }}:</label>
+                <label class="title4 block mb-2">{{ __('C.I.') }}:</label>
                 <input type="text" name="ci_patient" value="{{ old('ci_patient') }}"
                     class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500" />
                 @error('ci_patient') <p class="error mt-1">{{ $message }}</p> @enderror
@@ -34,65 +34,63 @@
 
         {{-- Budget selector --}}
         <div class="mb-6">
-            <h3 class="title4 mb-2">{{ __('Select a Budget') }}:</h3>
+            <h3 class="title4 mb-2">{{ __('Selecciona un tratamiento') }}:</h3>
             <div class="flex items-center gap-3">
                 <select id="budgetSelect" class="border rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                    <option value="">{{ __('-- Choose a budget --') }}</option>
+                    <option value="">{{ __('-- Selecciona un tratamiento --') }}</option>
                     @foreach($budgets as $budget)
                         <option value="{{ $budget->id }}" data-description="{{ $budget->description }}" data-procedure="{{ $budget->procedure }}" data-price="{{ $budget->total_amount }}">
                             {{ $budget->procedure }} — ${{ number_format($budget->total_amount, 2) }}
                         </option>
                     @endforeach
                 </select>
-                <button type="button" id="addBudget" class="botton2">{{ __('Add') }}</button>
+                <button type="button" id="addBudget" class="botton2">{{ __('Añadir') }}</button>
             </div>
         </div>
 
         {{-- Selected Budgets list --}}
         <div id="selectedBudgets" class="mb-6 hidden">
-            <h3 class="title4 mb-2">{{ __('Selected Budgets') }}:</h3>
+            <h3 class="title4 mb-2">{{ __('Cantidad') }}:</h3>
             <div id="budgetsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </div>
 
         {{-- Totals and discount --}}
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6 mt-8">
             <div>
-                <label class="title4 block mb-2">{{ __('Total Amount (Bs)') }}:</label>
+                <label class="title4 block mb-2">{{ __('Costo Total (Bs)') }}:</label>
                 <input type="text" name="total_amount" id="totalAmount" readonly
                     class="border-gray-300 rounded-lg p-3 w-full bg-gray-100" />
             </div>
-
             <div>
-                <label class="title4 block mb-2">{{ __('Discount Type') }}:</label>
+                <label class="title4 block mb-2">{{ __('Descuento') }}:</label>
+                <input type="number" name="discount" id="discount" min="0" value="0"
+                    class="border-gray-300 rounded-lg p-3 w-full" />
+            </div>
+            <div>
+                <label class="title4 block mb-2">{{ __('Tipo de Descuento') }}:</label>
                 <select id="discountType" name="discount_type"
                     class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                    <option value="fixed">{{ __('Fixed Amount') }}</option>
-                    <option value="percentage">{{ __('Percentage (%)') }}</option>
+                    <option value="fixed">{{ __('Cantidad fija') }}</option>
+                    <option value="percentage">{{ __('Porcentaje (%)') }}</option>
                 </select>
             </div>
 
             <div>
-                <label class="title4 block mb-2">{{ __('Discount') }}:</label>
-                <input type="number" name="discount" id="discount" min="0" value="0"
-                    class="border-gray-300 rounded-lg p-3 w-full" />
-            </div>
-
-            <div>
-                <label class="title4 block mb-2">{{ __('Final Amount (Bs)') }}:</label>
+                <label class="title4 block mb-2">{{ __('Costo Final (Bs)') }}:</label>
                 <input type="text" name="amount" id="amount" readonly
                     class="border-gray-300 rounded-lg p-3 w-full bg-gray-100" />
             </div>
         </div>
                     {{-- Details --}}
             <div>
-                <label class="title4 block mb-2">{{ __('Details') }}:</label>
+                <label class="title4 block mb-2">{{ __('Detalles') }}:</label>
                 <textarea name="details" 
                     class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500">{{ old('details') }}</textarea>
                 @error('details') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
         {{-- Buttons --}}
         <div class="flex justify-center gap-4 mt-6">
-            <button type="submit" class="botton2">{{ __('Create Treatment') }}</button>
+            <button type="submit" class="botton2">{{ __('Crear Tratamiento') }}</button>
         </div>
     </form>
 </div>

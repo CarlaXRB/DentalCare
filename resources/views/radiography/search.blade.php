@@ -4,35 +4,81 @@
     {{ __('Radiografias') }}
 @endsection
 @section('content')
-<div class="grid grid-cols-2" >
-    <div><form method="POST" action="{{ route('radiography.search') }}">
+<div class="flex justify-between items-center p-5 pb-1">
+    <!-- Search bar -->
+    <form method="POST" action="{{ route('radiography.search') }}" class="flex gap-3 items-center">
         @csrf
-        <input type="text" placeholder="Buscar" name="search" style="color: #333; font-size: 16px;  padding: 10px 15px; border-radius: 20px; margin-top: 5px; margin-left: 5px;"/>
-        <input class="botton4" type="submit" value="Buscar"/>
-    </form></div>
-    <div class="flex justify-end"><a href="{{ route('radiography.index')}}" class="botton1">Atrás</a></div>
+        <input type="text" name="search" placeholder="{{ __('Buscar radiografía...') }}"
+            class="px-4 py-2 rounded-full border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
+        <input class="botton2" type="submit" value="{{ __('Buscar') }}" />
+    </form>
+
+    <!-- Menu button -->
+    <a href="{{ route('radiography.index') }}" class="botton1">{{ __('Atrás') }}</a>
 </div>
-<h1 class="txt-title1">RESULTADOS</h1>
-    <div class="grid grid-cols-6 gap-4 border-b border-cyan-500 mb-3">
-        <h3 class="txt-head">Vista previa</h3>
-        <h3 class="txt-head">Nombre del paciente</h3>    
-        <h3 class="txt-head">Carnet de Identidad</h3>
-        <h3 class="txt-head">Fecha de Radiografia</h3>
-        <h3 class="txt-head">ID Radiografia</h3>
-        <h3 class="txt-head">Tipo de Radiografia</h3>
-    </div> 
-    <ul>
-        @forelse($radiographies as $radiography)
-        <div class="grid grid-cols-6 border-b border-gray-600 gap-4 mb-3 text-white pl-6 pl-10">
-        <img src="{{ asset('storage/radiographies/'.$radiography->radiography_uri)}}" width="128" />
-        <a href="{{ route('radiography.show', $radiography->id) }}"> {{ $radiography->name_patient }} </a>
-        <a href="{{ route('radiography.show', $radiography->id) }}"> {{ $radiography->ci_patient }} </a>
-        <a href="{{ route('radiography.show', $radiography->id) }}"> {{ $radiography->radiography_date }} </a>        
-        <a href="{{ route('radiography.show', $radiography->id) }}"> {{ $radiography->radiography_id }} </a>
-        <a href="{{ route('radiography.show', $radiography->id) }}"> {{ $radiography->radiography_type }} </a>  
+
+<!-- Main title -->
+<h1 class="title1 text-center">{{ __('Lista de Radiografías') }}</h1>
+
+<!-- Radiographies table -->
+<div class="max-w-6xl mx-auto bg-white rounded-xl p-3 text-gray-900 shadow-md">
+    <!-- Table header -->
+    <div class="grid grid-cols-6 gap-4 border-b border-gray-300 pb-2 mb-3">
+        <h3 class="title4 text-center">{{ __('Vista previa') }}</h3>
+        <h3 class="title4 text-center">{{ __('Nombre') }}</h3>
+        <h3 class="title4 text-center">{{ __('C.I.') }}</h3>
+        <h3 class="title4 text-center">{{ __('Fecha') }}</h3>
+        <h3 class="title4 text-center">{{ __('ID del estudio') }}</h3>
+        <h3 class="title4 text-center">{{ __('Tipo') }}</h3>
+    </div>
+    @forelse($radiographies as $radiography)
+    <div class="grid grid-cols-6 gap-4 items-center border-b border-gray-200 py-3 text-gray-800 hover:bg-gray-50 transition">
+        <!-- Preview -->
+        <div class="flex justify-center">
+            <a href="{{ route('radiography.show', $radiography->id) }}">
+                <img src="{{ asset('storage/radiographies/'.$radiography->radiography_uri) }}" 
+                     alt="Radiography preview" 
+                     class="rounded-lg shadow-md w-32 h-auto object-cover"/>
+            </a>
         </div>
-        @empty
-        <h2 class="text-white ml-5">No data</h2>
-        @endforelse
-    </ul>
+
+        <!-- Patient name -->
+        <div class="text-center">
+            <a href="{{ route('radiography.show', $radiography->id) }}" class="txt hover:text-cyan-600">
+                {{ $radiography->name_patient }}
+            </a>
+        </div>
+
+        <!-- CI -->
+        <div class="text-center">
+            <a href="{{ route('radiography.show', $radiography->id) }}" class="txt hover:text-cyan-600">
+                {{ $radiography->ci_patient }}
+            </a>
+        </div>
+
+        <!-- Date -->
+        <div class="text-center">
+            <a href="{{ route('radiography.show', $radiography->id) }}" class="txt hover:text-cyan-600">
+                {{ $radiography->radiography_date }}
+            </a>
+        </div>
+
+        <!-- Radiography ID -->
+        <div class="text-center">
+            <a href="{{ route('radiography.show', $radiography->id) }}" class="txt hover:text-cyan-600">
+                {{ $radiography->radiography_id }}
+            </a>
+        </div>
+
+        <!-- Radiography Type -->
+        <div class="text-center">
+            <a href="{{ route('radiography.show', $radiography->id) }}" class="txt hover:text-cyan-600">
+                {{ $radiography->radiography_type }}
+            </a>
+        </div>
+    </div>
+    @empty
+    <p class="text-gray-600 text-center py-4">{{ __('No se encontraron resultados para la búsqueda.') }}</p>
+    @endforelse
+</div>
 @endsection

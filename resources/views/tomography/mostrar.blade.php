@@ -6,38 +6,38 @@
 @section('content')
 
 <div class="flex justify-end p-5 pb-1">
-    <a href="{{ route('dashboard') }}" class="botton1">{{ __('Home') }}</a>
+    <a href="{{ route('tomography.index') }}" class="botton1">{{ __('Tomografías') }}</a>
 </div>
 <div class="max-w-5xl pt-2 mx-auto bg-white rounded-xl p-8 text-gray-900 dark:text-white">
 <div class="mb-5">
-        <h1 class="title1 text-center pb-5">{{ __('Study Information') }}</h1>
+        <h1 class="title1 text-center pb-5">{{ __('Información del estudio') }}</h1>
     </div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 pb-5 text-black dark:text-white">
         <div class="flex gap-2">
-            <h3 class="title4">{{ __('Patient:') }}</h3>
+            <h3 class="title4">{{ __('Paciente:') }}</h3>
             <span class="txt">{{ $tomography->name_patient }}</span>
             @if($tomography->patient)
-            <a href="{{ route('patient.show', $tomography->patient->id ) }}" class="txt text-green-500 hover:text-green-700 hover:font-bold pl-12">{{ __('View Patient') }}</a>
+            <a href="{{ route('patient.show', $tomography->patient->id ) }}" class="txt text-green-500 hover:text-green-700 hover:font-bold pl-12">{{ __('Ver Paciente') }}</a>
             @else
-            <p class="text-red-500 mb-3">{{ __('Patient not registered in the database.') }}</p>
+            <p class="text-red-500 mb-3">{{ __('Paciente no registrado.') }}</p>
             @endif
         </div>
 
     <div class="flex gap-2">
-            <h3 class="title4">{{ __('Tomography ID') }}:</h3><span class="txt">{{ $tomography->tomography_id }}</span>
+            <h3 class="title4">{{ __('ID de la Tomografía') }}:</h3><span class="txt">{{ $tomography->tomography_id }}</span>
         </div>
         <div class="flex gap-2">
-            <h3 class="title4">{{ __('Study Date') }}:</h3><span class="txt">{{ $tomography->tomography_date }}</span>
+            <h3 class="title4">{{ __('Fecha del estudio') }}:</h3><span class="txt">{{ $tomography->tomography_date }}</span>
         </div>
         <div class="flex gap-2">
-            <h3 class="title4">{{ __('Tomography Type') }}:</h3><span class="txt">{{ $tomography->tomography_type }}</span>
+            <h3 class="title4">{{ __('Tipo de Tomografía') }}:</h3><span class="txt">{{ $tomography->tomography_type }}</span>
         </div>
         <div class="flex gap-2">
             <h3 class="title4">{{ __('Doctor') }}:</h3><span class="txt">{{ $tomography->tomography_doctor }}</span>
         </div>
         <div class="flex gap-2">
-            <h3 class="title4">{{ __('Radiologist') }}:</h3><span class="txt">{{ $tomography->tomography_charge }}</span>
+            <h3 class="title4">{{ __('Radiologo') }}:</h3><span class="txt">{{ $tomography->tomography_charge }}</span>
         </div>
 </div>
 
@@ -50,20 +50,20 @@
                 style="width: 100%; height: 100%; object-fit: contain; transition: transform 0.2s; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); {{ $key === 0 ? '' : 'display: none;' }}">
             @endforeach
         @else
-            <p>{{ __('No images available') }}</p>
+            <p>{{ __('No hay imagenes disponibles') }}</p>
         @endif
     </div>
 </div>
 <div id="image-name" style="text-align: center; font-size: 14px; color: #808080;">{{ basename($images[0] ?? '') }}</div>
 
 <div id="controls" class="relative flex justify-center mt-[30px] mb-[30px]">
-    <button id="prev-btn" class="botton2">{{ __('Previous') }}</button>
-    <button id="next-btn" class="botton2">{{ __('Next') }}</button>
-    <button id="enable-scroll" class="botton3">{{ __('Enable wheel shifting') }}</button>
+    <button id="prev-btn" class="botton2">{{ __('Anterior') }}</button>
+    <button id="next-btn" class="botton2">{{ __('Siguiente') }}</button>
+    <button id="enable-scroll" class="botton3">{{ __('Habilitar cambio con rueda') }}</button>
 </div>
 
 
-        <div class="relative flex justify-center mt-[20px] mb-[5px]"><p>{{ __('Tools') }}:</p></div>
+        <div class="relative flex justify-center mt-[20px] mb-[5px]"><p>{{ __('Herramientas') }}:</p></div>
         <div class="relative flex justify-center mb-[18px]">
             <div class="group relative">
                 <button id="overlayButton" class="btnimg"><img src="{{ asset('storage/assets/images/sup.png') }}" width="50" height="50"></button>
@@ -86,7 +86,7 @@
 <div class="flex justify-end pb-5">
 @auth
     @if(!in_array(Auth::user()->role, ['user', 'reception']))
-        <a href="{{ route('tomography.edit', $tomography->id ) }}" class="botton3">{{ __('Edit') }}</a>
+        <a href="{{ route('tomography.edit', $tomography->id ) }}" class="botton3">{{ __('Editar') }}</a>
     @endif
 @endauth
 @auth
@@ -94,7 +94,7 @@
         <form method="POST" action="{{ route('tomography.destroy', $tomography->id) }}" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este estudio?');">
             @csrf
             @method('Delete')
-            <input type="submit" value="{{ __('Delete') }}" class="bottonDelete"/>
+            <input type="submit" value="{{ __('Eliminar') }}" class="bottonDelete"/>
         </form>
     </div>
     @endif

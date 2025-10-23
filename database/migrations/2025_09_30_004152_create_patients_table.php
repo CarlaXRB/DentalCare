@@ -20,7 +20,6 @@ return new class extends Migration
             $table->date('birth_date');
             $table->enum('gender',['masculino','femenino']);
             $table->integer('patient_contact');
-            $table->integer('family_contact');
             $table->timestamps();
         });
     }

@@ -1,13 +1,13 @@
 @extends('layouts._partials.layout')
-@section('title', 'Show Tool')
+@section('title', 'Herramientas')
 @section('subtitle')
-    {{ __('Tools') }}
+    {{ __('Herramientas') }}
 @endsection
 @section('content')
 <div class="flex justify-end p-5 pb-1">
-    <a href="{{ route('tool.show', $tool->id)}}" class="botton1">{{ __('Back') }}</a>
+    <a href="{{ route('tool.show', $tool->id)}}" class="botton1">{{ __('Atrás') }}</a>
 </div>
-<h1 class="title1">{{ __('Tools') }}</h1>
+<h1 class="title1">{{ __('Herramientas') }}</h1>
 <div class="relative flex justify-center space-x-2">
     <div class="group relative">
         <button id="zoomIn" class="btnimg"><img src="{{ asset('storage/assets/images/zoom.png') }}" width="50" height="50"></button>
@@ -68,16 +68,15 @@
 </div>
 
 <div>
-    <h1 class="title2">{{ __('Applied Tools') }}</h1>
-    <div class="flex justify-end"><a href="javascript:void(0);" class="botton3" id="updateButton">{{ __('Upload') }}</a></div>
+    <h1 class="title2">{{ __('Herramientas Aplicadas') }}</h1>
+    <div class="flex justify-end"><a href="javascript:void(0);" class="botton3" id="updateButton">{{ __('Actualizar') }}</a></div>
 <!-- Tools Table -->
 <div class="max-w-6xl mx-auto bg-white rounded-xl p-3 text-gray-900 shadow-md">
     <!-- Table Header -->
     <div class="grid grid-cols-4 gap-4 border-b border-gray-300 pb-2 mb-3">
-        <h3 class="title4 text-center">{{ __('Preview') }}</h3>
-        <h3 class="title4 text-center">{{ __('Creation Date') }}</h3>
-        <h3 class="title4 text-center">{{ __('Study ID') }}</h3>
-        <h3 class="title4 text-center">{{ __('Actions') }}</h3>
+        <h3 class="title4 text-center">{{ __('Vista Previa') }}</h3>
+        <h3 class="title4 text-center">{{ __('Fecha de creación') }}</h3>
+        <h3 class="title4 text-center">{{ __('ID del estudio') }}</h3>
     </div>
     
     @foreach($tools as $tool)
@@ -89,7 +88,7 @@
     <form method="POST" action="{{ route('tool.destroy', $tool->id) }}">
         @csrf
         @method('Delete')
-        <div class="flex justify-center"><input type="submit" value="Delete" class="bottonDelete"/></div>
+        <div class="flex justify-center"><input type="submit" value="Eliminar"" class="bottonDelete"/></div>
     </form>
     </div>
     @endforeach

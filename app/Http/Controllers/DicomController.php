@@ -33,13 +33,12 @@ class DicomController extends Controller
 
         $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $filePath = $file->storeAs('public/dicoms', $fileName);
-
-        $pythonScript = 'C:\Users\Gustavo\Desktop\CareRadiologyProject\careradiology\procesar_archivo.py';
+        $pythonScript = public_path('scripts/procesar_archivo.py');
         $command = "python \"$pythonScript\" \"" . storage_path("app/public/dicoms/$fileName") . "\"";
         shell_exec($command);
 
         $imageUrl = Storage::url("dicoms/{$fileName}.png");
-        $dataScript = 'C:\Users\Gustavo\Desktop\CareRadiologyProject\careradiology\data.py';
+        $dataScript = public_path('scripts/data.py');
         $dataCommand = "python \"$dataScript\" " . escapeshellarg(storage_path("app/public/dicoms/$fileName"));
         $output = shell_exec($dataCommand);
         $dicomData = json_decode($output, true);
@@ -118,7 +117,8 @@ class DicomController extends Controller
             }
         }
 
-        $pythonScript = 'C:\Users\Gustavo\Desktop\CareRadiologyProject\careradiology\procesar_carpeta.py';
+        $pythonScript = public_path('scripts/procesar_carpeta.py');
+
         $command = "python \"$pythonScript\" \"$folderPath\"";
         shell_exec($command);
 
@@ -126,7 +126,8 @@ class DicomController extends Controller
 
         $dicomData = null;
         if ($firstFilePath) {
-            $dataScript = 'C:\Users\Gustavo\Desktop\CareRadiologyProject\careradiology\data.py';
+            $dataScript = public_path('scripts/data.py');
+
             $dataCommand = "python \"$dataScript\" " . escapeshellarg($firstFilePath);
             $output = shell_exec($dataCommand);
             $dicomData = json_decode($output, true);

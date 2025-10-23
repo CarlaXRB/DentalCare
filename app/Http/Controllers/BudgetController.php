@@ -25,7 +25,7 @@ class BudgetController extends Controller
         ]);
 
         Budget::create($request->all());
-        return redirect()->route('budgets.index')->with('success', 'Budget created successfully.');
+        return redirect()->route('budgets.index')->with('success', 'Presupuesto creado exitosamente.');
     }
 
     public function show(Budget $budget){
@@ -46,13 +46,13 @@ class BudgetController extends Controller
 
         $budget->update($request->all());
         return redirect()->route('budgets.index')
-            ->with('success', 'Budget updated successfully.');
+            ->with('success', 'Presupuesto actualizado exitosamente.');
     }
 
     public function destroy(Budget $budget){
         $budget->delete();
         return redirect()->route('budgets.index')
-            ->with('success', 'Budget deleted successfully.');
+            ->with('success', 'Presupuesto eliminado exitosamente.');
     }
     public function search(Request $request) {
         $search = $request->input('search');

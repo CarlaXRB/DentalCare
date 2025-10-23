@@ -1,18 +1,18 @@
 @extends('layouts._partials.layout')
-@section('title', 'Show Tool')
+@section('title', 'Herramientas')
 @section('subtitle')
     {{ __('Visualizador') }}
 @endsection
 @section('content')
 
 <div class="flex justify-end p-5 pb-1">
-    <a href="{{ route('dashboard')}}" class="botton1">{{ __('Home') }}</a>
+    <a href="{{ route('dashboard')}}" class="botton1">{{ __('Inicio') }}</a>
 </div>
 
 <div class="max-w-5xl pt-2 mx-auto bg-white rounded-xl p-8 text-gray-900 dark:text-white">
 
     <div class="mb-5">
-        <h1 class="title1 text-center pb-5">{{ __('PATIENT STUDY') }}</h1>
+        <h1 class="title1 text-center pb-5">{{ __('ESTUDIO DEL PACIENTE') }}</h1>
     </div>
 
     <div class="relative flex justify-center items-center space-x-3">
@@ -67,48 +67,47 @@
     </div>
 </div>
 
-    <h1 class="title2 mb-4">{{ __('Patient Data') }}</h1>
+    <h1 class="title2 mb-4">{{ __('INFORMACIÓN DEL PACIENTE') }}</h1>
     @if($tool->patient)
         <div class="grid grid-cols-2 gap-4 text-gray-900 dark:text-white mb-6">
-            <div class="flex gap-2"><h3 class="title4">{{ __('Patient name') }}:</h3><p class="txt">{{ $tool->patient->name_patient }}</p></div>
+            <div class="flex gap-2"><h3 class="title4">{{ __('Paciente') }}:</h3><p class="txt">{{ $tool->patient->name_patient }}</p></div>
             <div class="flex gap-2"><h3 class="title4">{{ __('C.I.') }}:</h3><p class="txt">{{ $tool->patient->ci_patient }}</p></div>
-            <div class="flex gap-2"><h3 class="title4">{{ __('Birthdate') }}:</h3><p class="txt">{{ $tool->patient->birth_date }}</p></div>
-            <div class="flex gap-2"><h3 class="title4">{{ __('Gender') }}:</h3><p class="txt">{{ $tool->patient->gender }}</p></div>
-            <div class="flex gap-2"><h3 class="title4">{{ __('Contact') }}:</h3><p class="txt">{{ $tool->patient->patient_contact }}</p></div>
-            <div class="flex gap-2"><h3 class="title4">{{ __('Family contact') }}:</h3><p class="txt">{{ $tool->patient->family_contact }}</p></div>
+            <div class="flex gap-2"><h3 class="title4">{{ __('Fecha de nacimiento') }}:</h3><p class="txt">{{ $tool->patient->birth_date }}</p></div>
+            <div class="flex gap-2"><h3 class="title4">{{ __('Género') }}:</h3><p class="txt">{{ $tool->patient->gender }}</p></div>
+            <div class="flex gap-2"><h3 class="title4">{{ __('Celular') }}:</h3><p class="txt">{{ $tool->patient->patient_contact }}</p></div>
         </div>
     @else
         @isset($tool->radiography)
             <div class="grid grid-cols-2 gap-4 text-gray-900 dark:text-white mb-6">
-                <div class="flex gap-2"><h3 class="title4">{{ __('Patient name') }}:</h3><p>{{ $tool->radiography->name_patient }}</p></div>
+                <div class="flex gap-2"><h3 class="title4">{{ __('Paciente') }}:</h3><p>{{ $tool->radiography->name_patient }}</p></div>
                 <div class="flex gap-2"><h3 class="title4">{{ __('C.I.') }}:</h3><p>{{ $tool->radiography->ci_patient }}</p></div>
             </div>
         @elseif(isset($tool->tomography))
             <div class="grid grid-cols-2 gap-4 text-gray-900 dark:text-white mb-6">
-                <div class="flex gap-2"><h3 class="title4">{{ __('Patient name') }}:</h3><p>{{ $tool->tomography->name_patient }}</p></div>
+                <div class="flex gap-2"><h3 class="title4">{{ __('Paciente') }}:</h3><p>{{ $tool->tomography->name_patient }}</p></div>
                 <div class="flex gap-2"><h3 class="title4">{{ __('C.I.') }}:</h3><p>{{ $tool->tomography->ci_patient }}</p></div>
             </div>
         @else
-            <h1 class="text-red-500 mb-6">{{ __('Patient not registered in the database') }}.</h1>
+            <h1 class="text-red-500 mb-6">{{ __('Paciente no registrado') }}.</h1>
         @endisset
     @endif
 
-    <h1 class="title2 mb-4">{{ __('Study Data') }}</h1>
+    <h1 class="title2 mb-4">{{ __('Información del estudio') }}</h1>
     <div class="grid grid-cols-2 gap-4 mb-10">
         @isset($tool->radiography)
-            <div class="flex gap-2"><h3 class="title4">{{ __('Study ID') }}:</h3><p class="txt">{{ $tool->tool_radiography_id }}</p></div>
-            <div class="flex gap-2"><h3 class="title4">{{ __('Date') }}:</h3><p class="txt">{{ $tool->radiography->radiography_date }}</p></div>
-            <div class="flex gap-2"><h3 class="title4">{{ __('Type') }}:</h3><p class="txt">{{ $tool->radiography->radiography_type }}</p></div>
+            <div class="flex gap-2"><h3 class="title4">{{ __('ID del estudio') }}:</h3><p class="txt">{{ $tool->tool_radiography_id }}</p></div>
+            <div class="flex gap-2"><h3 class="title4">{{ __('Fecha') }}:</h3><p class="txt">{{ $tool->radiography->radiography_date }}</p></div>
+            <div class="flex gap-2"><h3 class="title4">{{ __('Tipo de estudio') }}:</h3><p class="txt">{{ $tool->radiography->radiography_type }}</p></div>
             <div class="flex gap-2"><h3 class="title4">{{ __('Doctor') }}:</h3><p class="txt">{{ $tool->radiography->radiography_doctor }}</p></div>
-            <div class="flex gap-2"><h3 class="title4">{{ __('Radiologist') }}:</h3><p class="txt">{{ $tool->radiography->radiography_charge }}</p></div>
+            <div class="flex gap-2"><h3 class="title4">{{ __('Radiologo') }}:</h3><p class="txt">{{ $tool->radiography->radiography_charge }}</p></div>
         @elseif(isset($tool->tomography))
-            <div class="flex gap-2"><h3 class="title4">{{ __('Study ID') }}:</h3><p class="txt">{{ $tool->tool_tomography_id }}</p></div>
-            <div class="flex gap-2"><h3 class="title4">{{ __('Date') }}:</h3><p class="txt">{{ $tool->tomography->tomography_date }}</p></div>
-            <div class="flex gap-2"><h3 class="title4">{{ __('Type') }}:</h3><p class="txt">{{ $tool->tomography->tomography_type }}</p></div>
+            <div class="flex gap-2"><h3 class="title4">{{ __('ID del estudio') }}:</h3><p class="txt">{{ $tool->tool_tomography_id }}</p></div>
+            <div class="flex gap-2"><h3 class="title4">{{ __('Fecha') }}:</h3><p class="txt">{{ $tool->tomography->tomography_date }}</p></div>
+            <div class="flex gap-2"><h3 class="title4">{{ __('Tipo de estudio') }}:</h3><p class="txt">{{ $tool->tomography->tomography_type }}</p></div>
             <div class="flex gap-2"><h3 class="title4">{{ __('Doctor') }}:</h3><p class="txt">{{ $tool->tomography->tomography_doctor }}</p></div>
-            <div class="flex gap-2"><h3 class="title4">{{ __('Radiologist') }}:</h3><p class="txt">{{ $tool->tomography->tomography_charge }}</p></div>
+            <div class="flex gap-2"><h3 class="title4">{{ __('Radiologo') }}:</h3><p class="txt">{{ $tool->tomography->tomography_charge }}</p></div>
         @else
-            <p class="txt">{{ __('No study data found') }}.</p>
+            <p class="txt">{{ __('No se encontro información del estudio') }}.</p>
         @endisset
     </div>
 </div>

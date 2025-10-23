@@ -1,13 +1,13 @@
 @extends('layouts._partials.layout')
-@section('title', 'Measurementsstorage/')
+@section('title', 'Herramientas de Medición')
 @section('subtitle')
-{{ __('Measuring tools') }}
+{{ __('Herramientas de Medición') }}
 @endsection
 @section('content')
 <div class="flex justify-end p-5">
-    <a href="{{ route('radiography.tool', $radiography->id) }}" class="botton1">{{ __('Back') }}</a>
+    <a href="{{ route('radiography.tool', $radiography->id) }}" class="botton1">{{ __('Atrás') }}</a>
 </div>
-<h1 class="title1">{{ __('Measurements') }}</h1>
+<h1 class="title1">{{ __('Herramientas de Medición') }}</h1>
 
 <div class="relative flex justify-center space-x-2">
     <div class="group relative">
@@ -43,7 +43,7 @@
     </div>
 </div>
 <div class="flex justify-end mb-4">
-    <label for="scaleSelect" class="mr-3 text-blue-900" style="font-size: 18px; margin-top: 8px;">{{ __('Scale') }}:</label>
+    <label for="scaleSelect" class="mr-3 text-blue-900" style="font-size: 18px; margin-top: 8px;">{{ __('Escala') }}:</label>
     <select id="scaleSelect" style="padding: 8px; padding-right: 30px; padding-left: 12px; border-radius: 10px; background-color: #ffffffff;color: #2000d4ff;border: 2px solid #0063d4ff;font-size: 16px; font-weight: bold; transition: background-color 0.3s, border-color 0.3s;margin-right: 70px;appearance: none; /* Elimina la flecha por defecto */-webkit-appearance: none; /* Para Safari */-moz-appearance: none; /* Para Firefox */">
         <option value="1" style="background-color: white; color: black;">1:1</option>
         <option value="0.5" style="background-color: white; color: black;">1:2</option>
@@ -62,7 +62,7 @@
 <div id="scaleMessage" style="display:none; color: white;font-size: 18px;padding: 10px;text-align: center;">
 </div>
 
-<div class="flex justify-center mb-4"><button id="clearButton" class="botton2">{{ __('Clear') }}</button></div>
+<div class="flex justify-center mb-4"><button id="clearButton" class="botton2">{{ __('Limpiar') }}</button></div>
 <div class="relative flex justify-center">
     <!-- Canvas -->
     <canvas id="canvas"></canvas>
@@ -78,16 +78,15 @@
 <div class="max-w-6xl mx-auto bg-white rounded-xl p-4 text-gray-900 shadow-md mt-6">
     <!-- Header -->
     <div class="flex justify-between items-center mb-4">
-        <h1 class="title1 text-center w-full">{{ __('Applied Tools') }}</h1>
-        <a href="javascript:void(0);" id="updateButton" class="botton3">{{ __('Update') }}</a>
+        <h1 class="title1 text-center w-full">{{ __('Herramientas Aplicadas') }}</h1>
+        <a href="javascript:void(0);" id="updateButton" class="botton3">{{ __('Actualizar') }}</a>
     </div>
 
     <!-- Column titles -->
     <div class="grid grid-cols-4 gap-4 border-b border-gray-300 pb-2 mb-3">
-        <h3 class="title4 text-center font-semibold">{{ __('Preview') }}</h3>
-        <h3 class="title4 text-center font-semibold">{{ __('Creation Date') }}</h3>
-        <h3 class="title4 text-center font-semibold">{{ __('Study ID') }}</h3>
-        <h3 class="title4 text-center font-semibold">{{ __('Actions') }}</h3>
+        <h3 class="title4 text-center font-semibold">{{ __('Vista Previa') }}</h3>
+        <h3 class="title4 text-center font-semibold">{{ __('Fecha de creación') }}</h3>
+        <h3 class="title4 text-center font-semibold">{{ __('ID del Estudio') }}</h3>
     </div>
 
     <!-- Table body -->
@@ -121,12 +120,12 @@
             <form method="POST" action="{{ route('tool.destroy', $tool->id) }}">
                 @csrf
                 @method('DELETE')
-                <input type="submit" value="{{ __('Delete') }}" class="bottonDelete" />
+                <input type="submit" value="{{ __('Eliminar') }}" class="bottonDelete" />
             </form>
         </div>
     </div>
     @empty
-    <p class="text-gray-600 text-center py-4">{{ __('No tools applied yet.') }}</p>
+    <p class="text-gray-600 text-center py-4">{{ __('Aún no se han aplicado herramientas.') }}</p>
     @endforelse
 </div>
 

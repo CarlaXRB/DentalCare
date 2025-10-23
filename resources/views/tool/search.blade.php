@@ -1,26 +1,24 @@
 @extends('layouts._partials.layout')
-
-@section('title', __('Tools'))
+@section('title', __('Herramientas'))
 @section('subtitle')
-    {{ __('Applied Tools') }}
+    {{ __('Herramientas Aplicadas') }}
 @endsection
 
 @section('content')
 <!-- Header buttons -->
 <div class="flex justify-end p-5 pb-1">
-    <a href="{{ route('dashboard') }}" class="botton1">{{ __('Home') }}</a>
+    <a href="{{ route('dashboard') }}" class="botton1">{{ __('Inicio') }}</a>
 </div>
 
 <!-- Main title -->
-<h1 class="title1 text-center">{{ __('Applied Tools List') }}</h1>
+<h1 class="title1 text-center">{{ __('Herramientas aplicadas') }}</h1>
 
 <!-- Tools table -->
 <div class="max-w-6xl mx-auto bg-white rounded-xl p-3 text-gray-900 shadow-md">
     <!-- Table header -->
     <div class="grid grid-cols-3 gap-4 border-b border-gray-300 pb-2 mb-3">
-        <h3 class="title4 text-center">{{ __('Preview') }}</h3>
-        <h3 class="title4 text-center">{{ __('Creation Date') }}</h3>
-        <h3 class="title4 text-center">{{ __('Actions') }}</h3>
+        <h3 class="title4 text-center">{{ __('Vista previa') }}</h3>
+        <h3 class="title4 text-center">{{ __('Fecha de creación') }}</h3>
     </div>
 
     <!-- Table body -->
@@ -50,16 +48,14 @@
                   onsubmit="return confirm('{{ __('Are you sure you want to delete this tool?') }}');">
                 @csrf
                 @method('DELETE')
-                <input type="submit" value="{{ __('Delete') }}" class="bottonDelete"/>
+                <input type="submit" value="{{ __('Eliminar') }}" class="bottonDelete"/>
             </form>
-            @else
-            <span class="text-gray-400 text-sm italic">{{ __('No actions available') }}</span>
             @endif
         </div>
         @endauth
     </div>
     @empty
-    <p class="text-center text-gray-600 py-4">{{ __('No tools have been applied yet.') }}</p>
+    <p class="text-center text-gray-600 py-4">{{ __('Todavia se aplicaron herramientas.') }}</p>
     @endforelse
 </div>
 @endsection

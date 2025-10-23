@@ -1,7 +1,7 @@
 @extends('layouts._partials.layout')
-@section('title','Radiographies')
+@section('title','Radiografías')
 @section('subtitle')
-    {{ __('Radiographies') }}
+    {{ __('Radiografías') }}
 @endsection
 
 @section('content')
@@ -9,28 +9,28 @@
     <!-- Search bar -->
     <form method="POST" action="{{ route('radiography.search') }}" class="flex gap-3 items-center">
         @csrf
-        <input type="text" name="search" placeholder="{{ __('Search radiography...') }}"
+        <input type="text" name="search" placeholder="{{ __('Buscar radiografía...') }}"
             class="px-4 py-2 rounded-full border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
-        <input class="botton2" type="submit" value="{{ __('Search') }}" />
+        <input class="botton2" type="submit" value="{{ __('Buscar') }}" />
     </form>
 
     <!-- Menu button -->
-    <a href="{{ route('radiography.new') }}" class="botton1">{{ __('Radiography Menu') }}</a>
+    <a href="{{ route('radiography.new') }}" class="botton1">{{ __('Menú de Radiografías') }}</a>
 </div>
 
 <!-- Main title -->
-<h1 class="title1 text-center">{{ __('Radiographies List') }}</h1>
+<h1 class="title1 text-center">{{ __('Lista de Radiografías') }}</h1>
 
 <!-- Radiographies table -->
 <div class="max-w-6xl mx-auto bg-white rounded-xl p-3 text-gray-900 shadow-md">
     <!-- Table header -->
     <div class="grid grid-cols-6 gap-4 border-b border-gray-300 pb-2 mb-3">
-        <h3 class="title4 text-center">{{ __('Preview') }}</h3>
-        <h3 class="title4 text-center">{{ __('Patient Name') }}</h3>
-        <h3 class="title4 text-center">{{ __('Identity Card') }}</h3>
-        <h3 class="title4 text-center">{{ __('Radiography Date') }}</h3>
-        <h3 class="title4 text-center">{{ __('Radiography ID') }}</h3>
-        <h3 class="title4 text-center">{{ __('Radiography Type') }}</h3>
+        <h3 class="title4 text-center">{{ __('Vista previa') }}</h3>
+        <h3 class="title4 text-center">{{ __('Nombre') }}</h3>
+        <h3 class="title4 text-center">{{ __('C.I.') }}</h3>
+        <h3 class="title4 text-center">{{ __('Fecha') }}</h3>
+        <h3 class="title4 text-center">{{ __('ID del estudio') }}</h3>
+        <h3 class="title4 text-center">{{ __('Tipo') }}</h3>
     </div>
 
     <!-- Table body -->
@@ -81,7 +81,7 @@
         </div>
     </div>
     @empty
-    <p class="text-gray-600 text-center py-4">{{ __('No radiographies registered yet.') }}</p>
+    <p class="text-gray-600 text-center py-4">{{ __('No hay radiografías registradas aún.') }}</p>
     @endforelse
 </div>
 @endsection

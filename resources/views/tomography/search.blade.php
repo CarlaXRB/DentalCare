@@ -19,7 +19,7 @@
     </form>
 
     <!-- Menu button -->
-    <a href="{{ route('tomography.new') }}" class="botton1">{{ __('Menú Tomografía') }}</a>
+    <a href="{{ route('tomography.index') }}" class="botton1">{{ __('Atrás') }}</a>
 </div>
 
 <!-- Main title -->
@@ -75,7 +75,7 @@
         </div>
     </div>
     @empty
-    <p class="text-gray-600 text-center py-4">{{ __('No hay tomografías registradas aún.') }}</p>
+    <p class="text-gray-600 text-center py-4">{{ __('No se encontraron resultados para la búsqueda.') }}</p>
     @endforelse
 </div>
 @endsection

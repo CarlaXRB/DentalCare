@@ -1,13 +1,13 @@
 @extends('layouts._partials.layout') 
-@section('title', 'Measurements')
+@section('title', 'Herramientas de Medición')
 @section('subtitle')
-{{ __('Measuring tools') }}
+{{ __('Herramientas de Medición') }}
 @endsection
 @section('content')
 <div class="flex justify-end p-5 pb-1">
-    <a href="{{ route('dashboard')}}" class="botton1">{{ __('Home') }}</a>
+    <a href="{{ route('dashboard')}}" class="botton1">{{ __('Inicio') }}</a>
 </div>
-<h1 class="title1">{{ __('Measurements') }}</h1>
+<h1 class="title1">{{ __('Herramientas de Medición') }}</h1>
 
 <div class="relative flex justify-center space-x-2">
     <div class="group relative">
@@ -43,7 +43,7 @@
     </div>
 </div>
 <div class="flex justify-end mb-4">
-    <label for="scaleSelect" class="mr-3 text-blue-900" style="font-size: 18px; margin-top: 8px;">{{ __('Scale') }}:</label>
+    <label for="scaleSelect" class="mr-3 text-blue-900" style="font-size: 18px; margin-top: 8px;">{{ __('Escala') }}:</label>
     <select id="scaleSelect" style="padding: 8px; padding-right: 30px; padding-left: 12px; border-radius: 10px; background-color: #ffffffff;color: #2000d4ff;border: 2px solid #0063d4ff;font-size: 16px; font-weight: bold; transition: background-color 0.3s, border-color 0.3s;margin-right: 70px;appearance: none; /* Elimina la flecha por defecto */-webkit-appearance: none; /* Para Safari */-moz-appearance: none; /* Para Firefox */">
         <option value="1" style="background-color: white; color: black;">1:1</option>
         <option value="0.5" style="background-color: white; color: black;">1:2</option>
@@ -61,11 +61,11 @@
 <div id="scaleMessage" style="display:none; color: white;font-size: 18px;padding: 10px;text-align: center;">
 </div>
 
-<div class="flex justify-center mb-4"><button id="clearButton" class="botton2">{{ __('Clear') }}</button></div>
+<div class="flex justify-center mb-4"><button id="clearButton" class="botton2">{{ __('Limpiar') }}</button></div>
 
 
 <div class="flex justify-end mb-[30px] mr-[30px]">
-    <a href="{{ route('tool.search',$tool->id)}}" class="botton3">{{ __('Applied tools') }}</a>
+    <a href="{{ route('tool.search',$tool->id)}}" class="botton3">{{ __('Herramientas aplicadas') }}</a>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js"></script>

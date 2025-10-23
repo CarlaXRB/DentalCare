@@ -1,21 +1,21 @@
 @extends('layouts._partials.layout')
-@section('title', 'Show Tool')
+@section('title', 'Superposición')
 @section('subtitle')
-    {{ __('Tool') }}
+    {{ __('Superposición') }}
 @endsection
 @section('content')
 <div class="flex justify-end p-5">
-    <a href="{{ route('tomography.show', ['id' => $tomography->id]) }}" class="botton1">{{ __('Back') }}</a>
+    <a href="{{ route('tomography.show', ['id' => $tomography->id]) }}" class="botton1">{{ __('Atrás') }}</a>
 </div>
 <div class="container">
-    <h1 class="title1 pb-5">{{ __('Overlap') }}</h1>
+    <h1 class="title1 pb-5">{{ __('Sobreponer') }}</h1>
     <div style="display: flex; justify-content: center;">
         <canvas id="tomographyCanvas"></canvas>
         <div id="thumbnailContainer" style="width: 180px; overflow-y: auto; max-height: 600px; padding: 10px; margin-left: 20px; margin-right: 20px;"></div>
     </div>
 
     <div style="display: flex; justify-content: center; margin-top: 20px; margin-bottom: 20px;">
-        <button id="autoOverlayButton" class="botton2">{{ __('Automatic overlay disabled') }}</button>
+        <button id="autoOverlayButton" class="botton2">{{ __('Activar superpsoción automática') }}</button>
     </div>
 </div>
 

@@ -55,7 +55,10 @@
 </head>
 <body>
     <header>
-        <h1>Presupuesto de Tratamiento</h1>
+        <div class="title-container">
+            <img src="{{ public_path('storage/assets/images/logoD.png') }}" class="logo" alt="Logo">
+            <h1>Presupuesto de Tratamiento</h1>
+        </div>
     </header>
 
     <p><strong>Paciente:</strong> {{ $treatment->name ?? 'N/A' }}</p>

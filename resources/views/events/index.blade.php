@@ -2,7 +2,7 @@
 <x-app-layout>
   <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-      {{ __('Appointments') }}
+      {{ __('Citas') }}
     </h2>
 
     {{-- FullCalendar --}}
@@ -127,8 +127,8 @@
             hour12: false
           },
           eventClassNames: function(arg) {
-            if (arg.event.extendedProps.room === 'Sala 1') return ['Sala-1'];
-            if (arg.event.extendedProps.room === 'Sala 2') return ['Sala-2'];
+            if (arg.event.extendedProps.room === 'Consultorio 1') return ['Sala-1'];
+            if (arg.event.extendedProps.room === 'Consultorio 2') return ['Sala-2'];
             return [];
           },
           eventContent: function(arg) {
@@ -136,6 +136,7 @@
               const start = arg.event.start;
               const end = arg.event.end;
               const room = arg.event.extendedProps.room || '';
+              const doctor = arg.event.extendedProps.doctor || ''; 
               const formatHour = (date) => date ? date.toLocaleTimeString([], {
                 hour: '2-digit',
                 minute: '2-digit',
@@ -143,11 +144,10 @@
               }) : '';
               return {
                 html: `
-                <div style="font-size: 0.9rem; font-family: sans-serif; color: #000000ff;">
-                  <b>${arg.event.title}</b><br>
-                  <b>${room}</b><br>
-                  Desde: ${formatHour(start)}<br>
-                  Hasta: ${formatHour(end)}
+                <div style="font-size: 0.7rem; font-family: sans-serif; color: #000000ff;">
+                  <b>${arg.event.title}</b> 
+                  ${formatHour(start)} - ${formatHour(end)}<br>
+                  Doctor: ${doctor}
                 </div>`
               };
             }
@@ -157,6 +157,7 @@
               const start = info.event.start;
               const end = info.event.end;
               const room = info.event.extendedProps.room || '';
+              const doctor = info.event.extendedProps.doctor || ''; 
               const formatHour = (date) => date ? date.toLocaleTimeString([], {
                 hour: '2-digit',
                 minute: '2-digit',
@@ -165,9 +166,9 @@
               info.el.innerHTML = `
                 <div style="font-size: 0.75rem; font-family: sans-serif; color: #000000ff;">
                   <b>${info.event.title}</b><br>
-                  <b>${room}</b><br>
-                  Desde: ${formatHour(start)}<br>
-                  Hasta: ${formatHour(end)}<br>
+                  ${room}<br>
+                  Horario: ${formatHour(start)} - ${formatHour(end)}<br>
+                  Doctor: ${doctor}<br>
                   <b>Creado por: ${info.event.extendedProps.creator_name}</b>
                 </div>`;
             }
@@ -187,7 +188,7 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
       <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
         <div class="flex justify-end p-5">
-          <a href="{{ route('events.create') }}" class="botton1">{{ __('Create Appointment') }}</a>
+          <a href="{{ route('events.create') }}" class="botton1">{{ __('Crear Cita') }}</a>
         </div>
         <div id="calendar" class="p-4 text-gray-800 font-sans"></div>
       </div>

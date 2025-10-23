@@ -1,68 +1,68 @@
 @extends('layouts._partials.layout')
-@section('title', __('General Information'))
-@section('subtitle', __('System Overview'))
+@section('title', __('Información General'))
+@section('subtitle', __('Descripción general del sistema'))
 @section('content')
 <div class="container mx-auto px-6 py-8">
-    <div class="mb-8"><h1 class="title1">{{ __('SYSTEM RECORDS') }}</h1></div>
+    <div class="mb-8"><h1 class="title1">{{ __('Registros del Sistema') }}</h1></div>
     <div class="w-4/5 mx-auto mb-5">
         <canvas id="dashboardChart"></canvas>
     </div>
     <section id="services" class="text-center">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-8">
             <div data-chart="pacientes" class="transform hover:scale-105 transition duration-300 p-6 bg-white rounded-lg shadow-md cursor-pointer">
-                <h5 class="text-xl font-semibold mb-4 text-blue-700">{{ __('Patients') }}</h5>
+                <h5 class="text-xl font-semibold mb-4 text-blue-700">{{ __('Pacientes') }}</h5>
                 <p class="text-3xl font-bold mt-2 text-gray-800">{{ $totalPatients }}</p>
             </div>
             <div data-chart="citas" class="transform hover:scale-105 transition duration-300 p-6 bg-white rounded-lg shadow-md cursor-pointer">
-                <h5 class="text-xl font-semibold mb-4 text-blue-700">{{ __('Appointments') }}</h5>
+                <h5 class="text-xl font-semibold mb-4 text-blue-700">{{ __('Citas') }}</h5>
                 <p class="text-3xl font-bold mt-2 text-gray-800">{{ $totalEvents }}</p>
             </div>
-            <div data-chart="radiografias" class="transform hover:scale-105 transition duration-300 p-6 bg-white rounded-lg shadow-md cursor-pointer">
-                <h5 class="text-xl font-semibold mb-4 text-blue-700">{{ __('X-Rays') }}</h5>
+            <div data-chart="tratamientos" class="transform hover:scale-105 transition duration-300 p-6 bg-white rounded-lg shadow-md cursor-pointer">
+                <h5 class="text-l font-semibold mb-4 text-blue-700">{{ __('Tratamientos') }}</h5>
+                <p class="text-3xl font-bold mt-2 text-gray-800">{{ $totalTreatments }}</p>
+            </div>
+            <div data-chart="usuarios" class="transform hover:scale-105 transition duration-300 p-6 bg-white rounded-lg shadow-md cursor-pointer">
+                <h5 class="text-xl font-semibold mb-4 text-blue-700">{{ __('Usuarios') }}</h5>
+                <p class="text-3xl font-bold mt-2 text-gray-800">{{ $totalUsers }}</p>
+            </div>
+            <div data-chart="reportes" class="transform hover:scale-105 transition duration-300 p-6 bg-white rounded-lg shadow-md cursor-pointer">
+                <h5 class="text-xl font-semibold mb-4 text-blue-700">{{ __('Reportes') }}</h5>
+                <p class="text-3xl font-bold mt-2 text-gray-800">{{ $totalReports }}</p>
+            </div>
+                        <div data-chart="radiografias" class="transform hover:scale-105 transition duration-300 p-6 bg-white rounded-lg shadow-md cursor-pointer">
+                <h5 class="text-xl font-semibold mb-4 text-blue-700">{{ __('RX') }}</h5>
                 <p class="text-3xl font-bold mt-2 text-gray-800">{{ $totalRadiographies }}</p>
             </div>
             <div data-chart="tomografias" class="transform hover:scale-105 transition duration-300 p-6 bg-white rounded-lg shadow-md cursor-pointer">
-                <h5 class="text-xl font-semibold mb-4 text-blue-700">{{ __('CT Scans') }}</h5>
+                <h5 class="text-xl font-semibold mb-4 text-blue-700">{{ __('CT') }}</h5>
                 <p class="text-3xl font-bold mt-2 text-gray-800">{{ $totalTomographies }}</p>
             </div>
-            <div data-chart="reportes" class="transform hover:scale-105 transition duration-300 p-6 bg-white rounded-lg shadow-md cursor-pointer">
-                <h5 class="text-xl font-semibold mb-4 text-blue-700">{{ __('Reports') }}</h5>
-                <p class="text-3xl font-bold mt-2 text-gray-800">{{ $totalReports }}</p>
-            </div>
-            <div data-chart="usuarios" class="transform hover:scale-105 transition duration-300 p-6 bg-white rounded-lg shadow-md cursor-pointer">
-                <h5 class="text-xl font-semibold mb-4 text-blue-700">{{ __('Users') }}</h5>
-                <p class="text-3xl font-bold mt-2 text-gray-800">{{ $totalUsers }}</p>
-            </div>
-            <div data-chart="tratamientos" class="transform hover:scale-105 transition duration-300 p-6 bg-white rounded-lg shadow-md cursor-pointer">
-                <h5 class="text-xl font-semibold mb-4 text-blue-700">{{ __('Treatments') }}</h5>
-                <p class="text-3xl font-bold mt-2 text-gray-800">{{ $totalTreatments }}</p>
-            </div>
     </section>
-    <div class="p-5"><h1 class="title2 text-center">{{ __('MONTHLY REPORT 2025') }}</h1></div>
+    <div class="p-5"><h1 class="title2 text-center">{{ __('INFORME MENSUAL 2025') }}</h1></div>
     <div class="w-4/5 mx-auto mb-5">
         <canvas id="dashboardMounth"></canvas>
     </div>
-    <div class="mt-10 mb-4"><h1 class="title1 text-center">{{ __('SUMMARY') }} 2025</h1></div>
+    <div class="mt-10 mb-4"><h1 class="title1 text-center">{{ __('RESUMEN') }} 2025</h1></div>
     <div class="overflow-x-auto pl-10 pr-10">
         <table class="min-w-full border border-blue-400 rounded-lg overflow-hidden bg-white text-gray-700">
             <thead class="bg-blue-400 text-white">
                 <tr>
-                    <th class="px-4 py-2 border border-blue-400">{{ __('Month') }}</th>
-                    <th class="px-4 py-2 border border-blue-400">{{ __('Patients') }}</th>
-                    <th class="px-4 py-2 border border-blue-400">{{ __('X-Rays') }}</th>
-                    <th class="px-4 py-2 border border-blue-400">{{ __('CT Scans') }}</th>
-                    <th class="px-4 py-2 border border-blue-400">{{ __('Appointments') }}</th>
-                    <th class="px-4 py-2 border border-blue-400">{{ __('Reports') }}</th>
-                    <th class="px-4 py-2 border border-blue-400">{{ __('Users') }}</th>
-                    <th class="px-4 py-2 border border-blue-400">{{ __('Treatments') }}</th>
+                    <th class="px-4 py-2 border border-blue-400">{{ __('Mes') }}</th>
+                    <th class="px-4 py-2 border border-blue-400">{{ __('Pacientes') }}</th>
+                    <th class="px-4 py-2 border border-blue-400">{{ __('Citas') }}</th>
+                    <th class="px-4 py-2 border border-blue-400">{{ __('Tratamientos') }}</th>
+                    <th class="px-4 py-2 border border-blue-400">{{ __('RX') }}</th>
+                    <th class="px-4 py-2 border border-blue-400">{{ __('CT') }}</th>
+                    <th class="px-4 py-2 border border-blue-400">{{ __('Reportes') }}</th>
+                    <th class="px-4 py-2 border border-blue-400">{{ __('Usuarios') }}</th>
                 </tr>
             </thead>
             <tbody>
                 @php
                     $months = [
-                        1 => __('January'), 2 => __('February'), 3 => __('March'), 4 => __('April'),
-                        5 => __('May'), 6 => __('June'), 7 => __('July'), 8 => __('August'),
-                        9 => __('September'), 10 => __('October'), 11 => __('November'), 12 => __('December')
+                        1 => __('Enero'), 2 => __('Febrero'), 3 => __('Marzo'), 4 => __('Abril'),
+                        5 => __('Mayo'), 6 => __('Junio'), 7 => __('Julio'), 8 => __('Agosto'),
+                        9 => __('Septiembre'), 10 => __('Octubre'), 11 => __('Noviembre'), 12 => __('Diciembre')
                     ];
                 @endphp
 
@@ -70,12 +70,12 @@
                     <tr class="text-center">
                         <td class="px-4 py-2 border border-blue-400">{{ $monthName }}</td>
                         <td class="px-4 py-2 border border-blue-400">{{ $monthlyPatients[$i-1] ?? 0 }}</td>
+                        <td class="px-4 py-2 border border-blue-400">{{ $monthlyEvents[$i-1] ?? 0 }}</td>
+                        <td class="px-4 py-2 border border-blue-400">{{ $monthlyTreatments[$i-1] ?? 0 }}</td>
                         <td class="px-4 py-2 border border-blue-400">{{ $monthlyRadiographies[$i-1] ?? 0 }}</td>
                         <td class="px-4 py-2 border border-blue-400">{{ $monthlyTomographies[$i-1] ?? 0 }}</td>
-                        <td class="px-4 py-2 border border-blue-400">{{ $monthlyEvents[$i-1] ?? 0 }}</td>
                         <td class="px-4 py-2 border border-blue-400">{{ $monthlyReports[$i-1] ?? 0 }}</td>
                         <td class="px-4 py-2 border border-blue-400">{{ $monthlyUsers[$i-1] ?? 0 }}</td>
-                        <td class="px-4 py-2 border border-blue-400">{{ $monthlyTreatments[$i-1] ?? 0 }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -86,17 +86,19 @@
 @push('scripts')
 <script>
     const dataValues = {!! json_encode([
-        $totalUsers,
-        $totalPatients,
+        
         $totalEvents,
+        $totalPatients,
+        $totalTreatments,
         $totalRadiographies,
         $totalTomographies,
-        $totalReports
+        $totalReports,
+        $totalUsers,
     ]) !!};
 
     const data = {
         labels: [
-            'Usuarios', 'Pacientes', 'Eventos', 'Radiografías', 'Tomografías', 'Reportes'
+             'Citas','Pacientes', 'Tratamientos', 'Radiografías', 'Tomografías', 'Reportes','Usuarios'
         ],
         datasets: [{
             label: 'Registros totales',

@@ -1,7 +1,7 @@
 @extends('layouts._partials.layout')
-@section('title','Patients')
+@section('title','Pacientes')
 @section('subtitle')
-    {{ __('Patients') }}
+    {{ __('Pacientes') }}
 @endsection
 
 @section('content')
@@ -9,26 +9,25 @@
     <!-- Buscador -->
     <form method="POST" action="{{ route('patient.search') }}" class="flex gap-3 items-center">
         @csrf
-        <input type="text" name="search" placeholder="{{ __('Search patient...') }}" 
+        <input type="text" name="search" placeholder="{{ __('Buscar paciente...') }}" 
             class="px-4 py-2 rounded-full border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
-        <input class="botton2" type="submit" value="{{ __('Search') }}" />
+        <input class="botton2" type="submit" value="{{ __('Buscar') }}" />
     </form>
 
     <!-- Botón crear paciente -->
-    <a href="{{ route('patient.create') }}" class="botton1">{{ __('Create Patient') }}</a>
+    <a href="{{ route('patient.create') }}" class="botton1">{{ __('Crear Paciente') }}</a>
 </div>
 
 <!-- Título principal -->
-<h1 class="title1 text-center">{{ __('Patients List') }}</h1>
+<h1 class="title1 text-center">{{ __('Lista de Pacientes') }}</h1>
 
 <!-- Tabla de pacientes -->
 <div class="max-w-6xl mx-auto bg-white rounded-xl p-3 text-gray-900 shadow-md">
     <!-- Encabezado -->
     <div class="grid grid-cols-4 gap-4 border-b border-gray-300 pb-2 mb-3">
-        <h3 class="title4 text-center">{{ __('Identity Card') }}</h3>
-        <h3 class="title4 text-center">{{ __('Patient Name') }}</h3>
-        <h3 class="title4 text-center">{{ __('Contact') }}</h3>
-        <h3 class="title4 text-center">{{ __('Actions') }}</h3>
+        <h3 class="title4 text-center">{{ __('Carnet de Identidad') }}</h3>
+        <h3 class="title4 text-center">{{ __('Nombre del Paciente') }}</h3>
+        <h3 class="title4 text-center">{{ __('Celular') }}</h3>
     </div>
 
     <!-- Cuerpo de la tabla -->
@@ -51,23 +50,23 @@
 
         <!-- Acciones -->
         <div class="flex justify-center gap-3">
-            <a href="{{ route('patient.edit', $patient->id) }}" class="botton3">{{ __('Edit') }}</a>
+            <a href="{{ route('patient.edit', $patient->id) }}" class="botton3">{{ __('Editar') }}</a>
 
             @auth
                 @if(Auth::user()->role === 'admin')  
                 <form method="POST" 
                       action="{{ route('patient.destroy', $patient->id) }}" 
-                      onsubmit="return confirm('{{ __('Are you sure you want to delete this patient?') }}');">
+                      onsubmit="return confirm('{{ __('¿Estás seguro de que quieres eliminar este presupuesto?') }}');">
                     @csrf
                     @method('DELETE')
-                    <input type="submit" value="{{ __('Delete') }}" class="bottonDelete cursor-pointer"/>
+                    <input type="submit" value="{{ __('Eliminar') }}" class="bottonDelete cursor-pointer"/>
                 </form>
                 @endif
             @endauth
         </div>
     </div>
     @empty
-    <p class="text-gray-600 text-center py-4">{{ __('No patients registered yet.') }}</p>
+    <p class="text-gray-600 text-center py-4">{{ __('Aún no hay pacientes registrados.') }}</p>
     @endforelse
 
     <!-- Paginación -->

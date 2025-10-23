@@ -30,7 +30,6 @@ class PatientRequest extends FormRequest
             'birth_date' => 'required|date',
             'gender' => 'required|in:masculino,femenino',
             'patient_contact' => 'required|numeric',
-            'family_contact' => 'nullable|numeric',
         ];
     }
 }

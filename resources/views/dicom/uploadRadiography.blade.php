@@ -1,21 +1,21 @@
 @extends('layouts._partials.layout')
 
-@section('title', __('Show Radiography'))
+@section('title', __('Subir Radiografía DICOM'))
 @section('subtitle')
-    {{ __('DICOM') }}
+    {{ __('Subir Radiografía DICOM') }}
 @endsection
 
 @section('content')
 <div class="flex justify-end p-5 pb-1">
-    <a href="{{ route('dashboard') }}" class="botton1">{{ __('Home') }}</a>
+    <a href="{{ route('radiography.new') }}" class="botton1">{{ __('Menú Radiografías') }}</a>
 </div>
 
 <!-- Main title -->
-<h1 class="title1 text-center mb-5">{{ __('DICOM File with Metadata') }}</h1>
+<h1 class="title1 text-center mb-5">{{ __('DICOM - Archivo con Metadatos') }}</h1>
 
 <div class="max-w-4xl mx-auto bg-white rounded-xl p-6 shadow-md">
     <p class="text-gray-800 text-lg mb-5">
-        {{ __('You can upload DICOM files here for processing and analysis. The system will extract and display relevant metadata, facilitating radiology image management.') }}
+        {{ __('Puede cargar archivos DICOM aquí para su procesamiento y análisis. El sistema extraerá y mostrará los metadatos relevantes, lo que facilita la gestión de imágenes radiológicas.') }}
     </p>
 
     <!-- Upload form -->
@@ -31,7 +31,7 @@
         @enderror
 
         <div class="flex justify-center p-5">
-            <button type="submit" class="botton2">{{ __('Upload File') }}</button>
+            <button type="submit" class="botton2">{{ __('Subir Archivo') }}</button>
         </div>
     </form>
 </div>

@@ -1,13 +1,13 @@
 @extends('layouts._partials.layout')
-@section('title', 'Show Radiography')
+@section('title', 'Herramientas')
 @section('subtitle')
-    {{ __('Tools') }}
+    {{ __('Herramientas') }}
 @endsection
 @section('content')
 <div class="flex justify-end p-5">
-    <a href="{{ route('radiography.show', $radiography->id)}}" class="botton1">{{ __('Back') }}</a>
+    <a href="{{ route('radiography.show', $radiography->id)}}" class="botton1">{{ __('Atrás') }}</a>
 </div>
-<h1 class="title1">{{ __('Tools') }}</h1>
+<h1 class="title1">{{ __('Herramientas') }}</h1>
 <div class="relative flex justify-center space-x-2">
     <div class="group relative">
         <button id="zoomIn" class="btnimg"><img src="{{ asset('storage/assets/images/zoom.png') }}" width="50" height="50"></button>
@@ -68,16 +68,15 @@
 </div>
 
 <div>
-    <h1 class="title2">{{ __('Applied Tools') }}</h1>
-    <div class="flex justify-end"><a href="javascript:void(0);" class="botton3" id="updateButton">{{ __('Upload') }}</a></div>
+    <h1 class="title2">{{ __('Herramientas aplicadas') }}</h1>
+    <div class="flex justify-end"><a href="javascript:void(0);" class="botton3" id="updateButton">{{ __('Actualizar') }}</a></div>
 <!-- Tools Table -->
 <div class="max-w-6xl mx-auto bg-white rounded-xl p-3 text-gray-900 shadow-md">
     <!-- Table Header -->
     <div class="grid grid-cols-4 gap-4 border-b border-gray-300 pb-2 mb-3">
-        <h3 class="title4 text-center">{{ __('Preview') }}</h3>
-        <h3 class="title4 text-center">{{ __('Creation Date') }}</h3>
-        <h3 class="title4 text-center">{{ __('Study ID') }}</h3>
-        <h3 class="title4 text-center">{{ __('Actions') }}</h3>
+        <h3 class="title4 text-center">{{ __('Vista Previa') }}</h3>
+        <h3 class="title4 text-center">{{ __('Fecha de creación') }}</h3>
+        <h3 class="title4 text-center">{{ __('ID') }}</h3>
     </div>
      <!-- Table Body -->
     @forelse($radiography->tools as $tool)
@@ -110,12 +109,12 @@
             <form method="POST" action="{{ route('tool.destroy', $tool->id) }}">
                 @csrf
                 @method('DELETE')
-                <input type="submit" value="{{ __('Delete') }}" class="bottonDelete"/>
+                <input type="submit" value="{{ __('Eliminar') }}" class="bottonDelete"/>
             </form>
         </div>
     </div>
     @empty
-    <p class="text-gray-600 text-center py-4">{{ __('No tools applied yet.') }}</p>
+    <p class="text-gray-600 text-center py-4">{{ __('Aún no se han aplicado herramientas.') }}</p>
     @endforelse
 </div>
 

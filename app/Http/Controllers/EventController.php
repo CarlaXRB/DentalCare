@@ -22,7 +22,7 @@ class EventController extends Controller
         'event' => 'required|string',
         'start_date' => 'required|date',
         'duration_minutes' => 'required|integer|min:1',
-        'room' => 'required|in:Sala 1,Sala 2',
+        'room' => 'required|in:Consultorio 1,Consultorio 2',
         'patient_id' => 'required|exists:patients,id',
     ]);
 
@@ -70,6 +70,7 @@ class EventController extends Controller
                 'end'   => date('Y-m-d\TH:i:s', strtotime($event->end_date)),
                 'room' => $event->room,
                 'allDay' => false,
+                'doctor' => $event->assignedDoctor->name ?? 'No asignado', 
                 'creator_name' => $event->creator->name ?? 'Sin información',
             ];            
         }        

@@ -1,21 +1,20 @@
 @extends('layouts._partials.layout')
-
-@section('title', __('Show Tomography Folder'))
+@section('title', __('Carpeta DICOM'))
 @section('subtitle')
-    {{ __('DICOM Folder') }}
+    {{ __('Carpeta DICOM') }}
 @endsection
 
 @section('content')
 <div class="flex justify-end p-5 pb-1">
-    <a href="{{ route('dashboard') }}" class="botton1">{{ __('Home') }}</a>
+    <a href="{{ route('tomography.new') }}" class="botton1">{{ __('Menú Tomografías') }}</a>
 </div>
 
 <!-- Main title -->
-<h1 class="title1 text-center mb-5">{{ __('DICOM Folder with Metadata') }}</h1>
+<h1 class="title1 text-center mb-5">{{ __('Carpeta DICOM con Metadatos') }}</h1>
 
 <div class="max-w-4xl mx-auto bg-white rounded-xl p-6 shadow-md">
     <p class="text-gray-800 text-lg mb-5">
-        {{ __('Upload a folder containing multiple DICOM files for analysis and processing. The system will extract and display essential metadata, optimizing radiology image management.') }}
+        {{ __('Cargue una carpeta con varios archivos DICOM para su análisis y procesamiento. El sistema extraerá y mostrará los metadatos esenciales, optimizando así la gestión de imágenes radiológicas.') }}
     </p>
 
     <!-- Folder upload -->
@@ -26,7 +25,7 @@
         </div>
 
         <div class="flex justify-center">
-            <button onclick="uploadFolder()" class="botton2 mt-2">{{ __('Upload Folder') }}</button>
+            <button onclick="uploadFolder()" class="botton2 mt-2">{{ __('Subir Carpeta') }}</button>
         </div>
     </div>
 
@@ -34,7 +33,7 @@
     <div id="message" class="hidden text-center mt-5">
         <p id="successMessage" class="text-green-500 font-semibold mb-3"></p>
         <a href="#" id="viewImagesBtn">
-            <button class="botton3 mb-2">{{ __('View Processed Images') }}</button>
+            <button class="botton3 mb-2">{{ __('Ver imágenes procesada') }}</button>
         </a>
     </div>
 </div>

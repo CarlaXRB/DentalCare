@@ -19,7 +19,7 @@ return new class extends Migration
             $table->datetime('start_date');
             $table->datetime('end_date');
             $table->integer('duration_minutes');
-            $table->enum('room', ['Sala 1', 'Sala 2']);
+            $table->enum('room', ['Consultorio 1', 'Consultorio 2']);
             $table->string('details')->nullable();
             $table->unsignedBigInteger('patient_id')->nullable();
             $table->unsignedBigInteger('assigned_doctor')->nullable();
