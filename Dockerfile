@@ -22,9 +22,10 @@ RUN npm run build
 # ------------------------------
 FROM php:8.2-apache
 
-# Instalar extensiones de PHP necesarias
+# Instalar extensiones de PHP necesarias y utilidades
 RUN apt-get update && apt-get install -y \
     libzip-dev zip unzip git curl libpq-dev libsqlite3-dev \
+    python3 python3-pip \
     && docker-php-ext-install pdo pdo_sqlite pdo_pgsql pgsql zip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -44,11 +45,15 @@ RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' \
     && a2enmod rewrite
 
 # Permisos de Laravel
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build
 
 # Instalar dependencias PHP con Composer
 RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+
+# (Opcional) Instalar dependencias Python si las necesitas
+COPY requirements.txt /var/www/html/requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Exponer puerto 80
 EXPOSE 80
