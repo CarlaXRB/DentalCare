@@ -5,8 +5,7 @@ FROM node:20-bullseye AS build
 
 WORKDIR /app
 
-# Instalar herramientas esenciales de compilación.
-# NECESARIO para que npm compile dependencias nativas (corrige el 'exit code 1').
+# Instalar herramientas esenciales de compilación (YA ESTABA BIEN)
 RUN apt-get update && \
     apt-get install -y build-essential && \
     rm -rf /var/lib/apt/lists/*
@@ -14,8 +13,8 @@ RUN apt-get update && \
 # Copiar solo package.json y package-lock.json para cache de dependencias
 COPY package.json package-lock.json ./
 
-# Instalar dependencias Node
-RUN npm install --legacy-peer-deps
+# Instalar dependencias Node, LIMITANDO EL USO DE MEMORIA para evitar fallos
+RUN npm install --max-old-space-size=4096 --legacy-peer-deps
 
 # Copiar el resto del proyecto Node/Vite
 COPY . .
