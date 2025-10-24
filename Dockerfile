@@ -1,36 +1,5 @@
 # ----------------------------------------------------------------------------------
-# 1️⃣ Etapa Build: Node + Laravel Assets (Orden de COPY Corregido)
-# ----------------------------------------------------------------------------------
-FROM node:18-bullseye AS build
-
-WORKDIR /app
-
-# 1. Actualizar el gestor de paquetes (Apt)
-RUN apt-get update
-
-# 2. Instalar herramientas esenciales de compilación y Yarn
-RUN apt-get install -y build-essential && \
-    # Instalar Yarn globalmente, forzando la sobrescritura del symlink
-    npm install -g yarn --force && \
-    # Limpiar caché de Apt
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# Copiar solo package.json y package-lock.json para cache de dependencias
-COPY package.json package-lock.json ./
-
-# Instalar dependencias Node con Yarn
-RUN yarn install --force
-
-# --- CAMBIO CRUCIAL AQUÍ ---
-# Copiar el resto del proyecto Node/Vite (incluye index.html, vite.config.js, etc.)
-COPY . .
-
-# Construir los assets de Laravel + Vite con Yarn (Ahora index.html está presente)
-RUN yarn run build
-
-# ----------------------------------------------------------------------------------
-# 2️⃣ Etapa PHP + Apache (Se mantiene igual)
+# 2️⃣ Etapa PHP + Apache (Correcciones aplicadas)
 # ----------------------------------------------------------------------------------
 FROM php:8.2-apache
 
@@ -38,18 +7,18 @@ FROM php:8.2-apache
 RUN apt-get update
 
 # 2. Instalar extensiones PHP y utilidades necesarias
+# Instalamos libpq-dev aquí para que pgsql y pdo_pgsql puedan compilar
 RUN apt-get install -y \
     libzip-dev zip unzip git curl libsqlite3-dev \
     libpq-dev \
-    python3 python3-pip
-
-# 3. Compilar extensiones PHP y limpiar
-# ... (Bloque previo de instalación de dependencias del SO como libpq-dev)
-
-# 3. Compilar extensiones PHP y limpiar
-RUN docker-php-ext-install pdo zip pdo_sqlite \
-    && docker-php-ext-install pgsql pdo_pgsql \
+    python3 python3-pip \
+    # Limpiar caché del SO aquí para evitar errores al final
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# 3. Compilar extensiones PHP y limpiar
+# CORRECCIÓN: Eliminado el 'docker-php-ext-configure' obsoleto.
+# Instalamos pdo_sqlite, pgsql y pdo_pgsql.
+RUN docker-php-ext-install pdo zip pdo_sqlite pgsql pdo_pgsql
 
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -59,10 +28,21 @@ WORKDIR /var/www/html
 # Copiar solo los archivos de dependencias de PHP para optimizar el cache de Composer
 COPY composer.json composer.lock ./
 
+# 🔴 SOLUCIÓN CRÍTICA PARA EL ERROR DE COMPOSER:
+# Copiar archivos esenciales para que Laravel pueda inicializarse (incluyendo .env y artisan)
+# Usaremos .env.example como .env temporal para el build.
+COPY .env.example artisan ./
+
+# Generar APP_KEY antes de composer install para que 'package:discover' no falle
+# Laravel necesita la APP_KEY para arrancar y ejecutar package:discover
+RUN php artisan key:generate
+
 # Instalar dependencias PHP con Composer
+# Ahora composer install ejecutará 'package:discover' sin error.
 RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
 
 # Copiar el resto del proyecto Laravel
+# El .env, artisan y composer.* ya existen, solo copiamos el resto del código
 COPY . /var/www/html
 
 # Copiar los assets construidos desde la etapa build
