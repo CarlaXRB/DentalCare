@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------------
-# 1️⃣ Etapa Build: Node + Laravel Assets (Optimizado para Instalación de Apt)
+# 1️⃣ Etapa Build: Node + Laravel Assets (Corregido EEXIST)
 # ----------------------------------------------------------------------------------
 FROM node:18-bullseye AS build
 
@@ -10,13 +10,13 @@ RUN apt-get update
 
 # 2. Instalar herramientas esenciales de compilación y Yarn
 RUN apt-get install -y build-essential && \
-    # Instalar Yarn globalmente
-    npm install -g yarn && \
+    # Instalar Yarn globalmente, forzando la sobrescritura del symlink
+    npm install -g yarn --force && \
     # Limpiar caché de Apt
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Copiar solo package.json y package-lock.json (Yarn usará package.json)
+# Copiar solo package.json y package-lock.json
 COPY package.json package-lock.json ./
 
 # Instalar dependencias Node con Yarn
@@ -29,7 +29,7 @@ COPY . .
 RUN yarn run build
 
 # ----------------------------------------------------------------------------------
-# 2️⃣ Etapa PHP + Apache (Se mantiene igual, pero aplicamos separación Apt también)
+# 2️⃣ Etapa PHP + Apache (Se mantiene igual)
 # ----------------------------------------------------------------------------------
 FROM php:8.2-apache
 
