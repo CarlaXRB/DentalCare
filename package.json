@@ -16,6 +16,6 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "postinstall": "npm run build"
+        "postinstall": "echo 'Skip build on postinstall for now. Run npm run build manually.'"
     }
 }
