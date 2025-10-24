@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Treatment;
 use App\Models\Budget;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,7 +35,7 @@ class TreatmentController extends Controller
             'discount_type' => 'nullable|string|in:fixed,percentage',
             'details' => 'nullable|string|max:255',
         ]);
-
+        
         $selectedBudgets = $request->input('selected_budgets', []);
         $quantities = $request->input('quantity', []);
 
@@ -66,7 +67,7 @@ class TreatmentController extends Controller
             'details' => $request->details,
             'pdf_path' => null,
         ]);
-
+/*
         $budgets = Budget::whereIn('id', array_keys($budgetCodes))->get();
 
         $pdf = Pdf::loadView('treatments.pdf', [
@@ -84,6 +85,40 @@ class TreatmentController extends Controller
         $treatment->update(['pdf_path' => 'storage/' . $storagePath]);
 
         return response()->download($fullPath, $fileName)->deleteFileAfterSend(false);
+        */
+        $budgets = Budget::whereIn('id', array_keys($budgetCodes))->get();
+
+        $pdf = Pdf::loadView('treatments.pdf', [
+            'treatment' => $treatment,
+            'budgets' => $budgets,
+            'author' => Auth::user()->name ?? 'Unknown User',
+        ])->setPaper('a4', 'portrait');
+
+        $fileName = 'treatment_' . $treatment->id . '.pdf';
+        $storageDir = 'treatments';
+        $storagePath = $storageDir . '/' . $fileName;
+        
+        // 1. Guardar el PDF usando el Storage Facade (más robusto en Docker)
+        Storage::put($storagePath, $pdf->output());
+
+        // 2. Actualizar el path en la base de datos
+        $treatment->update(['pdf_path' => $storagePath]);
+
+        // 3. Obtener la ruta completa para la descarga (storage/app/...)
+        $fullPath = storage_path('app/' . $storagePath);
+
+        // -----------------------------------------------------------
+        // 🚨 CRÍTICO PARA DOMPDF: Limpiar el buffer de salida (OB) de PHP
+        // -----------------------------------------------------------
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
+
+        // 4. Devolver la descarga forzada con el Content-Type correcto
+        return response()->download($fullPath, $fileName, [
+            'Content-Type' => 'application/pdf', 
+        ])->deleteFileAfterSend(false);
+    
     }
 
     public function show($id)
