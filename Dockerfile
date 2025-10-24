@@ -1,11 +1,11 @@
 # ----------------------------------------------------------------------------------
-# 1️⃣ Etapa Build: Node + Laravel Assets (Corregido y Optimizado)
+# 1️⃣ Etapa Build: Node + Laravel Assets (Usando --force)
 # ----------------------------------------------------------------------------------
 FROM node:20-bullseye AS build
 
 WORKDIR /app
 
-# Instalar herramientas esenciales de compilación (YA ESTABA BIEN)
+# Instalar herramientas esenciales de compilación (Necesario para dependencias nativas)
 RUN apt-get update && \
     apt-get install -y build-essential && \
     rm -rf /var/lib/apt/lists/*
@@ -13,8 +13,8 @@ RUN apt-get update && \
 # Copiar solo package.json y package-lock.json para cache de dependencias
 COPY package.json package-lock.json ./
 
-# Instalar dependencias Node, LIMITANDO EL USO DE MEMORIA para evitar fallos
-RUN npm install --max-old-space-size=4096 --legacy-peer-deps
+# Instalar dependencias Node, FORZANDO la instalación (debería resolver errores de peer deps y fallos menores)
+RUN npm install --force
 
 # Copiar el resto del proyecto Node/Vite
 COPY . .
@@ -30,12 +30,9 @@ FROM php:8.2-apache
 # Instalar extensiones PHP y utilidades necesarias
 RUN apt-get update && apt-get install -y \
     libzip-dev zip unzip git curl libsqlite3-dev \
-    # Instalar libpq-dev para PDO PostgreSQL
     libpq-dev \
-    # Herramientas opcionales que tenías
     python3 python3-pip \
     && docker-php-ext-install pdo zip pdo_sqlite \
-    # Configurar e instalar extensiones de PostgreSQL
     && docker-php-ext-configure pgsql -with-pdo-pgsql=/usr/include/postgresql \
     && docker-php-ext-install pgsql pdo_pgsql \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
