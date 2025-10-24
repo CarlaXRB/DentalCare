@@ -20,6 +20,7 @@ RUN apt-get install -y \
 RUN docker-php-ext-install pdo zip pdo_sqlite pgsql pdo_pgsql
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
+COPY composer.json composer.lock ./
 COPY . /var/www/html
 RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts
 RUN php artisan key:generate
