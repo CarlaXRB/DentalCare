@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------------
-# 1️⃣ Etapa Build: Node + Laravel Assets (Corregido EEXIST)
+# 1️⃣ Etapa Build: Node + Laravel Assets (Orden de COPY Corregido)
 # ----------------------------------------------------------------------------------
 FROM node:18-bullseye AS build
 
@@ -16,16 +16,17 @@ RUN apt-get install -y build-essential && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Copiar solo package.json y package-lock.json
+# Copiar solo package.json y package-lock.json para cache de dependencias
 COPY package.json package-lock.json ./
 
 # Instalar dependencias Node con Yarn
 RUN yarn install --force
 
-# Copiar el resto del proyecto Node/Vite
+# --- CAMBIO CRUCIAL AQUÍ ---
+# Copiar el resto del proyecto Node/Vite (incluye index.html, vite.config.js, etc.)
 COPY . .
 
-# Construir los assets de Laravel + Vite con Yarn
+# Construir los assets de Laravel + Vite con Yarn (Ahora index.html está presente)
 RUN yarn run build
 
 # ----------------------------------------------------------------------------------
