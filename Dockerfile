@@ -1,23 +1,26 @@
 # ------------------------------
 # 1️⃣ Etapa Build: Node + Laravel Assets
 # ------------------------------
-FROM node:20 AS build
+FROM node:20-bullseye AS build
 
 WORKDIR /app
 
 # Instalar herramientas para paquetes nativos
-RUN apt-get update && apt-get install -y python3 g++ make
+RUN apt-get update && apt-get install -y python3 g++ make curl git
 
-# Copiar solo package.json y package-lock.json
+# Copiar package.json y package-lock.json primero (para cache de Docker)
 COPY package.json package-lock.json ./
 
-# Instalar dependencias de Node
-RUN npm install --legacy-peer-deps
+# Limpiar cache y reinstalar npm
+RUN npm install -g npm@11.6.2
 
-# Copiar el resto del proyecto
+# Instalar dependencias de Node con bypass de peer deps
+RUN npm ci --legacy-peer-deps
+
+# Copiar resto del proyecto
 COPY . .
 
-# Construir los assets de Laravel + Vite
+# Construir assets de Laravel + Vite
 RUN npm run build
 
 # ------------------------------
@@ -34,11 +37,11 @@ RUN apt-get update && apt-get install -y \
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copiar el proyecto
+# Copiar proyecto
 COPY . /var/www/html
 WORKDIR /var/www/html
 
-# Copiar assets construidos desde etapa build
+# Copiar assets desde etapa build
 COPY --from=build /app/public/build /var/www/html/public/build
 
 # Configurar Apache para servir desde public/
