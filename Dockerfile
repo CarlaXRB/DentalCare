@@ -1,12 +1,43 @@
 # ----------------------------------------------------------------------------------
-# 2️⃣ Etapa PHP + Apache (Se mantiene igual, solo se actualiza el COPY)
+# 1️⃣ Etapa Build: Node + Laravel Assets (Alias assets_builder)
 # ----------------------------------------------------------------------------------
-FROM php:8.2-apache
+FROM node:18-bullseye AS assets_builder
+
+WORKDIR /app
+
+# 1. Actualizar el gestor de paquetes (Apt)
+RUN apt-get update
+
+# 2. Instalar herramientas esenciales de compilación y Yarn
+RUN apt-get install -y build-essential && \
+    # Instalar Yarn globalmente, forzando la sobrescritura del symlink
+    npm install -g yarn --force && \
+    # Limpiar caché de Apt
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copiar solo package.json y package-lock.json para cache de dependencias
+COPY package.json package-lock.json ./
+
+# Instalar dependencias Node con Yarn
+RUN yarn install --force
+
+# Copiar el resto del proyecto Node/Vite
+COPY . .
+
+# Construir los assets de Laravel + Vite
+RUN yarn run build
+
+# ----------------------------------------------------------------------------------
+# 2️⃣ Etapa PHP + Apache (Alias final_stage)
+# ----------------------------------------------------------------------------------
+FROM php:8.2-apache AS final_stage  <-- NUEVO ALIAS AÑADIDO
 
 # 1. Actualizar el gestor de paquetes (Apt)
 RUN apt-get update
 
 # 2. Instalar extensiones PHP y utilidades necesarias
+# Incluye libpq-dev para PostgreSQL
 RUN apt-get install -y \
     libzip-dev zip unzip git curl libsqlite3-dev \
     libpq-dev \
@@ -14,6 +45,7 @@ RUN apt-get install -y \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # 3. Compilar extensiones PHP y limpiar
+# Instalación correcta de pgsql/pdo_pgsql
 RUN docker-php-ext-install pdo zip pdo_sqlite pgsql pdo_pgsql
 
 # Instalar Composer
@@ -24,7 +56,7 @@ WORKDIR /var/www/html
 # Copiar solo los archivos de dependencias de PHP para optimizar el cache de Composer
 COPY composer.json composer.lock ./
 
-# Solución crítica para el error de Composer
+# Solución para el error de 'package:discover': copiar archivos esenciales y generar la llave
 COPY .env.example artisan ./
 RUN php artisan key:generate
 
@@ -34,8 +66,9 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-di
 # Copiar el resto del proyecto Laravel
 COPY . /var/www/html
 
-# Copiar los assets construidos desde la etapa build
-COPY --from=assets_builder /app/public/build /var/www/html/public/build <-- ¡CAMBIO AQUÍ!
+# Copiar los assets construidos desde la etapa anterior
+# Usa el alias correcto: assets_builder
+COPY --from=assets_builder /app/public/build /var/www/html/public/build
 
 # Configurar Apache para servir desde public/
 RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' \
