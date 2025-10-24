@@ -1,29 +1,32 @@
 # ----------------------------------------------------------------------------------
-# 1️⃣ Etapa Build: Node + Laravel Assets (Usando Node 18)
+# 1️⃣ Etapa Build: Node + Laravel Assets (Usando Yarn)
 # ----------------------------------------------------------------------------------
 FROM node:18-bullseye AS build
 
 WORKDIR /app
 
-# Instalar herramientas esenciales de compilación para paquetes nativos de Node
+# Instalar herramientas esenciales de compilación y Yarn
 RUN apt-get update && \
     apt-get install -y build-essential && \
+    # Instalar Yarn
+    npm install -g yarn && \
     rm -rf /var/lib/apt/lists/*
 
-# Copiar solo package.json y package-lock.json para cache de dependencias
+# Copiar solo package.json y package-lock.json (Yarn usará package.json)
 COPY package.json package-lock.json ./
 
-# Instalar dependencias Node, forzando la instalación para evitar errores de peer dependencies
-RUN npm install --force
+# Instalar dependencias Node con Yarn
+# Usamos --force para manejar posibles conflictos.
+RUN yarn install --force
 
 # Copiar el resto del proyecto Node/Vite
 COPY . .
 
-# Construir los assets de Laravel + Vite
-RUN npm run build
+# Construir los assets de Laravel + Vite con Yarn
+RUN yarn run build
 
 # ----------------------------------------------------------------------------------
-# 2️⃣ Etapa PHP + Apache (Servicio final)
+# 2️⃣ Etapa PHP + Apache (Se mantiene igual)
 # ----------------------------------------------------------------------------------
 FROM php:8.2-apache
 
