@@ -1,11 +1,11 @@
 # ----------------------------------------------------------------------------------
-# 1️⃣ Etapa Build: Node + Laravel Assets (Cambiado a Node 18)
+# 1️⃣ Etapa Build: Node + Laravel Assets (Usando Node 18)
 # ----------------------------------------------------------------------------------
-FROM node:18-bullseye AS build  # <<< CAMBIADO A NODE 18
+FROM node:18-bullseye AS build
 
 WORKDIR /app
 
-# Instalar herramientas esenciales de compilación
+# Instalar herramientas esenciales de compilación para paquetes nativos de Node
 RUN apt-get update && \
     apt-get install -y build-essential && \
     rm -rf /var/lib/apt/lists/*
@@ -13,7 +13,7 @@ RUN apt-get update && \
 # Copiar solo package.json y package-lock.json para cache de dependencias
 COPY package.json package-lock.json ./
 
-# Instalar dependencias Node, FORZANDO la instalación
+# Instalar dependencias Node, forzando la instalación para evitar errores de peer dependencies
 RUN npm install --force
 
 # Copiar el resto del proyecto Node/Vite
@@ -23,7 +23,7 @@ COPY . .
 RUN npm run build
 
 # ----------------------------------------------------------------------------------
-# 2️⃣ Etapa PHP + Apache (Se mantiene como estaba)
+# 2️⃣ Etapa PHP + Apache (Servicio final)
 # ----------------------------------------------------------------------------------
 FROM php:8.2-apache
 
