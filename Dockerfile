@@ -5,24 +5,25 @@ FROM node:20-bullseye AS build
 
 WORKDIR /app
 
-# Copiar solo package.json y package-lock.json para cache de dependencias
-COPY package.json package-lock.json ./
-
-# Instalar dependencias Node (bypass peer deps)
-RUN npm install --legacy-peer-deps
-
-# Copiar todo el proyecto (incluyendo index.html, resources, vite.config.js)
+# Copiar todo el proyecto primero para que Vite encuentre index.html
 COPY . .
+
+# Instalar dependencias Node (bypass peer deps) como usuario node
+USER node
+RUN npm install --legacy-peer-deps
 
 # Construir los assets de Laravel + Vite
 RUN npm run build
+
+# Volver a root para copiar archivos al contenedor PHP
+USER root
 
 # ------------------------------
 # 2️⃣ Etapa PHP + Apache
 # ------------------------------
 FROM php:8.2-apache
 
-# Instalar extensiones PHP y utilidades necesarias
+# Instalar extensiones PHP necesarias
 RUN apt-get update && apt-get install -y \
     libzip-dev zip unzip git curl libpq-dev libsqlite3-dev \
     python3 python3-pip \
@@ -32,7 +33,7 @@ RUN apt-get update && apt-get install -y \
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copiar todo el proyecto
+# Copiar proyecto
 COPY . /var/www/html
 WORKDIR /var/www/html
 
@@ -44,17 +45,16 @@ RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' \
     /etc/apache2/sites-available/000-default.conf \
     && a2enmod rewrite
 
-# Configurar permisos de Laravel y assets
+# Permisos de Laravel y assets
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build
 
-# Instalar dependencias PHP con Composer
+# Instalar dependencias PHP
 RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
-
 
 
 # Exponer puerto 80
 EXPOSE 80
 
-# Comando para iniciar Apache
+# Iniciar Apache
 CMD ["apache2-foreground"]
