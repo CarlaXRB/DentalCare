@@ -184,10 +184,16 @@
                 <form method="POST" action="{{ route('logout') }}" x-data>
                     @csrf
 
-                    <x-responsive-nav-link href="{{ route('logout') }}"
-                                   @click.prevent="$root.submit();">
-                        {{ __('Salir') }}
-                    </x-responsive-nav-link>
+                    <x-jet-dropdown-link href="{{ route('logout') }}"
+    @click.prevent="document.getElementById('logout-form').submit()">
+    {{ __('Salir') }}
+</x-jet-dropdown-link>
+
+<form method="POST" id="logout-form" action="{{ route('logout') }}">
+    @csrf
+</form>
+
+                    
                 </form>
 
                 <!-- Team Management -->
