@@ -5,7 +5,6 @@ RUN apt-get install -y build-essential && \
     npm install -g yarn --force && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-
 COPY package.json package-lock.json ./
 RUN yarn install --force
 COPY . .
@@ -21,12 +20,10 @@ RUN apt-get install -y \
 RUN docker-php-ext-install pdo zip pdo_sqlite pgsql pdo_pgsql
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
-COPY composer.json composer.lock ./
-COPY .env.example artisan ./
+COPY . /var/www/html
 RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts
 RUN php artisan key:generate
 RUN php artisan package:discover
-COPY . /var/www/html
 COPY --from=assets_builder /app/public/build /var/www/html/public/build
 RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' \
     /etc/apache2/sites-available/000-default.conf \
