@@ -5,11 +5,14 @@ FROM node:20 AS build
 
 WORKDIR /app
 
-# Copiar solo package.json y package-lock.json antes de copiar todo
+# Instalar herramientas para paquetes nativos
+RUN apt-get update && apt-get install -y python3 g++ make
+
+# Copiar solo package.json y package-lock.json
 COPY package.json package-lock.json ./
 
-# Instalar dependencias de Node (evita problemas de cache)
-RUN npm ci
+# Instalar dependencias de Node
+RUN npm install --legacy-peer-deps
 
 # Copiar el resto del proyecto
 COPY . .
@@ -31,7 +34,7 @@ RUN apt-get update && apt-get install -y \
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copiar todo el proyecto
+# Copiar el proyecto
 COPY . /var/www/html
 WORKDIR /var/www/html
 
