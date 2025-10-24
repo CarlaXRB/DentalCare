@@ -1,23 +1,22 @@
 # -----------------------------------------------------------------
-# 1️⃣ Etapa Node (assets_builder) - Compila CSS/JS (Vite)
+# 1️⃣ Etapa Node (assets_builder) - Compila CSS/JS (Vite/npm)
 # -----------------------------------------------------------------
 FROM node:18-bullseye AS assets_builder
 WORKDIR /app
 
-# Instalar Yarn y limpiar caché
+# Instalar build tools y limpiar caché. Removida la instalación global de yarn.
 RUN apt-get update && \
     apt-get install -y build-essential && \
-    npm install -g yarn && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Copiar archivos de Node (para aprovechar la caché de yarn install)
-COPY package.json yarn.lock ./
-RUN yarn install
+# CRÍTICO: Copiar archivos de Node (usando package-lock.json de npm)
+COPY package.json package-lock.json ./
+RUN npm install
 
 # Copiar el resto del código y compilar assets
 COPY . .
-RUN yarn run build
+RUN npm run build
 
 # -----------------------------------------------------------------
 # 2️⃣ Etapa PHP + Apache (final_stage) - Servidor y Ejecución
@@ -38,7 +37,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# CRÍTICO: Copiar archivos de Composer PRIMERO para aprovechar la caché
+# Copiar archivos de Composer
 COPY composer.json composer.lock ./
 # Copiar TODO el código de la aplicación
 COPY . /var/www/html
@@ -47,7 +46,6 @@ COPY . /var/www/html
 RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts
 
 # Ejecutar comandos Artisan
-# Estos comandos se ejecutan solo una vez al construir la imagen
 RUN php artisan key:generate
 RUN php artisan package:discover
 
