@@ -44,8 +44,10 @@ RUN apt-get install -y \
     python3 python3-pip
 
 # 3. Compilar extensiones PHP y limpiar
+# ... (Bloque previo de instalación de dependencias del SO como libpq-dev)
+
+# 3. Compilar extensiones PHP y limpiar
 RUN docker-php-ext-install pdo zip pdo_sqlite \
-    && docker-php-ext-configure pgsql -with-pdo-pgsql=/usr/include/postgresql \
     && docker-php-ext-install pgsql pdo_pgsql \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
