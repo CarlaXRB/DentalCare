@@ -5,13 +5,13 @@ FROM node:20-bullseye AS build
 
 WORKDIR /app
 
-# Copiar package.json y package-lock.json para cache de dependencias
+# Copiar solo package.json y package-lock.json para cache de dependencias
 COPY package.json package-lock.json ./
 
-# Instalar dependencias Node (con bypass de peer deps)
+# Instalar dependencias Node (bypass peer deps)
 RUN npm install --legacy-peer-deps
 
-# Copiar todo el proyecto (index.html, resources, vite.config.js, etc.)
+# Copiar todo el proyecto (incluyendo index.html, resources, vite.config.js)
 COPY . .
 
 # Construir los assets de Laravel + Vite
@@ -32,7 +32,7 @@ RUN apt-get update && apt-get install -y \
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copiar el proyecto completo
+# Copiar todo el proyecto
 COPY . /var/www/html
 WORKDIR /var/www/html
 
@@ -44,7 +44,7 @@ RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' \
     /etc/apache2/sites-available/000-default.conf \
     && a2enmod rewrite
 
-# Configurar permisos de Laravel
+# Configurar permisos de Laravel y assets
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build
 
@@ -56,5 +56,5 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-di
 # Exponer puerto 80
 EXPOSE 80
 
-# Iniciar Apache
+# Comando para iniciar Apache
 CMD ["apache2-foreground"]
