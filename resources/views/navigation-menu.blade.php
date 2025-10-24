@@ -182,15 +182,12 @@
 
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}" x-data>
-                    @csrf
+    @csrf
 
-                    <x-responsive-nav-link href="{{ route('logout') }}"
-                                   @click.prevent="$root.submit();">
-                        {{ __('Salir') }}
-                    </x-responsive-nav-link>
-
-                    
-                </form>
+    <button type="submit" class="w-full text-left">
+        {{ __('Salir') }}
+    </button>
+</form>
 
                 <!-- Team Management -->
                 @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
