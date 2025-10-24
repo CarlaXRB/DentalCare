@@ -10,9 +10,7 @@ RUN apt-get update
 
 # 2. Instalar herramientas esenciales de compilación y Yarn
 RUN apt-get install -y build-essential && \
-    # Instalar Yarn globalmente
     npm install -g yarn --force && \
-    # Limpiar caché de Apt
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -28,23 +26,22 @@ COPY . .
 # Construir los assets de Laravel + Vite
 RUN yarn run build
 
-# ----------------------------------------------------------------------------------
-# 2️⃣ Etapa PHP + Apache (Stage Final)
-# ----------------------------------------------------------------------------------
+---
+## 2️⃣ Etapa PHP + Apache (Stage Final)
+
 FROM php:8.2-apache AS final_stage
 
 # 1. Actualizar el gestor de paquetes (Apt)
 RUN apt-get update
 
 # 2. Instalar extensiones PHP y utilidades necesarias
-# **IMPORTANTE: Sin backslash al final del bloque**
 RUN apt-get install -y \
     libzip-dev zip unzip git curl libsqlite3-dev \
     libpq-dev \
     python3 python3-pip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# 3. Compilar extensiones PHP (sin docker-php-ext-configure)
+# 3. Compilar extensiones PHP
 RUN docker-php-ext-install pdo zip pdo_sqlite pgsql pdo_pgsql
 
 # Instalar Composer
@@ -55,12 +52,23 @@ WORKDIR /var/www/html
 # Copiar archivos esenciales para el cache de Composer
 COPY composer.json composer.lock ./
 
-# Solución al error 'package:discover': copiar .env.example y artisan antes de Composer
+# Copiar .env.example y artisan (Necesario para los pasos siguientes)
 COPY .env.example artisan ./
-RUN php artisan key:generate
 
-# Instalar dependencias PHP con Composer
-RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+# -----------------------------------------------------------------
+# 🔴 CORRECCIÓN CRÍTICA: Composer antes de Artisan
+# -----------------------------------------------------------------
+
+# 4. Instalar dependencias PHP con Composer (Usando --no-scripts)
+# Esto crea el vendor/autoload.php
+RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts
+
+# 5. Ejecutar los comandos Artisan que fueron omitidos
+# Ahora vendor/autoload.php existe y Artisan puede arrancar.
+RUN php artisan key:generate
+RUN php artisan package:discover
+
+# -----------------------------------------------------------------
 
 # Copiar el resto del proyecto Laravel
 COPY . /var/www/html
@@ -68,7 +76,7 @@ COPY . /var/www/html
 # Copiar los assets construidos desde la etapa anterior
 COPY --from=assets_builder /app/public/build /var/www/html/public/build
 
-# Configurar Apache para servir desde public/
+# Configurar Apache
 RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' \
     /etc/apache2/sites-available/000-default.conf \
     && a2enmod rewrite
