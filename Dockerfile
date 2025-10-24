@@ -1,22 +1,25 @@
 # ----------------------------------------------------------------------------------
-# 1️⃣ Etapa Build: Node + Laravel Assets (Usando Yarn)
+# 1️⃣ Etapa Build: Node + Laravel Assets (Optimizado para Instalación de Apt)
 # ----------------------------------------------------------------------------------
 FROM node:18-bullseye AS build
 
 WORKDIR /app
 
-# Instalar herramientas esenciales de compilación y Yarn
-RUN apt-get update && \
-    apt-get install -y build-essential && \
-    # Instalar Yarn
+# 1. Actualizar el gestor de paquetes (Apt)
+RUN apt-get update
+
+# 2. Instalar herramientas esenciales de compilación y Yarn
+RUN apt-get install -y build-essential && \
+    # Instalar Yarn globalmente
     npm install -g yarn && \
+    # Limpiar caché de Apt
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Copiar solo package.json y package-lock.json (Yarn usará package.json)
 COPY package.json package-lock.json ./
 
 # Instalar dependencias Node con Yarn
-# Usamos --force para manejar posibles conflictos.
 RUN yarn install --force
 
 # Copiar el resto del proyecto Node/Vite
@@ -26,16 +29,21 @@ COPY . .
 RUN yarn run build
 
 # ----------------------------------------------------------------------------------
-# 2️⃣ Etapa PHP + Apache (Se mantiene igual)
+# 2️⃣ Etapa PHP + Apache (Se mantiene igual, pero aplicamos separación Apt también)
 # ----------------------------------------------------------------------------------
 FROM php:8.2-apache
 
-# Instalar extensiones PHP y utilidades necesarias
-RUN apt-get update && apt-get install -y \
+# 1. Actualizar el gestor de paquetes (Apt)
+RUN apt-get update
+
+# 2. Instalar extensiones PHP y utilidades necesarias
+RUN apt-get install -y \
     libzip-dev zip unzip git curl libsqlite3-dev \
     libpq-dev \
-    python3 python3-pip \
-    && docker-php-ext-install pdo zip pdo_sqlite \
+    python3 python3-pip
+
+# 3. Compilar extensiones PHP y limpiar
+RUN docker-php-ext-install pdo zip pdo_sqlite \
     && docker-php-ext-configure pgsql -with-pdo-pgsql=/usr/include/postgresql \
     && docker-php-ext-install pgsql pdo_pgsql \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
