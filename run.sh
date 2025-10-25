@@ -1,21 +1,29 @@
-# Sobrescribe el archivo run.sh con el contenido corregido:
-cat << 'EOF' > run.sh
-#!/usr/bin/env bash
+#!/bin/bash
+# run.sh - Ejecución del servicio web Laravel en Cloud Run
 
-# 1. Configurar permisos de escritura
-chmod -R 777 storage
-chmod -R 777 bootstrap/cache
+# CRÍTICO 1: Asignar permisos de escritura a los directorios de almacenamiento y caché.
+# Esto es CRUCIAL para que Laravel funcione en un contenedor sin errores.
+echo "===> Setting storage permissions..."
+chmod -R 775 /var/www/html/storage
+chmod -R 775 /var/www/html/bootstrap/cache
 
-# 2. Limpiar cachés para forzar la carga de las variables de entorno de Cloud Run
-php artisan cache:clear
+# CRÍTICO 2: Limpiar cachés y regenerar la configuración
+# Se ejecuta DESPUÉS de que Cloud Run inyecte las variables de entorno.
+echo "===> Cleaning and regenerating configuration cache..."
 php artisan config:clear
-php artisan view:clear
+php artisan cache:clear
 php artisan route:clear
-
-# 3. Optimizar (opcional pero bueno)
+php artisan view:clear
+# php artisan package:discover (Opcional, se mantiene si es necesario, pero no es crítico)
 php artisan config:cache
-php artisan route:cache
+# NOTA: Se ELIMINA 'php artisan key:generate' porque la clave se pasa por variable de entorno.
 
-# 4. Iniciar el servidor en el puerto 8080
-php artisan serve --host=0.0.0.0 --port=8080
-EOF
+# 3. Configurar el puerto de Apache
+# Reemplaza la escucha de Apache por el puerto de Cloud Run ($PORT)
+echo "===> Configuring Apache port..."
+sed -i "s/8080/${PORT:-8080}/g" /etc/apache2/ports.conf
+sed -i "s/8080/${PORT:-8080}/g" /etc/apache2/sites-available/000-default.conf
+
+# 4. Iniciar Apache en primer plano
+echo "===> Starting Apache in foreground..."
+exec apache2-foreground
