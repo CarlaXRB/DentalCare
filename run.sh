@@ -17,4 +17,4 @@ sed -i "s/8080/${PORT:-8080}/g" /etc/apache2/sites-available/000-default.conf
 
 # Ejecuta Apache en primer plano
 echo "===> Starting Apache..."
-apache2-foreground
+exec apache2-foreground
