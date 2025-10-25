@@ -45,10 +45,6 @@ COPY . /var/www/html
 # Instalar dependencias PHP
 RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts
 
-# Ejecutar comandos Artisan
-RUN php artisan key:generate
-RUN php artisan package:discover
-
 # CRÍTICO: Copiar los assets de Vite compilados desde la etapa anterior
 COPY --from=assets_builder /app/public/build /var/www/html/public/build
 
