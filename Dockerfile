@@ -4,7 +4,7 @@
 FROM node:18-bullseye AS assets_builder
 WORKDIR /app
 
-# Instalar build tools y limpiar caché. Removida la instalación global de yarn.
+# Instalar build tools y limpiar caché.
 RUN apt-get update && \
     apt-get install -y build-essential && \
     apt-get clean && \
@@ -49,7 +49,7 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-di
 RUN php artisan key:generate
 RUN php artisan package:discover
 
-# CRÍTICO: Copiar los assets de Vite compilados
+# CRÍTICO: Copiar los assets de Vite compilados desde la etapa anterior
 COPY --from=assets_builder /app/public/build /var/www/html/public/build
 
 # Configurar Apache para servir desde /public y habilitar mod_rewrite
@@ -61,6 +61,12 @@ RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' \
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build
 
-# Exponer el puerto por defecto de Apache
-EXPOSE 80
-CMD ["apache2-foreground"]
+# 🚨 Ajuste CRÍTICO para Cloud Run 🚨
+# Copiar el script de inicio y darle permisos
+COPY run.sh /usr/local/bin/run
+RUN chmod +x /usr/local/bin/run
+
+# Cloud Run requiere escuchar en el puerto 8080 por defecto
+EXPOSE 8080 
+# Usar el script para que Apache escuche en el puerto $PORT (generalmente 8080)
+CMD ["/usr/local/bin/run"]
