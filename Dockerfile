@@ -1,3 +1,4 @@
+# Usa PHP 8.2 FPM (FastCGI Process Manager)
 FROM php:8.2-fpm-alpine
 
 # Instalar dependencias del sistema operativo y extensiones PHP necesarias
@@ -18,6 +19,10 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Configuración de Nginx
 # Copiaremos el archivo de configuración de Nginx
 COPY ./docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+
+# ===> CORRECCIÓN CRÍTICA AÑADIDA AQUI <===
+# Copiar el archivo de Supervisor a su ubicación correcta
+COPY ./docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Directorio de trabajo y permisos
 WORKDIR /var/www/html
