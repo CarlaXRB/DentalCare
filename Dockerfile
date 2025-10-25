@@ -1,68 +1,38 @@
-# -----------------------------------------------------------------
-# 1️⃣ Etapa Node (assets_builder) - Compila CSS/JS (Vite/npm)
-# -----------------------------------------------------------------
-FROM node:18-bullseye AS assets_builder
-WORKDIR /app
+# Usa PHP 8.2 FPM (FastCGI Process Manager)
+FROM php:8.2-fpm-alpine
 
-# Instalar build tools y limpiar caché.
-RUN apt-get update && \
-    apt-get install -y build-essential && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# CRÍTICO: Copiar archivos de Node (usando package-lock.json de npm)
-COPY package.json package-lock.json ./
-RUN npm install
-
-# Copiar el resto del código y compilar assets
-COPY . .
-RUN npm run build
-
-# -----------------------------------------------------------------
-# 2️⃣ Etapa PHP + Apache (final_stage) - Servidor y Ejecución
-# -----------------------------------------------------------------
-FROM php:8.2-apache AS final_stage
-RUN apt-get update && \
-    apt-get install -y \
-    libzip-dev zip unzip git curl libsqlite3-dev \
-    libpq-dev \
-    python3 python3-pip \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Instalar extensiones PHP necesarias (incluyendo PostgreSQL)
-RUN docker-php-ext-install pdo zip pdo_sqlite pgsql pdo_pgsql
+# Instalar dependencias del sistema operativo y extensiones PHP necesarias
+RUN apk add --no-cache \
+    nginx \
+    git \
+    mysql-client \
+    make \
+    curl \
+    supervisor \
+    && docker-php-ext-install pdo_mysql opcache \
+    && rm -rf /var/cache/apk/*
 
 # Instalar Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Configuración de Nginx
+# Copiaremos el archivo de configuración de Nginx
+COPY ./docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+
+# Directorio de trabajo y permisos
 WORKDIR /var/www/html
+COPY . .
 
-# Copiar archivos de Composer
-COPY composer.json composer.lock ./
-# Copiar TODO el código de la aplicación
-COPY . /var/www/html
+# Permisos CRUCIALES para Laravel
+# Otorgamos permisos al directorio storage y bootstrap/cache
+RUN chmod -R 775 storage bootstrap/cache \
+    && chown -R www-data:www-data /var/www/html
 
-# Instalar dependencias PHP
-RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts
+# Instalar dependencias de Laravel
+RUN composer install --no-dev --optimize-autoloader
 
-# CRÍTICO: Copiar los assets de Vite compilados desde la etapa anterior
-COPY --from=assets_builder /app/public/build /var/www/html/public/build
+# Exponer el puerto
+EXPOSE 8080
 
-# Configurar Apache para servir desde /public y habilitar mod_rewrite
-RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' \
-    /etc/apache2/sites-available/000-default.conf \
-    && a2enmod rewrite
-
-# CRÍTICO: Configurar permisos de escritura para storage y cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build
-
-# 🚨 Ajuste CRÍTICO para Cloud Run 🚨
-# Copiar el script de inicio y darle permisos
-COPY run.sh /usr/local/bin/run
-RUN chmod +x /usr/local/bin/run
-
-# Cloud Run requiere escuchar en el puerto 8080 por defecto
-EXPOSE 8080 
-# Usar el script para que Apache escuche en el puerto $PORT (generalmente 8080)
-CMD ["/usr/local/bin/run"]
+# Iniciar Nginx y PHP-FPM con Supervisor
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
