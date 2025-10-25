@@ -1,15 +1,15 @@
-# Usa PHP 8.2 FPM (FastCGI Process Manager)
 FROM php:8.2-fpm-alpine
 
 # Instalar dependencias del sistema operativo y extensiones PHP necesarias
 RUN apk add --no-cache \
     nginx \
     git \
-    mysql-client \
+    postgresql-client \
     make \
     curl \
     supervisor \
-    && docker-php-ext-install pdo_mysql opcache \
+    # CRÍTICO: Instalar la extensión de PostgreSQL (pdo_pgsql)
+    && docker-php-ext-install pdo_pgsql opcache \
     && rm -rf /var/cache/apk/*
 
 # Instalar Composer
@@ -34,5 +34,5 @@ RUN composer install --no-dev --optimize-autoloader
 # Exponer el puerto
 EXPOSE 8080
 
-# Iniciar Nginx y PHP-FPM con Supervisor
+# Iniciar Nginx y PHP-FPM con Supervisor (Esto es el arranque final)
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
