@@ -1,5 +1,5 @@
 FROM composer:2.7.2 as composer_stage
-RUN apk add --no-cache git icu-dev zlib-dev libzip-dev \
+RUN apk add --no-cache git icu-dev zlib-dev libzip-dev postgresql-dev \
     && docker-php-ext-install pdo pdo_pgsql zip bcmath
 WORKDIR /app
 COPY composer.json composer.lock ./
