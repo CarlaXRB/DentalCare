@@ -1,20 +1,16 @@
 #!/bin/sh
 
-# 1. Chequeo y reparación de permisos del storage
-# Esto es vital en Cloud Run, donde el UID del usuario es dinámico.
+# 1. Chequeo y reparación de permisos del storage (esencial)
 chmod -R 777 /var/www/html/storage/
 
-# 2. Ejecutar optimizaciones de Laravel
-# Esto minimiza el tiempo de arranque y reduce el uso de memoria.
+# 2. Comando básico de optimización que limpia configuraciones viejas.
+# Solo dejamos optimize:clear, ya que no depende de la base de datos para funcionar.
 php /var/www/html/artisan optimize:clear
-php /var/www/html/artisan config:cache
-php /var/www/html/artisan route:cache
-php /var/www/html/artisan view:cache
 
-# 3. Ejecutar migraciones (OPCIONAL: Solo si tu app lo necesita al inicio)
-# Si tus migraciones son lentas, considera hacerlas manualmente o fuera del entrypoint.
+# 3. Ejecutar migraciones (OPCIONAL: Si necesitas ejecutarlas al inicio, puedes descomentar)
+# Si no las necesitas, déjalas comentadas.
 # php /var/www/html/artisan migrate --force
 
 # 4. Iniciar Supervisor (en primer plano)
-# Una vez que Laravel está optimizado, ejecuta el gestor de procesos.
+# Esto iniciará Nginx y PHP-FPM, resolviendo el error DEADLINE_EXCEEDED.
 exec /usr/bin/supervisord -c /etc/supervisord.conf
