@@ -1,4 +1,3 @@
-cat << 'EOF' > Dockerfile
 FROM composer:2.7.2 as composer_stage
 RUN apk add --no-cache git icu-dev zlib-dev libzip-dev postgresql-dev \
     && docker-php-ext-install pdo pdo_pgsql zip bcmath
@@ -47,4 +46,3 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 EXPOSE 8080
 ENTRYPOINT ["docker-entrypoint.sh"]
 CMD []
-EOF
