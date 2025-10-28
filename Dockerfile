@@ -1,91 +1,66 @@
-# --- STAGE 1: Composer & PHP Dependencies ---
-# Usa composer para instalar las dependencias de PHP
-FROM composer:2.7.2 as composer_stage
-
-# Instalar dependencias del sistema y extensiones PHP necesarias
-RUN apk add --no-cache git icu-dev zlib-dev libzip-dev \
-    && docker-php-ext-install pdo pdo_pgsql zip bcmath
-
+# -----------------------------------------------------------------
+# 1️⃣ Etapa Node (assets_builder) - Compila CSS/JS (Vite/npm)
+# -----------------------------------------------------------------
+FROM node:18-bullseye AS assets_builder
 WORKDIR /app
 
-# Copiar archivos de composer y descargar dependencias
-COPY composer.json composer.lock ./
-# Instalar dependencias sin incluir las de desarrollo (más rápido y ligero)
-RUN composer install --no-dev --no-scripts --prefer-dist --optimize-autoloader
+# Instalar build tools y limpiar caché. Removida la instalación global de yarn.
+RUN apt-get update && \
+    apt-get install -y build-essential && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# --- STAGE 2: Node.js & Frontend Build Stage ---
-# Usamos una imagen de Node para compilar los assets de frontend (Vite/Tailwind)
-FROM node:20-alpine as node_stage
-
-WORKDIR /app
-
-# Copiar archivos de configuración de frontend
-COPY package.json package-lock.json vite.config.js ./
-# Copiar archivos de recursos (CSS, JS, etc.)
-COPY resources resources/
-COPY public public/
-
-# Instalar dependencias de Node
+# CRÍTICO: Copiar archivos de Node (usando package-lock.json de npm)
+COPY package.json package-lock.json ./
 RUN npm install
 
-# Ejecutar la compilación de producción de los assets (¡ESTO ES CLAVE!)
-# Esto crea la carpeta public/build que Nginx necesita para servir el CSS y JS.
-RUN npm run build 
-
-# --- STAGE 3: Production Stage (Imagen final de Alpine) ---
-FROM php:8.2-fpm-alpine
-
-# Instalar utilidades, Nginx, Supervisor y extensiones de PHP necesarias
-RUN apk add --no-cache \
-    nginx \
-    supervisor \
-    # Extensiones de PHP
-    php82-pgsql \
-    php82-dom \
-    php82-xml \
-    php82-session \
-    php82-ctype \
-    php82-mbstring \
-    php82-tokenizer \
-    php82-xmlwriter \
-    php82-json \
-    php82-opcache \
-    php82-pecl-apcu \
-    php82-gd \
-    php82-zip \
-    && rm -rf /var/cache/apk/*
-
-# Crear directorio de logs de Nginx
-RUN mkdir -p /run/nginx
-
-# Reemplazar la configuración por defecto de Nginx y PHP
-COPY default.conf /etc/nginx/conf.d/default.conf
-COPY supervisord.conf /etc/supervisord.conf
-
-# Copiar el código de la aplicación
-WORKDIR /var/www/html
+# Copiar el resto del código y compilar assets
 COPY . .
+RUN npm run build
 
-# Copiar el vendor desde la etapa de compilación de composer
-COPY --from=composer_stage /app/vendor/ vendor/
+# -----------------------------------------------------------------
+# 2️⃣ Etapa PHP + Apache (final_stage) - Servidor y Ejecución
+# -----------------------------------------------------------------
+FROM php:8.2-apache AS final_stage
+RUN apt-get update && \
+    apt-get install -y \
+    libzip-dev zip unzip git curl libsqlite3-dev \
+    libpq-dev \
+    python3 python3-pip \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Copiar los assets compilados de frontend (public/build) desde la etapa de Node
-COPY --from=node_stage /app/public/build/ public/build/
+# Instalar extensiones PHP necesarias (incluyendo PostgreSQL)
+RUN docker-php-ext-install pdo zip pdo_sqlite pgsql pdo_pgsql
 
-# Crear y dar permisos al storage de Laravel
-RUN chown -R www-data:www-data /var/www/html \
-    && mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views \
-    && chmod -R 777 storage bootstrap/cache
+# Instalar Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copiar el script de ENTRYPOINT y hacerlo ejecutable
-COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+WORKDIR /var/www/html
 
-# Exponer el puerto
-EXPOSE 8080
+# Copiar archivos de Composer
+COPY composer.json composer.lock ./
+# Copiar TODO el código de la aplicación
+COPY . /var/www/html
 
-# Definir el script de ENTRYPOINT que se ejecuta primero
-ENTRYPOINT ["docker-entrypoint.sh"]
+# Instalar dependencias PHP
+RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts
 
-# El CMD no es necesario si el ENTRYPOINT ejecuta el supervisor
-CMD []
+# Ejecutar comandos Artisan
+RUN php artisan key:generate
+RUN php artisan package:discover
+
+# CRÍTICO: Copiar los assets de Vite compilados
+COPY --from=assets_builder /app/public/build /var/www/html/public/build
+
+# Configurar Apache para servir desde /public y habilitar mod_rewrite
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' \
+    /etc/apache2/sites-available/000-default.conf \
+    && a2enmod rewrite
+
+# CRÍTICO: Configurar permisos de escritura para storage y cache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build
+
+# Exponer el puerto por defecto de Apache
+EXPOSE 80
+CMD ["apache2-foreground"]

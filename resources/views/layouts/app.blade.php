@@ -7,18 +7,14 @@
 
         <!-- Título principal -->
         <title>{{ config('app.name', 'Dental Care') }}</title>
-
-        <!-- 1. Carga de FUENTES (solo Figtree si es necesaria, o elimina si usas solo Poppins) -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-        <!-- 2. Scripts y CSS: Consolidado en un solo @vite -->
+        
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-        <!-- 3. Estilos de Livewire -->
+        <!--<link rel="stylesheet" href="{{ asset('css/app.css')}}"> -->
+        
         @livewireStyles
-
-        <!-- 4. Librerías Externas que tenías en el otro layout -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.6.0/fabric.min.js"></script>
 
