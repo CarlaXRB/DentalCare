@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>{{ config('app.name', 'Dental Care') }}</title>
+
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <script src="https://cdn.tailwindcss.com"></script>
@@ -13,7 +14,6 @@
         @livewireStyles
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.6.0/fabric.min.js"></script>
-
     </head>
     <body class="font-sans antialiased"> 
         <x-banner />
@@ -31,6 +31,7 @@
             </main>
         </div>
         @stack('modals')
+        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         @livewireScripts
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         @stack('scripts')
