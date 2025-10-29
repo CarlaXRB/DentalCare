@@ -1,10 +1,13 @@
+# -----------------------------------------------------------------
+# 1️⃣ Etapa Node (assets_builder) - Compila CSS/JS (Vite/npm)
+# -----------------------------------------------------------------
 FROM node:18-bullseye AS assets_builder
 WORKDIR /app
 
 # Instalar build tools y limpiar caché. Removida la instalación global de yarn.
 RUN apt-get update && \
-    apt-get install -y build-essential && \
-    apt-get clean && \
+    apt-get install -y build-essential \
+    && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # CRÍTICO: Copiar archivos de Node (usando package-lock.json de npm)
@@ -24,11 +27,15 @@ RUN apt-get update && \
     libzip-dev zip unzip git curl libsqlite3-dev \
     libpq-dev \
     python3 python3-pip \
+    --no-install-recommends \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Instalar extensiones PHP necesarias (incluyendo PostgreSQL)
+# --- Instalación de extensiones necesarias ---
+
+# Instalar extensiones PHP principales (pdo, zip, pdo_pgsql, etc.)
+# 'zip' se instala aquí para ZipArchive
 RUN docker-php-ext-install pdo zip pdo_sqlite pgsql pdo_pgsql
-RUN docker-php-ext-install pdo **zip** pdo_sqlite pgsql pdo_pgsql
+
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
