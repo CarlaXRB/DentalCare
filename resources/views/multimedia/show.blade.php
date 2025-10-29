@@ -46,24 +46,6 @@
          style="max-width:90%; max-height: 80vh; width: auto; height: auto; object-fit: contain; border-radius: 8px;"
          class="shadow-xl border-4 border-white transform hover:scale-[1.01] transition-transform duration-300"
     /></div>
-    <!-- Herramientas 
-    <div class="flex justify-center">
-        <a href="{{ route('radiography.tool', $file->id) }}" class="botton2">{{ __('Herramientas') }}</a>
-    </div>
-
-    <div class="flex justify-end pl-3">
-        <a href="{{ route('radiography.edit', $file->id ) }}" class="botton3">{{ __('Editar') }}</a>
-        @auth
-        @if(Auth::user()->role === 'admin')
-        <form method="POST" action="{{ route('multimedia.destroy', $file->id) }}" onsubmit="return confirm('{{ __('Are you sure you want to delete this study?') }}');">
-            @csrf
-            @method('DELETE')
-            <input type="submit" value="{{ __('Eliminar') }}" class="bottonDelete" />
-        </form>
-        @endif
-        @endauth
-    </div>
-    -->
 </div>
 
 @endsection

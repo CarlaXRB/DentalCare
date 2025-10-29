@@ -87,7 +87,7 @@
         </div>
     </div>
     @empty
-    <p class="text-gray-600 text-center py-4">{{ __('No hay radiografías registradas aún.') }}</p>
+    <p class="text-gray-600 text-center py-4">{{ __('No hay estudios registradas aún.') }}</p>
     @endforelse
 </div>
 Estudios
