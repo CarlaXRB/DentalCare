@@ -9,9 +9,7 @@ use App\Http\Requests\RadiographyRequest;
 use App\Services\ImageFilterService;
 use App\Models\Radiography;
 use App\Models\Patient;
-// Se eliminan las importaciones de Route y Storage, ya que no se usan directamente en el controlador.
-// use Illuminate\Support\Facades\Route; 
-// use Illuminate\Support\Facades\Storage; 
+use Illuminate\Support\Facades\File; // Necesario para crear la carpeta si no existe
 
 class RadiographyController extends Controller
 {
@@ -73,6 +71,8 @@ class RadiographyController extends Controller
      * Muestra los detalles de una radiografía, incluyendo la imagen.
      */
     public function show(Radiography $radiography):View{
+        // En la vista, la imagen se accederá directamente con:
+        // asset('radiographies/' . $radiography->radiography_uri)
         return view('radiography.show', compact('radiography'));
     }
 
@@ -91,21 +91,27 @@ class RadiographyController extends Controller
     }
 
     /**
-     * Almacena una nueva radiografía y su archivo asociado.
-     * * NOTA: La lógica de la ruta para servir el archivo (radiography.file)
-     * ha sido movida a routes/web.php, lo cual es correcto.
+     * Almacena una nueva radiografía y su archivo asociado en la carpeta PUBLIC.
      */
     public function store(RadiographyRequest $request):RedirectResponse{
         $patient = Patient::findOrFail($request->patient_id);
         $radiographyFile = $request->file('radiography_file');
         
-        // 1. Crear nombre único del archivo
+        // 1. Definir la carpeta de destino en public/
+        $destinationPath = public_path('radiographies');
+
+        // Asegurarse de que el directorio exista (si no existe, lo crea)
+        if (!File::isDirectory($destinationPath)) {
+            File::makeDirectory($destinationPath, 0777, true, true);
+        }
+        
+        // 2. Crear nombre único del archivo
         $fileName = time() . '_' . $patient->ci_patient . '.' . $radiographyFile->getClientOriginalExtension();
         
-        // 2. Guardar el archivo en storage/app/public/radiographies/
-        $filePath = $radiographyFile->storeAs('public/radiographies', $fileName); 
+        // 3. Mover el archivo directamente a la carpeta public/radiographies/
+        $radiographyFile->move($destinationPath, $fileName);
         
-        // 3. Crear el registro en la base de datos
+        // 4. Crear el registro en la base de datos
         $radiography=new Radiography;
         $radiography->name_patient=$patient->name_patient;
         $radiography->ci_patient=$patient->ci_patient;
@@ -142,6 +148,12 @@ class RadiographyController extends Controller
      * Elimina una radiografía.
      */
     public function destroy(Radiography $radiography){
+        // Opcional: Eliminar el archivo físico de la carpeta public
+        $filePath = public_path('radiographies/' . $radiography->radiography_uri);
+        if (File::exists($filePath)) {
+            File::delete($filePath);
+        }
+        
         $radiography->delete();
         return redirect()->route('radiography.index')->with('danger','Estudio eliminado');
     }
