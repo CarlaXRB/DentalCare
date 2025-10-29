@@ -138,4 +138,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::post('/payments/search',[PaymentController::class, 'search'])->name('payments.search');
     Route::get('/payments/index', [PaymentController::class, 'index'])->name('payments.index');
 
+    Route::resource('multimedia', App\Http\Controllers\MultimediaFileController::class);
+Route::get('multimedia/search', [App\Http\Controllers\MultimediaFileController::class, 'search'])->name('multimedia.search');
 });
