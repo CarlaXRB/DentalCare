@@ -15,7 +15,7 @@
 
     <a href="{{ route('radiography.create') }}" class="card1">
         <img class="img-fluid mx-auto" src="{{ asset('assets/images/radiography3.png') }}" width="150" height="150" alt="JPEG, PNG">
-        <h5 class="mt-3">{{ __('RADIOGRAFÍA (.JPEG / .PNG')) }}</h5>
+        <h5 class="mt-3">{{ __('RADIOGRAFÍA (.JPEG / .PNG)')}}</h5>
         <p>{{ __('Formatos de imágenes comunes sin información médica incorporada.') }}</p>
     </a>
     <a href="{{ route('tomography.create') }}" class="card1">
