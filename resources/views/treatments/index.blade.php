@@ -47,11 +47,11 @@
             @endif
         </div>
         <div class="flex justify-end">
-            <a href="{{ route('payments.show',$t->id) }}" class="botton3">{{ __('Pagar') }}</a>
+            <a href="{{ route('payments.show',$treatment->id) }}" class="botton3">{{ __('Pagar') }}</a>
                 @auth
                 @if(Auth::user()->role === 'admin')  
                 <form method="POST" 
-                      action="{{ route('treatments.destroy', $t->id) }}" 
+                      action="{{ route('treatments.destroy', $treatment->id) }}" 
                       onsubmit="return confirm('{{ __('¿Estás seguro de que quieres eliminar este presupuesto?') }}');">
                     @csrf
                     @method('DELETE')
