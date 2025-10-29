@@ -1,90 +1,104 @@
-@extends('layouts.app') {{-- Reemplaza con tu layout base si es diferente --}}
+@extends('layouts._partials.layout')
+@section('title','Radiografías')
+@section('subtitle')
+    {{ __('Radiografías') }}
+@endsection
 
 @section('content')
-<div class="container mx-auto p-4">
-    <div class="bg-white shadow-xl rounded-lg p-6">
-        <h1 class="text-3xl font-bold text-gray-800 mb-6 border-b pb-2">
-            <i class="fas fa-list-alt text-green-500 mr-2"></i> Listado de Archivos Multimedia
-        </h1>
+<div class="flex justify-between items-center p-5 pb-1 max-w-6xl mx-auto">
+    <!-- Search bar -->
+    {{-- Se usa POST porque así está en el template, aunque GET es más común para búsquedas --}}
+    <form method="POST" action="{{ route('radiography.search') }}" class="flex gap-3 items-center">
+        @csrf
+        <input type="text" name="search" placeholder="{{ __('Buscar radiografía por nombre, CI o ID...') }}"
+            class="px-4 py-2 rounded-full border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-cyan-500 w-80"/>
+        <input class="botton2" type="submit" value="{{ __('Buscar') }}" />
+    </form>
 
-        {{-- Botón y Barra de Búsqueda --}}
-        <div class="flex justify-between items-center mb-6">
-            <a href="{{ route('multimedia.create') }}" 
-               class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 transition duration-150">
-                <i class="fas fa-plus mr-2"></i> Nuevo Archivo
+    <!-- Menu button -->
+    <a href="{{ route('files.select') }}" class="botton1">{{ __('Atrás') }}</a>
+</div>
+
+<!-- Main title -->
+<h1 class="title1 text-center mb-6">{{ __('Lista de Radiografías') }}</h1>
+
+<!-- Radiographies table -->
+<div class="max-w-6xl mx-auto bg-white rounded-xl p-6 text-gray-900 shadow-2xl">
+    @if(session('status'))
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded-md" role="alert">
+            {{ session('status') }}
+        </div>
+    @endif
+    
+    <!-- Table header -->
+    <div class="grid grid-cols-6 gap-4 border-b border-gray-300 pb-3 mb-3 font-semibold text-sm uppercase">
+        <h3 class="title4 text-center">{{ __('Vista previa') }}</h3>
+        <h3 class="title4 text-center">{{ __('Nombre') }}</h3>
+        <h3 class="title4 text-center">{{ __('C.I.') }}</h3>
+        <h3 class="title4 text-center">{{ __('Fecha') }}</h3>
+        <h3 class="title4 text-center">{{ __('ID del estudio') }}</h3>
+        <h3 class="title4 text-center">{{ __('Tipo') }}</h3>
+    </div>
+
+    <!-- Table body -->
+    {{-- Asumo que la variable $radiographies es un array de objetos con las propiedades requeridas --}}
+    @forelse($radiographies as $radiography)
+    <div class="grid grid-cols-6 gap-4 items-center border-b border-gray-200 py-3 text-gray-800 hover:bg-gray-50 transition">
+        
+        <!-- Preview -->
+        <div class="flex justify-center">
+            <a href="{{ route('radiography.show', $radiography->id) }}">
+                {{-- Asegúrate que 'storage/radiographies/' sea el path correcto a tu archivo --}}
+                <img src="{{ asset('storage/radiographies/'.$radiography->radiography_uri) }}" 
+                     alt="Radiography preview" 
+                     class="rounded-lg shadow-md w-24 h-20 object-cover border border-gray-100 transition transform hover:scale-105"/>
             </a>
-            
-            <form action="{{ route('multimedia.search') }}" method="GET" class="w-1/3">
-                <div class="relative">
-                    <input type="text" name="search" placeholder="Buscar por Nombre, CI o Tipo de Estudio..."
-                           class="w-full py-2 pl-10 pr-4 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
-                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-                </div>
-            </form>
         </div>
 
-        {{-- Mensajes de Sesión --}}
-        @if (session('success'))
-            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">{{ session('success') }}</div>
-        @endif
-        @if (session('danger'))
-            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">{{ session('danger') }}</div>
-        @endif
+        <!-- Patient name -->
+        <div class="text-center">
+            <a href="{{ route('radiography.show', $radiography->id) }}" class="txt hover:text-cyan-600 font-medium">
+                {{ $radiography->name_patient }}
+            </a>
+        </div>
 
-        {{-- Tabla de Archivos --}}
-        @if ($files->isEmpty())
-            <div class="text-center py-10 text-gray-500">
-                <p>No hay archivos multimedia cargados todavía.</p>
-            </div>
-        @else
-            <div class="overflow-x-auto shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                <table class="min-w-full divide-y divide-gray-300">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">ID</th>
-                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Nombre del Paciente</th>
-                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">CI</th>
-                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Nombre del Archivo</th>
-                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Tipo de Estudio</th>
-                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Tamaño</th>
-                            <th scope="col" class="relative py-3.5 pl-3 pr-4">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200 bg-white">
-                        @foreach ($files as $file)
-                        <tr class="hover:bg-gray-50">
-                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">{{ $file->id }}</td>
-                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $file->name_patient }}</td>
-                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $file->ci_patient }}</td>
-                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                <span class="{{ $file->file_type == 'folder' ? 'font-bold text-blue-600' : '' }}">
-                                    @if ($file->file_type != 'folder')
-                                        <i class="fas fa-file-image mr-1 text-purple-500"></i>
-                                    @else
-                                        <i class="fas fa-folder-open mr-1 text-orange-500"></i>
-                                    @endif
-                                    {{ Str::limit($file->file_name, 35) }}
-                                </span>
-                            </td>
-                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ ucfirst($file->study_type) }}</td>
-                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $file->readable_size }}</td>
-                            <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium">
-                                @if ($file->file_type != 'folder')
-                                <a href="{{ route('multimedia.show', $file->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-3" title="Ver Detalle"><i class="fas fa-eye"></i></a>
-                                @endif
-                                
-                                <form action="{{ route('multimedia.destroy', $file->id) }}" method="POST" class="inline" onsubmit="return confirm('¿Está seguro de que desea eliminar este archivo? Esta acción no se puede deshacer.');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900" title="Eliminar"><i class="fas fa-trash"></i></button>
-                                </form>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @endif
+        <!-- CI -->
+        <div class="text-center">
+            <a href="{{ route('radiography.show', $radiography->id) }}" class="txt hover:text-cyan-600">
+                {{ $radiography->ci_patient }}
+            </a>
+        </div>
+
+        <!-- Date -->
+        <div class="text-center">
+            <a href="{{ route('radiography.show', $radiography->id) }}" class="txt hover:text-cyan-600">
+                {{ \Carbon\Carbon::parse($radiography->radiography_date)->format('d/m/Y') }}
+            </a>
+        </div>
+
+        <!-- Radiography ID -->
+        <div class="text-center text-sm font-mono">
+            <a href="{{ route('radiography.show', $radiography->id) }}" class="txt hover:text-cyan-600">
+                {{ $radiography->radiography_id }}
+            </a>
+        </div>
+
+        <!-- Radiography Type -->
+        <div class="text-center">
+            <a href="{{ route('radiography.show', $radiography->id) }}" class="txt hover:text-cyan-600">
+                {{ $radiography->radiography_type }}
+            </a>
+        </div>
     </div>
+    @empty
+    <p class="text-gray-600 text-center py-8 text-lg">{{ __('No hay radiografías registradas aún.') }}</p>
+    @endforelse
+    
+    {{-- Paginación (si aplica) --}}
+    @if(isset($radiographies) && method_exists($radiographies, 'links'))
+    <div class="mt-4">
+        {{ $radiographies->links() }}
+    </div>
+    @endif
 </div>
 @endsection
