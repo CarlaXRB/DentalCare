@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PatientRequest extends FormRequest
 {
@@ -26,7 +27,11 @@ class PatientRequest extends FormRequest
         $patientId = $this->route('patient')?->id ?? null;
         return [
             'name_patient' => 'required|string|max:100|min:3',
-            'ci_patient' => 'required|unique:patients,ci_patient,' . $patientId,
+            'ci_patient' => [
+                'required',
+                'numeric',
+                Rule::unique('patients', 'ci_patient')->ignore($patientId),
+            ],
             'birth_date' => 'required|date',
             'gender' => 'required|in:masculino,femenino',
             'patient_contact' => 'required|numeric',

@@ -22,7 +22,7 @@
             <div>
                 <label class="title4 block mb-2">{{ __('Nombre del paciente') }}:</label>
                 <input type="text" name="name_patient" value="{{ old('name_patient') }}" 
-                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
+                    class="border-gray-500 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
                 @error('name_patient') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
 
@@ -30,7 +30,7 @@
             <div>
                 <label class="title4 block mb-2">{{ __('C.I.') }}:</label>
                 <input type="text" name="ci_patient" value="{{ old('ci_patient') }}" 
-                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
+                    class="border-gray-500 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
                 @error('ci_patient') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
 
@@ -38,7 +38,7 @@
             <div>
                 <label class="title4 block mb-2">{{ __('Fecha de Nacimiento') }}:</label>
                 <input type="date" name="birth_date" value="{{ old('birth_date') }}" 
-                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                    class="border-gray-500 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 />
                 @error('birth_date') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
@@ -47,7 +47,7 @@
             <div>
                 <label class="title4 block mb-2">{{ __('Género') }}:</label>
                 <select name="gender" 
-                    class="border-gray-300 rounded-lg p-3 w-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                    class="border-gray-500 rounded-lg p-3 w-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-cyan-500">
                     <option value="">{{ __('-- Seleccionar género --') }}</option>
                     <option value="femenino" {{ old('gender') == 'femenino' ? 'selected' : '' }}>{{ __('Femenino') }}</option>
                     <option value="masculino" {{ old('gender') == 'masculino' ? 'selected' : '' }}>{{ __('Masculino') }}</option>
@@ -59,7 +59,7 @@
             <div>
                 <label class="title4 block mb-2">{{ __('Número de celular') }}:</label>
                 <input type="text" name="patient_contact" value="{{ old('patient_contact') }}" 
-                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                    class="border-gray-500 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 />
                 @error('patient_contact') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
