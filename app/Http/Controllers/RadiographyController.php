@@ -9,6 +9,8 @@ use App\Http\Requests\RadiographyRequest;
 use App\Services\ImageFilterService;
 use App\Models\Radiography;
 use App\Models\Patient;
+use Illuminate\Support\Facades\Route; 
+use Illuminate\Support\Facades\Storage; 
 
 class RadiographyController extends Controller
 {
@@ -54,11 +56,14 @@ class RadiographyController extends Controller
     public function measurements(Radiography $radiography):View{
         return view('radiography.measurements', compact('radiography'));
     }
-     public function store(RadiographyRequest $request):RedirectResponse{
+    public function store(RadiographyRequest $request):RedirectResponse{
         $patient = Patient::findOrFail($request->patient_id);
         $radiographyFile = $request->file('radiography_file');
+        
         $fileName = time() . '_' . $patient->ci_patient . '.' . $radiographyFile->getClientOriginalExtension();
+        
         $filePath = $radiographyFile->storeAs('public/radiographies', $fileName); 
+        
         $radiography=new Radiography;
         $radiography->name_patient=$patient->name_patient;
         $radiography->ci_patient=$patient->ci_patient;
@@ -70,6 +75,7 @@ class RadiographyController extends Controller
         $radiography->radiography_charge=$request->radiography_charge;
         $radiography->save();
 
+        // La definición de la ruta se ha movido a routes/web.php
         return redirect()->route('radiography.index')->with('success','Radiografia creada');
     }
     public function report(Radiography $radiography):View{

@@ -10,23 +10,23 @@
 <h1 class="title1">{{ __('Herramientas') }}</h1>
 <div class="relative flex justify-center space-x-2">
     <div class="group relative">
-        <button id="zoomIn" class="btnimg"><img src="{{ asset('storage/assets/images/zoom.png') }}" width="50" height="50"></button>
+        <button id="zoomIn" class="btnimg"><img src="{{ asset('assets/images/zoom.png') }}" width="50" height="50"></button>
         <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-sm text-gray-800">Acercar</span></div>
     </div>
     <div class="group relative">
-        <button id="zoomOut" class="btnimg"><img src="{{ asset('storage/assets/images/unzoom.png') }}" width="50" height="50"></button>
+        <button id="zoomOut" class="btnimg"><img src="{{ asset('assets/images/unzoom.png') }}" width="50" height="50"></button>
         <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-sm text-gray-800">Alejar</span></div>
     </div>
     <div class="group relative">
-        <button id="invertColors" class="btnimg"><img src="{{ asset('storage/assets/images/negative.png') }}" width="50" height="50"></button>
+        <button id="invertColors" class="btnimg"><img src="{{ asset('assets/images/negative.png') }}" width="50" height="50"></button>
         <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-sm text-gray-800">Negativo</span></div>
     </div>
     <div class="group relative">
-        <button id="increaseBrightness" class="btnimg"><img src="{{ asset('storage/assets/images/filter3.png') }}" width="50" height="50"></button>
+        <button id="increaseBrightness" class="btnimg"><img src="{{ asset('assets/images/filter3.png') }}" width="50" height="50"></button>
         <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Más_Brillo</span></div>
     </div>
     <div class="group relative">
-        <button id="decreaseBrightness" class="btnimg"><img src="{{ asset('storage/assets/images/filter4.png') }}" width="50" height="50"></button>
+        <button id="decreaseBrightness" class="btnimg"><img src="{{ asset('assets/images/filter4.png') }}" width="50" height="50"></button>
         <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Menos_Brillo</span></div>
     </div>
     <div class="group relative">
@@ -53,7 +53,7 @@
         <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Descargar</span></div>
     </div>
     <div class="group relative">
-        <button id="draw" class="btnimg" onclick="window.location.href='{{ route('radiography.measurements', $radiography->id) }}'"><img src="{{ asset('storage/assets/images/draw.png') }}" width="50" height="50"></button>
+        <button id="draw" class="btnimg" onclick="window.location.href='{{ route('radiography.measurements', $radiography->id) }}'"><img src="{{ asset('assets/images/draw.png') }}" width="50" height="50"></button>
         <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-sm text-gray-800">Mediciones</span></div>
     </div>
 </div>
