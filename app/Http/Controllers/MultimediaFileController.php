@@ -38,38 +38,21 @@ class MultimediaFileController extends Controller
     /**
      * Almacena uno o varios archivos (o un archivo ZIP) y sus metadatos.
      */
-    public function store(MultimediaFileRequest $request): RedirectResponse
+public function store(MultimediaFileRequest $request)
     {
-        // Usamos ci_patient para encontrar al paciente.
-        $patient = Patient::where('ci_patient', $request->ci_patient)->firstOrFail();
-        
-        $destinationPath = public_path($this->basePath);
-        // Crear el directorio si no existe
+        $radiographyFile = $request->file('file'); 
+
+        if (!$radiographyFile) {
+            return back()->withInput()->withErrors(['file' => 'El archivo de radiografía es obligatorio y no fue subido.']);
+        }
+        $patient = Patient::findOrFail($request->patient_id);
+        $destinationPath = public_path('radiographies/' . $patient->ci_patient);
         if (!File::isDirectory($destinationPath)) {
             File::makeDirectory($destinationPath, 0777, true, true);
         }
-
-        foreach ($request->file('file') as $uploadedFile) {
-            $extension = strtolower($uploadedFile->getClientOriginalExtension());
-            $originalName = $uploadedFile->getClientOriginalName();
-            
-            // Nombre de archivo único
-            $uniqueFileName = time() . '_' . uniqid() . '.' . $extension;
-            
-            if ($extension === 'zip') {
-                // Lógica para manejar archivos ZIP
-                $this->processZipFile($uploadedFile, $destinationPath, $patient, $request->study_type);
-            } else {
-                // Lógica para archivos de imagen individuales (JPG, PNG)
-                // Usamos move() para guardar directamente en la carpeta public/multimedia
-                $uploadedFile->move($destinationPath, $uniqueFileName);
-                
-                // Guardamos los metadatos
-                $this->saveMetadata($originalName, $uniqueFileName, $uploadedFile->getSize(), $uploadedFile->getClientMimeType(), $patient, $request->study_type);
-            }
-        }
-
-        return redirect()->route('multimedia.index')->with('success', 'Archivos procesados y subidos exitosamente.');
+        $fileName = time() . '_' . $patient->ci_patient . '.' . $radiographyFile->getClientOriginalExtension();
+        $radiographyFile->move($destinationPath, $fileName);
+        return redirect()->route('radiography.index')->with('success', 'Radiografía registrada con éxito.');
     }
 
     /**
