@@ -21,7 +21,6 @@ return new class extends Migration
             $table->date('radiography_date');
             $table->string('radiography_type');
             $table->string('radiography_uri');
-            $table->string('radiography_dicom_uri');
             $table->string('radiography_doctor');
             $table->string('radiography_charge');
             $table->timestamps();
