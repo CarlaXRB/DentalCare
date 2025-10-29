@@ -55,30 +55,29 @@ class RadiographyController extends Controller
     public function measurements(Radiography $radiography):View{
         return view('radiography.measurements', compact('radiography'));
     }
-    public function store(RadiographyRequest $request):RedirectResponse{
+     public function store(RadiographyRequest $request):RedirectResponse{
         $patient = Patient::findOrFail($request->patient_id);
-        $dicomFile = $request->file('radiography_file');
-        $dicomFileName = time() . '.' . $dicomFile->getClientOriginalExtension();
-        $dicomFilePath = $dicomFile->storeAs('public/radiographies', $dicomFileName);
-
-        $dicomPath = storage_path('app/public/radiographies/' . $dicomFileName);
-        $imagick = new Imagick();
-        $imagick->readImage($dicomPath);
-        $imagick->setImageFormat('jpg');
-        $imagick->setImageCompressionQuality(95);
-        $jpgFileName = time() . '.jpg';
-        $jpgFilePath = storage_path('app/public/radiographies/' . $jpgFileName);
-        $imagick->writeImage($jpgFilePath);
-        $imagick->destroy();
-
+        
+        // 1. Manejo del archivo
+        $radiographyFile = $request->file('radiography_file');
+        
+        // Genera un nombre de archivo único con la extensión original
+        $fileName = time() . '_' . $patient->ci_patient . '.' . $radiographyFile->getClientOriginalExtension();
+        
+        // Almacena el archivo en 'storage/app/public/radiographies'
+        // Esto guarda el archivo directamente sin manipulación
+        $filePath = $radiographyFile->storeAs('public/radiographies', $fileName); 
+        
+        // 2. Creación del registro en la base de datos
         $radiography=new Radiography;
         $radiography->name_patient=$patient->name_patient;
         $radiography->ci_patient=$patient->ci_patient;
         $radiography->radiography_id=$request->radiography_id;
         $radiography->radiography_date=$request->radiography_date;
         $radiography->radiography_type=$request->radiography_type;
-        $radiography->radiography_uri=$jpgFileName;
-        $radiography->radiography_dicom_uri=$dicomFileName;
+        // La URI ahora usa el nombre de archivo completo (ej: 1678888.jpg)
+        $radiography->radiography_uri=$fileName; 
+    
         $radiography->radiography_doctor=$request->radiography_doctor;
         $radiography->radiography_charge=$request->radiography_charge;
         $radiography->save();
