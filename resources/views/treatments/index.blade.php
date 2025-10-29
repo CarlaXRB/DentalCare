@@ -32,15 +32,15 @@
     </div>
 
     <!-- Table body -->
-    @forelse($treatments as $t)
+    @forelse($treatments as $treatment)
     <div class="grid grid-cols-7 gap-4 items-center border-b border-gray-200 py-3 text-gray-800 hover:bg-gray-50 transition text-center">
-        <div class="text-center">{{ $t->name ?? 'N/A' }}</div>
-        <div class="text-center">{{ $t->ci_patient ?? 'N/A' }}</div>
-        <div class="text-center">Bs. {{ number_format($t->total_amount, 2) }}</div>
-        <div class="text-center">Bs. {{ number_format($t->discount, 2) }}</div>
-        <div class="text-center">Bs. {{ number_format($t->amount, 2) }}</div>
+        <div class="text-center">{{ $treatment->name ?? 'N/A' }}</div>
+        <div class="text-center">{{ $treatment->ci_patient ?? 'N/A' }}</div>
+        <div class="text-center">Bs. {{ number_format($treatment->total_amount, 2) }}</div>
+        <div class="text-center">Bs. {{ number_format($treatment->discount, 2) }}</div>
+        <div class="text-center">Bs. {{ number_format($treatment->amount, 2) }}</div>
         <div>
-            @if ($t->pdf_path)
+            @if ($treatment->pdf_path)
                 <a href="{{ route('treatments.downloadPdf', $treatment->id) }}" class="botton2">{{ __('Ver PDF') }}</a>
             @else
                 —
