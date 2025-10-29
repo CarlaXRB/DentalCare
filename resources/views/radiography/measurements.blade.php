@@ -11,34 +11,34 @@
 
 <div class="relative flex justify-center space-x-2">
     <div class="group relative">
-        <button id="distance" class="btnimg"><img src="{{ asset('storage/assets/images/distance.png') }}" width="50" height="50"></button>
+        <button id="distance" class="btnimg"><img src="{{ asset('assets/images/distance.png') }}" width="50" height="50"></button>
         <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Medir_Distancia</span></div>
     </div>
     <div class="group relative">
-        <button id="delimited" class="btnimg"><img src="{{ asset('storage/assets/images/distances.png') }}" width="50" height="50"></button>
+        <button id="delimited" class="btnimg"><img src="{{ asset('assets/images/distances.png') }}" width="50" height="50"></button>
         <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Marcar_Contorno</span></div>
     </div>
     <div class="group relative">
-        <button id="angle" class="btnimg"><img src="{{ asset('storage/assets/images/angle.png') }}" width="50" height="50"></button>
+        <button id="angle" class="btnimg"><img src="{{ asset('assets/images/angle.png') }}" width="50" height="50"></button>
         <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Medir_Ángulo</span></div>
     </div>
     <div class="group relative">
-        <button id="arco" class="btnimg"><img src="{{ asset('storage/assets/images/arco.png') }}" width="50" height="50"></button>
+        <button id="arco" class="btnimg"><img src="{{ asset('assets/images/arco.png') }}" width="50" height="50"></button>
         <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Medir_Arco</span></div>
     </div>
     <div class="group relative">
-        <button id="paint" class="btnimg"><img src="{{ asset('storage/assets/images/paint.png') }}" width="50" height="50"></button>
+        <button id="paint" class="btnimg"><img src="{{ asset('assets/images/paint.png') }}" width="50" height="50"></button>
         <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Pintar</span></div>
     </div>
     <form action="{{ route('tool.store',['radiography_id' => $radiography->radiography_id, 'tomography_id' => '0', 'ci_patient' => $radiography->ci_patient, 'id' => $radiography->id]) }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="group relative">
-            <button id="save" class="btnimg" type="submit"><img src="{{ asset('storage/assets/images/save.png') }}" width="50" height="50"></button>
+            <button id="save" class="btnimg" type="submit"><img src="{{ asset('assets/images/save.png') }}" width="50" height="50"></button>
             <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-sm text-gray-800">Guardar</span></div>
         </div>
     </form>
     <div class="group relative">
-        <button id="downloadImage" class="btnimg"><img src="{{ asset('storage/assets/images/download.png') }}" width="50" height="50"></button>
+        <button id="downloadImage" class="btnimg"><img src="{{ asset('assets/images/download.png') }}" width="50" height="50"></button>
         <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Decargar</span></div>
     </div>
 </div>

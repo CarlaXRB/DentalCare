@@ -15,7 +15,7 @@
     </form>
 
     <!-- Menu button -->
-    <a href="{{ route('radiography.new') }}" class="botton1">{{ __('Menú de Radiografías') }}</a>
+    <a href="{{ route('files.select') }}" class="botton1">{{ __('Atrás') }}</a>
 </div>
 
 <!-- Main title -->

@@ -123,10 +123,7 @@
 
 <body>
     <div class="hero">
-        <!-- Banner de fondo -->
         <img src="{{ asset('assets/images/banner.png') }}" alt="Banner Dental Care" class="banner">
-
-        <!-- Contenido -->
         <div class="hero-content">
             <img src="{{ asset('assets/images/logo.png') }}" alt="Logo Dental Care" class="logo">
             <h1>¡Bienvenido!</h1>

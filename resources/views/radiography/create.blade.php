@@ -7,7 +7,7 @@
 @section('content')
 {{-- Botón para volver al dashboard --}}
 <div class="flex justify-end p-5 pb-1">
-    <a href="{{ route('radiography.new') }}" class="botton1">{{ __('Menú Radiografías') }}</a>
+    <a href="{{ route('files.select') }}" class="botton1">{{ __('Atrás') }}</a>
 </div>
 
 <div class="bg-white rounded-lg max-w-5xl mx-auto p-6">
