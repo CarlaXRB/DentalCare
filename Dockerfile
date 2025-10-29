@@ -4,14 +4,6 @@
 FROM node:18-bullseye AS assets_builder
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y \
-    libmagickwand-dev \
-    --no-install-recommends && rm -rf /var/lib/apt/lists/*
-
-# 2. Instalar la extensión PHP Imagick
-# El comando docker-php-ext-install se encarga de compilar e instalar la extensión
-RUN docker-php-ext-install imagick
-
 # Instalar build tools y limpiar caché. Removida la instalación global de yarn.
 RUN apt-get update && \
     apt-get install -y build-essential && \
@@ -35,7 +27,20 @@ RUN apt-get update && \
     libzip-dev zip unzip git curl libsqlite3-dev \
     libpq-dev \
     python3 python3-pip \
+    --no-install-recommends \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# 💥 CAMBIO CRÍTICO AÑADIDO AQUÍ 💥
+
+# 1. Instalar la librería ImageMagick (la dependencia de sistema)
+RUN apt-get update && apt-get install -y \
+    libmagickwand-dev \
+    --no-install-recommends && rm -rf /var/lib/apt/lists/*
+
+# 2. Instalar la extensión PHP Imagick
+RUN docker-php-ext-install imagick
+
+# 💥 FIN DE CAMBIOS CRÍTICOS 💥
 
 # Instalar extensiones PHP necesarias (incluyendo PostgreSQL)
 RUN docker-php-ext-install pdo zip pdo_sqlite pgsql pdo_pgsql
