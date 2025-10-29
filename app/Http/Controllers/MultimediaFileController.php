@@ -78,7 +78,7 @@ class MultimediaFileController extends Controller
         }
 
         // 3. Redirección
-        return redirect()->route('files.index')->with('success', 'Archivos multimedia subidos con éxito.');
+        return redirect()->route('multimedia.index')->with('success', 'Archivos multimedia subidos con éxito.');
     }
 
     /**

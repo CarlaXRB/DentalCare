@@ -1,93 +1,93 @@
 @extends('layouts._partials.layout')
-@section('title', __('Subir Archivo Multimedia'))
+@section('title','Estudios')
 @section('subtitle')
-    {{ __('Subir Archivo Multimedia') }}
+    {{ __('Estudios') }}
 @endsection
 
 @section('content')
-{{-- Botón para volver al dashboard --}}
-<div class="flex justify-end p-5 pb-1">
-    {{-- Asumo que 'files.select' es tu ruta para volver al menú principal de archivos --}}
+<div class="flex justify-between items-center p-5 pb-1">
+    <!-- Search bar -->
+    <form method="POST" action="{{ route('multimedia.search') }}" class="flex gap-3 items-center">
+        @csrf
+        <input type="text" name="search" placeholder="{{ __('Buscar estudio...') }}"
+            class="px-4 py-2 rounded-full border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
+        <input class="botton2" type="submit" value="{{ __('Buscar') }}" />
+    </form>
+
+    <!-- Menu button -->
     <a href="{{ route('files.select') }}" class="botton1">{{ __('Atrás') }}</a>
 </div>
 
-<div class="bg-white rounded-lg max-w-5xl mx-auto p-6 shadow-xl">
-    
-    {{-- Mensajes de validación y estado --}}
-    @if(session('success'))
-        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded-md" role="alert">
-            {{ session('success') }}
-        </div>
-    @endif
-    
-    <form method="POST" action="{{ route('multimedia.store') }}" enctype="multipart/form-data">
-        @csrf
+<!-- Main title -->
+<h1 class="title1 text-center">{{ __('Lista de estudios') }}</h1>
 
-        <h1 class="title1 text-center mb-8">{{ __('Registro de Archivo Multimedia') }}</h1>
+<!-- Radiographies table -->
+<div class="max-w-6xl mx-auto bg-white rounded-xl p-3 text-gray-900 shadow-md">
+    <!-- Table header -->
+    <div class="grid grid-cols-6 gap-4 border-b border-gray-300 pb-2 mb-3">
+        <h3 class="title4 text-center">{{ __('Vista previa') }}</h3>
+        <h3 class="title4 text-center">{{ __('Nombre') }}</h3>
+        <h3 class="title4 text-center">{{ __('C.I.') }}</h3>
+        <h3 class="title4 text-center">{{ __('Fecha') }}</h3>
+        <h3 class="title4 text-center">{{ __('ID del estudio') }}</h3>
+        <h3 class="title4 text-center">{{ __('Tipo') }}</h3>
+    </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {{-- Patient selection (patient_id) --}}
-            <div>
-                <label class="title4 block mb-2">{{ __('Paciente') }}:</label>
-                <select name="patient_id" required
-                    class="border-gray-300 rounded-lg p-3 w-full text-black focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                    <option value="">{{ __('-- Seleccionar Paciente --') }}</option>
-                    {{-- La variable $patients DEBE ser pasada desde el controlador MultimediaFileController@create --}}
-                    @foreach($patients as $patient)
-                        <option value="{{ $patient->id }}" {{ old('patient_id') == $patient->id ? 'selected' : '' }}>
-                            {{ $patient->name_patient }} - CI: {{ $patient->ci_patient }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('patient_id') <p class="error mt-1 text-red-500 text-sm">{{ $message }}</p> @enderror
-            </div>
-
-            <div class="flex items-center gap-2 mt-6">
-                <p class="text-gray-600">{{ __('¿Paciente no registrado?') }}</p>
-                <a href="{{ route('patient.create') }}" class="botton3 ml-5">{{ __('Registrar Paciente') }}</a>
-            </div>
-
-            {{-- Study Type (study_type) --}}
-            <div>
-                <label class="title4 block mb-2">{{ __('Tipo de Estudio/Archivo') }}:</label>
-                <select id="study_type" name="study_type" required
-                    class="border-gray-300 rounded-lg p-3 w-full text-black focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                    <option value="">{{ __('-- Seleccione el tipo --') }}</option>
-                    <option value="radiography" {{ old('study_type') == 'radiography' ? 'selected' : '' }}>Radiografía</option>
-                    <option value="tomography" {{ old('study_type') == 'tomography' ? 'selected' : '' }}>Tomografía</option>
-                    <option value="ecography" {{ old('study_type') == 'ecography' ? 'selected' : '' }}>Ecografía</option>
-                    <option value="general" {{ old('study_type') == 'general' ? 'selected' : '' }}>General / Otro</option>
-                </select>
-                @error('study_type') <p class="error mt-1 text-red-500 text-sm">{{ $message }}</p> @enderror
-            </div>
-
-            {{-- File Input (file) --}}
-            <div>
-                <label class="title4 block mb-2">{{ __('Subir Archivo(s)') }}:</label>
-                {{-- Se usa name="file[]" y multiple para permitir varios archivos o un ZIP --}}
-                <input type="file" name="file[]" multiple accept="image/*,.zip" required
-                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
-                <small class="text-gray-500 mt-1 block">{{ __('JPG, PNG, o ZIP (se extraerán imágenes).') }}</small>
-                @error('file') <p class="error mt-1 text-red-500 text-sm">{{ $message }}</p> @enderror
-                @error('file.*') <p class="error mt-1 text-red-500 text-sm">{{ $message }}</p> @enderror
-            </div>
-            
-            {{-- Optional Notes/Description --}}
-            <div class="md:col-span-2">
-                <label class="title4 block mb-2">{{ __('Descripción / Notas (Opcional)') }}:</label>
-                <textarea name="notes" rows="3"
-                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500">{{ old('notes') }}</textarea>
-                @error('notes') <p class="error mt-1 text-red-500 text-sm">{{ $message }}</p> @enderror
-            </div>
-
-        </div>
-
-        {{-- Submit button --}}
-        <div class="flex justify-center mt-10">
-            <button type="submit" class="botton2 shadow-lg hover:shadow-xl transition duration-300">
-                <i class="fas fa-upload mr-2"></i> {{ __('Procesar y Subir Archivo(s)') }}
-            </button>
-        </div>
-    </form>
+    <!-- Table body -->
+    @forelse($multimediaFiles as $file)
+    <div class="grid grid-cols-6 gap-4 items-center border-b border-gray-200 py-3 text-gray-800 hover:bg-gray-50 transition">
+        <!-- Preview -->
+        <div class="flex justify-center">
+    {{-- 1. Cambiar la variable de $radiography a $file --}}
+    <a href="{{ route('multimedia.show', $file->id) }}">
+        {{-- 2. Cambiar la ruta del asset: usar 'multimedia' y el campo 'file_path' --}}
+        <img src="{{ asset('storage/multimedia/'.$file->file_path) }}" 
+             alt="Vista previa de {{ $file->study_type }}" 
+             {{-- Asegúrate de usar las clases de la nueva vista (w-24 h-20) --}}
+             class="rounded-lg shadow-md w-24 h-20 object-cover border border-gray-100"
+             {{-- 3. Agregar un fallback en caso de que la imagen no cargue (¡CRÍTICO!) --}}
+             onerror="this.onerror=null;this.src='https://placehold.co/100x70/E0F2F7/4A5568?text=NO+IMG';"
+        />
+    </a>
 </div>
-@endsection
+
+        <!-- Patient name -->
+        <div class="text-center">
+            <a href="{{ route('multimedia.show', $file->id) }}" class="txt hover:text-cyan-600">
+                {{ $multimedia->name_patient }}
+            </a>
+        </div>
+
+        <!-- CI -->
+        <div class="text-center">
+            <a href="{{ route('multimedia.show', $file->id) }}" class="txt hover:text-cyan-600">
+                {{ $multimedia->ci_patient }}
+            </a>
+        </div>
+
+        <!-- Date -->
+        <div class="text-center">
+            <a href="{{ route('multimedia.show', $file->id) }}" class="txt hover:text-cyan-600">
+                {{ $multimedia->radiography_date }}
+            </a>
+        </div>
+
+        <!-- Radiography ID -->
+        <div class="text-center">
+            <a href="{{ route('multimedia.show', $file->id) }}" class="txt hover:text-cyan-600">
+                {{ $multimedia->file_type }}
+            </a>
+        </div>
+
+        <!-- Radiography Type -->
+        <div class="text-center">
+            <a href="{{ route('multimedia.show', $file->id) }}" class="txt hover:text-cyan-600">
+                {{ $multimedia->study_type }}
+            </a>
+        </div>
+    </div>
+    @empty
+    <p class="text-gray-600 text-center py-4">{{ __('No hay radiografías registradas aún.') }}</p>
+    @endforelse
+</div>
+Estudios

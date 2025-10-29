@@ -129,7 +129,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::resource('/treatments',TreatmentController::class);
     Route::post('/budget-search',[BudgetController::class, 'search'])->name('budgets.search');
     Route::post('/treatment-search',[TreatmentController::class, 'search'])->name('treatments.search');
-    Route::post('/treatment-download',[TreatmentController::class, 'downloadPdf'])->name('treatments.downloadPdf');
+    Route::post('/treatment-download/{id}',[TreatmentController::class, 'downloadPdf'])->name('treatments.downloadPdf');
+    
     Route::prefix('treatments/{treatment}/payments')->group(function () {
         Route::get('/', [PaymentController::class, 'show'])->name('payments.show');
         Route::get('/create', [PaymentController::class, 'create'])->name('payments.create');
