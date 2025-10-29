@@ -41,7 +41,7 @@
         <div class="text-center">Bs. {{ number_format($t->amount, 2) }}</div>
         <div>
             @if ($t->pdf_path)
-                <a href="{{ asset($t->pdf_path) }}" class="botton2">{{ __('Ver PDF') }}</a>
+                <a href="{{ route('treatments.downloadPdf', $treatment->id) }}" class="botton2">{{ __('Ver PDF') }}</a>
             @else
                 —
             @endif

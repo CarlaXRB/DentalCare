@@ -13,6 +13,7 @@ use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\TreatmentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\DicomController;
+use App\Http\Controllers\MultimediaFileController;
 
 use App\Models\Patient;
 use App\Models\Radiography;
@@ -138,6 +139,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::post('/payments/search',[PaymentController::class, 'search'])->name('payments.search');
     Route::get('/payments/index', [PaymentController::class, 'index'])->name('payments.index');
 
-    Route::resource('multimedia', App\Http\Controllers\MultimediaFileController::class);
-Route::get('multimedia/search', [App\Http\Controllers\MultimediaFileController::class, 'search'])->name('multimedia.search');
+    Route::resource('multimedia', MultimediaFileController::class);
+Route::get('multimedia/search', [MultimediaFileController::class, 'search'])->name('multimedia.search');
 });

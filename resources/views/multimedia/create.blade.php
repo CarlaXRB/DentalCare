@@ -12,7 +12,7 @@
 
 
 <div class="bg-white rounded-lg max-w-5xl mx-auto p-6">
-    <form method="POST" action="{{ route('radiography.store') }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('multimedia.store') }}" enctype="multipart/form-data">
         @csrf
 
         <h1 class="title1 text-center mb-8">{{ __('Información del Estudio') }}</h1>

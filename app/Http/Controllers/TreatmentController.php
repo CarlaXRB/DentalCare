@@ -102,7 +102,7 @@ class TreatmentController extends Controller
         ])->deleteFileAfterSend(false);
     
     }
-/*
+
     public function show($id)
     {
         $treatment = Treatment::findOrFail($id);
@@ -111,7 +111,7 @@ class TreatmentController extends Controller
 
         return view('treatments.show', compact('treatment', 'budgets'));
     }
-*/
+
     public function destroy($id)
     {
         $treatment = Treatment::findOrFail($id);
@@ -129,22 +129,17 @@ class TreatmentController extends Controller
             ->orWhere('ci_patient', 'LIKE', '%' . $search . '%')->get();
         return view('treatments.search', compact('treatments'));
     }
-        public function show($id)
+    public function downloadPdf($id)
     {
-        // 1. Buscar el tratamiento por ID
         $treatment = Treatment::findOrFail($id);
+        $filePath = $treatment->pdf_path;
 
-        // 2. Obtener la ruta de almacenamiento
-        $filePath = $treatment->pdf_path; 
-
-        // 3. Verificar si el archivo existe en el Storage
-        if (!Storage::exists($filePath)) {
-            // Si no existe, lanza un error 404
-            abort(404, 'El archivo PDF del tratamiento no fue encontrado.');
+        if (!$filePath || !Storage::exists($filePath)) {
+            // Manejar error 404 si el archivo no existe
+            abort(404, 'El archivo PDF no fue encontrado.');
         }
 
-        // 4. Servir el archivo para descarga forzada
-        // El método download toma la ruta relativa al disco de almacenamiento
+        // Retorna la descarga usando Storage, que es la forma recomendada en Laravel
         $fileName = basename($filePath);
         return Storage::download($filePath, $fileName);
     }
