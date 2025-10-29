@@ -1,6 +1,3 @@
-# -----------------------------------------------------------------
-# 1️⃣ Etapa Node (assets_builder) - Compila CSS/JS (Vite/npm)
-# -----------------------------------------------------------------
 FROM node:18-bullseye AS assets_builder
 WORKDIR /app
 
@@ -31,7 +28,7 @@ RUN apt-get update && \
 
 # Instalar extensiones PHP necesarias (incluyendo PostgreSQL)
 RUN docker-php-ext-install pdo zip pdo_sqlite pgsql pdo_pgsql
-
+RUN docker-php-ext-install pdo **zip** pdo_sqlite pgsql pdo_pgsql
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 

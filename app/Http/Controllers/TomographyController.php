@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\File;
 use App\Http\Requests\TomographyRequest;
 use App\Models\Tomography;
 use App\Models\Patient;
-use Imagick;
 use ZipArchive;
 
 class TomographyController extends Controller
@@ -86,128 +85,6 @@ class TomographyController extends Controller
         $tomography->save();
     
         return redirect()->route('tomography.convert', ['id' => $tomography->id]);
-    }
-    public function createdcm(): View {
-        $patients = Patient::all();
-        return view('tomography.createdcm', compact('patients'));
-    }
-    public function storedcm(Request $request): RedirectResponse {
-        $request->validate([
-            'tomography_folder.*' => 'required|file|mimes:dcm',
-        ]);
-        $patient = Patient::findOrFail($request->patient_id);
-        $timestamp = time();
-        $folderName = "dcm_upload_{$timestamp}";
-        $destinationPath = storage_path("app/public/tomographies/images/{$folderName}");
-        if (!File::exists($destinationPath)) {
-            File::makeDirectory($destinationPath, 0777, true);
-        }
-        foreach ($request->file('tomography_folder') as $index => $file) {
-            $fileName = $file->getClientOriginalName();
-            $file->move($destinationPath, $fileName);
-        }
-        $tomography = new Tomography();
-        /*$tomography->name_patient = $request->name_patient;
-        $tomography->ci_patient = $request->ci_patient;*/
-        $tomography->name_patient=$patient->name_patient;
-        $tomography->ci_patient=$patient->ci_patient;
-        $tomography->tomography_id = $request->tomography_id;
-        $tomography->tomography_date = $request->tomography_date;
-        $tomography->tomography_type = $request->tomography_type;
-        $tomography->tomography_dicom_uri = "tomographies/images/{$folderName}";
-        $tomography->tomography_uri = 'new';
-        $tomography->tomography_doctor = $request->tomography_doctor;
-        $tomography->tomography_charge = $request->tomography_charge;
-        $tomography->save();
-        return redirect()->route('tomography.convert', ['id' => $tomography->id]);
-    }
-    public function convert($id){
-        $tomography = Tomography::find($id);
-        if (!$tomography) {
-            return response()->json(['error' => 'Tomografía no encontrada.'], 404);
-        }
-        $tomography_dicom_uri = $tomography->tomography_dicom_uri;
-        $dicomFolderPath = storage_path('app/public/' . $tomography_dicom_uri);
-
-        if (!is_dir($dicomFolderPath)) {
-            return response()->json([
-            'error' => 'La carpeta especificada no existe.',
-            'constructed_path' => $dicomFolderPath,
-            'file_exists_check' => file_exists($dicomFolderPath) ? 'file_exists: true' : 'file_exists: false',
-        ], 404);
-        }
-
-        $jpgFolderPath = storage_path('app/public/tomographies/converted_images/' . $id);
-
-        if (!is_dir($jpgFolderPath)) {
-            if (!mkdir($jpgFolderPath, 0777, true)) {
-            return response()->json([
-                'error' => 'No se pudo crear la carpeta de destino.',
-                'constructed_path' => $jpgFolderPath,
-            ], 500);
-            }
-        }
-
-        if (!is_dir($jpgFolderPath)) {
-            return response()->json([
-            'error' => 'La carpeta de destino no se pudo crear.',
-            'constructed_path' => $jpgFolderPath,
-        ], 500);
-        }
-
-        $tomography->tomography_uri = 'tomographies/converted_images/' . $id;
-        $tomography->save();
-
-        $dicomFiles = glob($dicomFolderPath . DIRECTORY_SEPARATOR . '*.dcm');
-        if (empty($dicomFiles)) {
-            return response()->json(['error' => 'No se encontraron archivos DICOM en la carpeta.'], 404);
-        }
-
-        $convertedFiles = [];
-
-        foreach ($dicomFiles as $dicomFilePath) {
-            try {
-                $imagick = new \Imagick();
-                $imagick->readImage($dicomFilePath);
-                $imagick->setImageFormat('jpg');
-
-                $jpgFileName = pathinfo($dicomFilePath, PATHINFO_FILENAME) . '.jpg';
-                $jpgFilePath = $jpgFolderPath . DIRECTORY_SEPARATOR . $jpgFileName;
-
-                $imagick->writeImage($jpgFilePath);
-                $imagick->destroy();
-
-                $convertedFiles[] = $jpgFileName;
-            } catch (\Exception $e) {
-                return response()->json([
-                    'error' => "Error al procesar el archivo {$dicomFilePath}: " . $e->getMessage(),
-                ], 500);
-            }
-        }
-
-        return redirect()->route('tomography.index')->with('success', 'Tomografía creada');
-    }
-    public function show($id){
-        $tomography = Tomography::findOrFail($id);
-        $imagePath = storage_path('app/public/tomographies/converted_images/' . $id);
-
-        if (!file_exists($imagePath)) {
-            abort(404, 'El directorio de imágenes no existe.');
-        }
-
-        $files = scandir($imagePath);
-        $images = array_filter($files, function ($file) use ($imagePath) {
-            return preg_match('/\.(jpg|jpeg|png)$/i', $file) && is_file($imagePath . '/' . $file);
-        });
-        sort($images);
-        $imageUrls = array_map(function ($image) use ($id) {
-            return asset('storage/tomographies/converted_images/' . $id . '/' . $image);
-        }, $images);
-
-        return view('tomography.mostrar', [
-            'tomography' => $tomography,
-            'images' => $imageUrls,
-        ]);
     }
     public function showSelectedImage($tomographyId, $image){
         $tomography = Tomography::findOrFail($tomographyId);

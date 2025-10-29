@@ -9,7 +9,6 @@ use App\Http\Requests\RadiographyRequest;
 use App\Services\ImageFilterService;
 use App\Models\Radiography;
 use App\Models\Patient;
-use Imagick;
 
 class RadiographyController extends Controller
 {
@@ -57,27 +56,17 @@ class RadiographyController extends Controller
     }
      public function store(RadiographyRequest $request):RedirectResponse{
         $patient = Patient::findOrFail($request->patient_id);
-        
-        // 1. Manejo del archivo
         $radiographyFile = $request->file('radiography_file');
-        
-        // Genera un nombre de archivo único con la extensión original
         $fileName = time() . '_' . $patient->ci_patient . '.' . $radiographyFile->getClientOriginalExtension();
-        
-        // Almacena el archivo en 'storage/app/public/radiographies'
-        // Esto guarda el archivo directamente sin manipulación
         $filePath = $radiographyFile->storeAs('public/radiographies', $fileName); 
-        
-        // 2. Creación del registro en la base de datos
         $radiography=new Radiography;
         $radiography->name_patient=$patient->name_patient;
         $radiography->ci_patient=$patient->ci_patient;
         $radiography->radiography_id=$request->radiography_id;
         $radiography->radiography_date=$request->radiography_date;
         $radiography->radiography_type=$request->radiography_type;
-        // La URI ahora usa el nombre de archivo completo (ej: 1678888.jpg)
         $radiography->radiography_uri=$fileName; 
-    
+        $radiography->radiography_dicom_uri = null;
         $radiography->radiography_doctor=$request->radiography_doctor;
         $radiography->radiography_charge=$request->radiography_charge;
         $radiography->save();
