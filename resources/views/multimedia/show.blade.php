@@ -45,14 +45,12 @@
          alt="Imagen del estudio: {{ $file->study_type }}" 
          style="max-width:90%; max-height: 80vh; width: auto; height: auto; object-fit: contain; border-radius: 8px;"
          class="shadow-xl border-4 border-white transform hover:scale-[1.01] transition-transform duration-300"
-    />
-</div>
-    <!-- Herramientas -->
+    /></div>
+    <!-- Herramientas 
     <div class="flex justify-center">
         <a href="{{ route('radiography.tool', $file->id) }}" class="botton2">{{ __('Herramientas') }}</a>
     </div>
 
-    <!-- Acciones Editar / Eliminar -->
     <div class="flex justify-end pl-3">
         <a href="{{ route('radiography.edit', $file->id ) }}" class="botton3">{{ __('Editar') }}</a>
         @auth
@@ -65,5 +63,7 @@
         @endif
         @endauth
     </div>
+    -->
 </div>
+
 @endsection
