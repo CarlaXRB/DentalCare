@@ -1,7 +1,7 @@
 @extends('layouts._partials.layout')
-@section('title', __('Crear Radiografía'))
+@section('title', __('Subir Archivo Multimedia'))
 @section('subtitle')
-    {{ __('Crear Radiografía') }}
+    {{ __('Subir Archivo Multimedia') }}
 @endsection
 
 @section('content')
@@ -20,19 +20,19 @@
         </div>
     @endif
     
-    <form method="POST" action="{{ route('radiography.store') }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('multimedia.store') }}" enctype="multipart/form-data">
         @csrf
 
-        <h1 class="title1 text-center mb-8">{{ __('Información de la Radiografía') }}</h1>
+        <h1 class="title1 text-center mb-8">{{ __('Registro de Archivo Multimedia') }}</h1>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {{-- Patient selection --}}
+            {{-- Patient selection (patient_id) --}}
             <div>
                 <label class="title4 block mb-2">{{ __('Paciente') }}:</label>
                 <select name="patient_id" required
                     class="border-gray-300 rounded-lg p-3 w-full text-black focus:outline-none focus:ring-2 focus:ring-cyan-500">
                     <option value="">{{ __('-- Seleccionar Paciente --') }}</option>
-                    {{-- La variable $patients DEBE ser pasada desde el controlador --}}
+                    {{-- La variable $patients DEBE ser pasada desde el controlador MultimediaFileController@create --}}
                     @foreach($patients as $patient)
                         <option value="{{ $patient->id }}" {{ old('patient_id') == $patient->id ? 'selected' : '' }}>
                             {{ $patient->name_patient }} - CI: {{ $patient->ci_patient }}
@@ -44,67 +44,48 @@
 
             <div class="flex items-center gap-2 mt-6">
                 <p class="text-gray-600">{{ __('¿Paciente no registrado?') }}</p>
-                {{-- Asumo que 'patient.create' es la ruta para crear pacientes --}}
                 <a href="{{ route('patient.create') }}" class="botton3 ml-5">{{ __('Registrar Paciente') }}</a>
             </div>
 
-            {{-- Radiography ID --}}
+            {{-- Study Type (study_type) --}}
             <div>
-                <label class="title4 block mb-2">{{ __('ID de la radiografía') }}:</label>
-                <input type="text" name="radiography_id" value="{{ old('radiography_id') }}" required
-                    placeholder="{{ __('Ej: RX-2023-1234') }}"
-                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
-                @error('radiography_id') <p class="error mt-1 text-red-500 text-sm">{{ $message }}</p> @enderror
+                <label class="title4 block mb-2">{{ __('Tipo de Estudio/Archivo') }}:</label>
+                <select id="study_type" name="study_type" required
+                    class="border-gray-300 rounded-lg p-3 w-full text-black focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                    <option value="">{{ __('-- Seleccione el tipo --') }}</option>
+                    <option value="radiography" {{ old('study_type') == 'radiography' ? 'selected' : '' }}>Radiografía</option>
+                    <option value="tomography" {{ old('study_type') == 'tomography' ? 'selected' : '' }}>Tomografía</option>
+                    <option value="ecography" {{ old('study_type') == 'ecography' ? 'selected' : '' }}>Ecografía</option>
+                    <option value="general" {{ old('study_type') == 'general' ? 'selected' : '' }}>General / Otro</option>
+                </select>
+                @error('study_type') <p class="error mt-1 text-red-500 text-sm">{{ $message }}</p> @enderror
             </div>
 
-            {{-- Radiography Date --}}
+            {{-- File Input (file) --}}
             <div>
-                <label class="title4 block mb-2">{{ __('Fecha de la radiografía') }}:</label>
-                <input type="date" name="radiography_date" value="{{ old('radiography_date') }}" required
+                <label class="title4 block mb-2">{{ __('Subir Archivo(s)') }}:</label>
+                {{-- Se usa name="file[]" y multiple para permitir varios archivos o un ZIP --}}
+                <input type="file" name="file[]" multiple accept="image/*,.zip" required
                     class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
-                @error('radiography_date') <p class="error mt-1 text-red-500 text-sm">{{ $message }}</p> @enderror
+                <small class="text-gray-500 mt-1 block">{{ __('JPG, PNG, o ZIP (se extraerán imágenes).') }}</small>
+                @error('file') <p class="error mt-1 text-red-500 text-sm">{{ $message }}</p> @enderror
+                @error('file.*') <p class="error mt-1 text-red-500 text-sm">{{ $message }}</p> @enderror
+            </div>
+            
+            {{-- Optional Notes/Description --}}
+            <div class="md:col-span-2">
+                <label class="title4 block mb-2">{{ __('Descripción / Notas (Opcional)') }}:</label>
+                <textarea name="notes" rows="3"
+                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500">{{ old('notes') }}</textarea>
+                @error('notes') <p class="error mt-1 text-red-500 text-sm">{{ $message }}</p> @enderror
             </div>
 
-            {{-- Radiography Type --}}
-            <div>
-                <label class="title4 block mb-2">{{ __('Tipo de Radiografía') }}:</label>
-                <input type="text" name="radiography_type" value="{{ old('radiography_type') }}" required
-                    placeholder="{{ __('Ej: Tórax PA, Mandíbula Lateral') }}"
-                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
-                @error('radiography_type') <p class="error mt-1 text-red-500 text-sm">{{ $message }}</p> @enderror
-            </div>
-
-            {{-- Radiography File --}}
-            <div>
-                <label class="title4 block mb-2">{{ __('Subir Archivo (JPG, PNG)') }}:</label>
-                <input type="file" name="radiography_file" required accept="image/jpeg,image/png"
-                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
-                @error('radiography_file') <p class="error mt-1 text-red-500 text-sm">{{ $message }}</p> @enderror
-            </div>
-
-            {{-- Doctor --}}
-            <div>
-                <label class="title4 block mb-2">{{ __('Doctor') }}:</label>
-                <input type="text" name="radiography_doctor" value="{{ old('radiography_doctor') }}"
-                    placeholder="{{ __('Dr. Pérez (Solicitante)') }}"
-                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
-                @error('radiography_doctor') <p class="error mt-1 text-red-500 text-sm">{{ $message }}</p> @enderror
-            </div>
-
-            {{-- Radiologist --}}
-            <div>
-                <label class="title4 block mb-2">{{ __('Radiólogo') }}:</label>
-                <input type="text" name="radiography_charge" value="{{ old('radiography_charge') }}"
-                    placeholder="{{ __('Tec. González (Realizó)') }}"
-                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
-                @error('radiography_charge') <p class="error mt-1 text-red-500 text-sm">{{ $message }}</p> @enderror
-            </div>
         </div>
 
         {{-- Submit button --}}
         <div class="flex justify-center mt-10">
             <button type="submit" class="botton2 shadow-lg hover:shadow-xl transition duration-300">
-                <i class="fas fa-file-upload mr-2"></i> {{ __('Subir Radiografía') }}
+                <i class="fas fa-upload mr-2"></i> {{ __('Procesar y Subir Archivo(s)') }}
             </button>
         </div>
     </form>

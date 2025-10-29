@@ -1,104 +1,93 @@
 @extends('layouts._partials.layout')
-@section('title','Radiografías')
+@section('title', __('Subir Archivo Multimedia'))
 @section('subtitle')
-    {{ __('Radiografías') }}
+    {{ __('Subir Archivo Multimedia') }}
 @endsection
 
 @section('content')
-<div class="flex justify-between items-center p-5 pb-1 max-w-6xl mx-auto">
-    <!-- Search bar -->
-    {{-- Se usa POST porque así está en el template, aunque GET es más común para búsquedas --}}
-    <form method="POST" action="{{ route('radiography.search') }}" class="flex gap-3 items-center">
-        @csrf
-        <input type="text" name="search" placeholder="{{ __('Buscar radiografía por nombre, CI o ID...') }}"
-            class="px-4 py-2 rounded-full border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-cyan-500 w-80"/>
-        <input class="botton2" type="submit" value="{{ __('Buscar') }}" />
-    </form>
-
-    <!-- Menu button -->
+{{-- Botón para volver al dashboard --}}
+<div class="flex justify-end p-5 pb-1">
+    {{-- Asumo que 'files.select' es tu ruta para volver al menú principal de archivos --}}
     <a href="{{ route('files.select') }}" class="botton1">{{ __('Atrás') }}</a>
 </div>
 
-<!-- Main title -->
-<h1 class="title1 text-center mb-6">{{ __('Lista de Radiografías') }}</h1>
-
-<!-- Radiographies table -->
-<div class="max-w-6xl mx-auto bg-white rounded-xl p-6 text-gray-900 shadow-2xl">
-    @if(session('status'))
+<div class="bg-white rounded-lg max-w-5xl mx-auto p-6 shadow-xl">
+    
+    {{-- Mensajes de validación y estado --}}
+    @if(session('success'))
         <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded-md" role="alert">
-            {{ session('status') }}
+            {{ session('success') }}
         </div>
     @endif
     
-    <!-- Table header -->
-    <div class="grid grid-cols-6 gap-4 border-b border-gray-300 pb-3 mb-3 font-semibold text-sm uppercase">
-        <h3 class="title4 text-center">{{ __('Vista previa') }}</h3>
-        <h3 class="title4 text-center">{{ __('Nombre') }}</h3>
-        <h3 class="title4 text-center">{{ __('C.I.') }}</h3>
-        <h3 class="title4 text-center">{{ __('Fecha') }}</h3>
-        <h3 class="title4 text-center">{{ __('ID del estudio') }}</h3>
-        <h3 class="title4 text-center">{{ __('Tipo') }}</h3>
-    </div>
+    <form method="POST" action="{{ route('multimedia.store') }}" enctype="multipart/form-data">
+        @csrf
 
-    <!-- Table body -->
-    {{-- Asumo que la variable $radiographies es un array de objetos con las propiedades requeridas --}}
-    @forelse($radiographies as $radiography)
-    <div class="grid grid-cols-6 gap-4 items-center border-b border-gray-200 py-3 text-gray-800 hover:bg-gray-50 transition">
-        
-        <!-- Preview -->
-        <div class="flex justify-center">
-            <a href="{{ route('radiography.show', $radiography->id) }}">
-                {{-- Asegúrate que 'storage/radiographies/' sea el path correcto a tu archivo --}}
-                <img src="{{ asset('storage/radiographies/'.$radiography->radiography_uri) }}" 
-                     alt="Radiography preview" 
-                     class="rounded-lg shadow-md w-24 h-20 object-cover border border-gray-100 transition transform hover:scale-105"/>
-            </a>
+        <h1 class="title1 text-center mb-8">{{ __('Registro de Archivo Multimedia') }}</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {{-- Patient selection (patient_id) --}}
+            <div>
+                <label class="title4 block mb-2">{{ __('Paciente') }}:</label>
+                <select name="patient_id" required
+                    class="border-gray-300 rounded-lg p-3 w-full text-black focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                    <option value="">{{ __('-- Seleccionar Paciente --') }}</option>
+                    {{-- La variable $patients DEBE ser pasada desde el controlador MultimediaFileController@create --}}
+                    @foreach($patients as $patient)
+                        <option value="{{ $patient->id }}" {{ old('patient_id') == $patient->id ? 'selected' : '' }}>
+                            {{ $patient->name_patient }} - CI: {{ $patient->ci_patient }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('patient_id') <p class="error mt-1 text-red-500 text-sm">{{ $message }}</p> @enderror
+            </div>
+
+            <div class="flex items-center gap-2 mt-6">
+                <p class="text-gray-600">{{ __('¿Paciente no registrado?') }}</p>
+                <a href="{{ route('patient.create') }}" class="botton3 ml-5">{{ __('Registrar Paciente') }}</a>
+            </div>
+
+            {{-- Study Type (study_type) --}}
+            <div>
+                <label class="title4 block mb-2">{{ __('Tipo de Estudio/Archivo') }}:</label>
+                <select id="study_type" name="study_type" required
+                    class="border-gray-300 rounded-lg p-3 w-full text-black focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                    <option value="">{{ __('-- Seleccione el tipo --') }}</option>
+                    <option value="radiography" {{ old('study_type') == 'radiography' ? 'selected' : '' }}>Radiografía</option>
+                    <option value="tomography" {{ old('study_type') == 'tomography' ? 'selected' : '' }}>Tomografía</option>
+                    <option value="ecography" {{ old('study_type') == 'ecography' ? 'selected' : '' }}>Ecografía</option>
+                    <option value="general" {{ old('study_type') == 'general' ? 'selected' : '' }}>General / Otro</option>
+                </select>
+                @error('study_type') <p class="error mt-1 text-red-500 text-sm">{{ $message }}</p> @enderror
+            </div>
+
+            {{-- File Input (file) --}}
+            <div>
+                <label class="title4 block mb-2">{{ __('Subir Archivo(s)') }}:</label>
+                {{-- Se usa name="file[]" y multiple para permitir varios archivos o un ZIP --}}
+                <input type="file" name="file[]" multiple accept="image/*,.zip" required
+                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
+                <small class="text-gray-500 mt-1 block">{{ __('JPG, PNG, o ZIP (se extraerán imágenes).') }}</small>
+                @error('file') <p class="error mt-1 text-red-500 text-sm">{{ $message }}</p> @enderror
+                @error('file.*') <p class="error mt-1 text-red-500 text-sm">{{ $message }}</p> @enderror
+            </div>
+            
+            {{-- Optional Notes/Description --}}
+            <div class="md:col-span-2">
+                <label class="title4 block mb-2">{{ __('Descripción / Notas (Opcional)') }}:</label>
+                <textarea name="notes" rows="3"
+                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500">{{ old('notes') }}</textarea>
+                @error('notes') <p class="error mt-1 text-red-500 text-sm">{{ $message }}</p> @enderror
+            </div>
+
         </div>
 
-        <!-- Patient name -->
-        <div class="text-center">
-            <a href="{{ route('radiography.show', $radiography->id) }}" class="txt hover:text-cyan-600 font-medium">
-                {{ $radiography->name_patient }}
-            </a>
+        {{-- Submit button --}}
+        <div class="flex justify-center mt-10">
+            <button type="submit" class="botton2 shadow-lg hover:shadow-xl transition duration-300">
+                <i class="fas fa-upload mr-2"></i> {{ __('Procesar y Subir Archivo(s)') }}
+            </button>
         </div>
-
-        <!-- CI -->
-        <div class="text-center">
-            <a href="{{ route('radiography.show', $radiography->id) }}" class="txt hover:text-cyan-600">
-                {{ $radiography->ci_patient }}
-            </a>
-        </div>
-
-        <!-- Date -->
-        <div class="text-center">
-            <a href="{{ route('radiography.show', $radiography->id) }}" class="txt hover:text-cyan-600">
-                {{ \Carbon\Carbon::parse($radiography->radiography_date)->format('d/m/Y') }}
-            </a>
-        </div>
-
-        <!-- Radiography ID -->
-        <div class="text-center text-sm font-mono">
-            <a href="{{ route('radiography.show', $radiography->id) }}" class="txt hover:text-cyan-600">
-                {{ $radiography->radiography_id }}
-            </a>
-        </div>
-
-        <!-- Radiography Type -->
-        <div class="text-center">
-            <a href="{{ route('radiography.show', $radiography->id) }}" class="txt hover:text-cyan-600">
-                {{ $radiography->radiography_type }}
-            </a>
-        </div>
-    </div>
-    @empty
-    <p class="text-gray-600 text-center py-8 text-lg">{{ __('No hay radiografías registradas aún.') }}</p>
-    @endforelse
-    
-    {{-- Paginación (si aplica) --}}
-    @if(isset($radiographies) && method_exists($radiographies, 'links'))
-    <div class="mt-4">
-        {{ $radiographies->links() }}
-    </div>
-    @endif
+    </form>
 </div>
 @endsection
