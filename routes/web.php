@@ -12,7 +12,6 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\TreatmentController;
 use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\DicomController;
 use App\Http\Controllers\MultimediaFileController;
 
 use App\Models\Patient;
@@ -88,17 +87,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/tomography/dcm/create', [TomographyController::class, 'createdcm'])->name('tomography.createdcm');
     Route::post('/tomography/dcm/store', [TomographyController::class, 'storedcm'])->name('tomography.storedcm');
     Route::delete('/tomography/destroy/{tomography}',[tomographyController::class, 'destroy'])->name('tomography.destroy');
-
-    Route::get('/dicom/upload-radiography', [DicomController::class, 'uploadFormRadiography'])->name('dicom.uploadRadiography');
-    Route::get('/dicom/upload-tomography', [DicomController::class, 'uploadFormTomography'])->name('dicom.uploadTomography');
-    Route::post('/dicom/process', [DicomController::class, 'processDicom'])->name('process.dicom');
-    Route::post('/dicom/process-folder', [DicomController::class, 'processFolder'])->name('process.folder');
-    Route::get('/dicom/show-images/{folderName}', [DicomController::class, 'showFolderImages'])->name('dicom.showFolderImages');
-    Route::get('/dicom-form', [DicomController::class, 'showForm'])->name('dicom.data');
-    Route::post('/dicom-upload', [DicomController::class, 'uploadDicom'])->name('dicom.updata');
-    Route::get('/dicom-records', [DicomController::class, 'showRecords'])->name('dicom.viewdata');
-    Route::post('/dicom/radiography/save', [DicomController::class, 'saveRadiography'])->name('dicom.saveradiography');
-    Route::post('/dicom/tomography/save', [DicomController::class, 'saveTomography'])->name('dicom.savetomography');
 
     Route::get('/tool',[ToolController::class,'index'])->name('tool.index');
     Route::post('/tool/new/tool/{tomography_id}/{ci_patient}/{id}', [ToolController::class, 'new'])->name('tool.new');

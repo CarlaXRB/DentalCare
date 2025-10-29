@@ -19,24 +19,24 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 pb-5 text-black dark:text-white">
         <div class="flex gap-2">
             <h3 class="title4">{{ __('Paciente:') }}</h3>
-            <span class="txt">{{ $multimedia->name_patient }}</span>
-            @if($radiography->patient)
-            <a href="{{ route('patient.show', $multimedia->patient->id ) }}" class="txt text-green-500 hover:text-green-700 hover:font-bold pl-12">{{ __('Ver Paciente') }}</a>
+            <span class="txt">{{ $file->name_patient }}</span>
+            @if($file->patient)
+            <a href="{{ route('patient.show', $file->patient->id ) }}" class="txt text-green-500 hover:text-green-700 hover:font-bold pl-12">{{ __('Ver Paciente') }}</a>
             @else
             <p class="text-red-500 mb-3">{{ __('Paciente no registrado en la base de datos.') }}</p>
             @endif
         </div>
         <div class="flex gap-2">
-            <h3 class="title4">{{ __('ID de la radiografía:') }}</h3><span class="txt">{{ $multimedia->radiography_id }}</span>
+            <h3 class="title4">{{ __('ID de la radiografía:') }}</h3><span class="txt">{{ $file->radiography_id }}</span>
         </div>
         <div class="flex gap-2">
-            <h3 class="title4">{{ __('Fecha del estudio:') }}</h3><span class="txt">{{ $multimedia->radiography_id }}</span>
+            <h3 class="title4">{{ __('Fecha del estudio:') }}</h3><span class="txt">{{ $file->radiography_id }}</span>
         </div>
         <div class="flex gap-2">
-            <h3 class="title4">{{ __('Tipo de radiografía:') }}</h3><span class="txt">{{ $multimedia->radiography_id}}</span>
+            <h3 class="title4">{{ __('Tipo de radiografía:') }}</h3><span class="txt">{{ $file->radiography_id}}</span>
         </div>
         <div class="flex gap-2">
-            <h3 class="title4">{{ __('Doctor:') }}</h3><span class="txt">{{ $multimedia->radiography_id}}</span>
+            <h3 class="title4">{{ __('Doctor:') }}</h3><span class="txt">{{ $file->radiography_id}}</span>
         </div>
     </div>
 
@@ -44,7 +44,7 @@
     <div class="flex items-center space-y-4 ml-0 mb-6">
         <div class="title4 mb-5">{{ __('Generar Resporte:') }}</div>
         <div class="group relative ml-5">
-            <button id="report" class="btnimg" onclick="window.location.href='{{ route('report.form', ['type'=>'radiography','id'=>$multimedia->id, 'name'=>$multimedia->name_patient,'ci'=>$multimedia->ci_patient]) }}'">
+            <button id="report" class="btnimg" onclick="window.location.href='{{ route('report.form', ['type'=>'radiography','id'=>$file->id, 'name'=>$file->name_patient,'ci'=>$file->ci_patient]) }}'">
                 <img src="{{ asset('assets/images/report.png') }}" width="50" height="50">
             </button>
             <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1">
@@ -62,15 +62,15 @@
 </div>
     <!-- Herramientas -->
     <div class="flex justify-center">
-        <a href="{{ route('radiography.tool', $multimedia->id) }}" class="botton2">{{ __('Herramientas') }}</a>
+        <a href="{{ route('radiography.tool', $file->id) }}" class="botton2">{{ __('Herramientas') }}</a>
     </div>
 
     <!-- Acciones Editar / Eliminar -->
     <div class="flex justify-end pl-3">
-        <a href="{{ route('radiography.edit', $multimedia->id ) }}" class="botton3">{{ __('Editar') }}</a>
+        <a href="{{ route('radiography.edit', $file->id ) }}" class="botton3">{{ __('Editar') }}</a>
         @auth
         @if(Auth::user()->role === 'admin')
-        <form method="POST" action="{{ route('multimedia.destroy', $multimedia->id) }}" onsubmit="return confirm('{{ __('Are you sure you want to delete this study?') }}');">
+        <form method="POST" action="{{ route('multimedia.destroy', $file->id) }}" onsubmit="return confirm('{{ __('Are you sure you want to delete this study?') }}');">
             @csrf
             @method('DELETE')
             <input type="submit" value="{{ __('Eliminar') }}" class="bottonDelete" />

@@ -79,24 +79,15 @@ class TreatmentController extends Controller
         $fileName = 'treatment_' . $treatment->id . '.pdf';
         $storageDir = 'treatments';
         $storagePath = $storageDir . '/' . $fileName;
-        
-        // 1. Guardar el PDF usando el Storage Facade (más robusto en Docker)
+
         Storage::put($storagePath, $pdf->output());
 
-        // 2. Actualizar el path en la base de datos
         $treatment->update(['pdf_path' => $storagePath]);
-
-        // 3. Obtener la ruta completa para la descarga (storage/app/...)
         $fullPath = storage_path('app/' . $storagePath);
 
-        // -----------------------------------------------------------
-        // 🚨 CRÍTICO PARA DOMPDF: Limpiar el buffer de salida (OB) de PHP
-        // -----------------------------------------------------------
         if (ob_get_level()) {
             ob_end_clean();
         }
-
-        // 4. Devolver la descarga forzada con el Content-Type correcto
         return response()->download($fullPath, $fileName, [
             'Content-Type' => 'application/pdf', 
         ])->deleteFileAfterSend(false);
@@ -128,19 +119,5 @@ class TreatmentController extends Controller
         $treatments = Treatment::where('name', 'LIKE', '%' . $search . '%')
             ->orWhere('ci_patient', 'LIKE', '%' . $search . '%')->get();
         return view('treatments.search', compact('treatments'));
-    }
-    public function downloadPdf($id)
-    {
-        $treatment = Treatment::findOrFail($id);
-        $filePath = $treatment->pdf_path;
-
-        if (!$filePath || !Storage::exists($filePath)) {
-            // Manejar error 404 si el archivo no existe
-            abort(404, 'El archivo PDF no fue encontrado.');
-        }
-
-        // Retorna la descarga usando Storage, que es la forma recomendada en Laravel
-        $fileName = basename($filePath);
-        return Storage::download($filePath, $fileName);
     }
 }

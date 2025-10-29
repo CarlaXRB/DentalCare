@@ -33,21 +33,14 @@
 
     <!-- Table body -->
     @forelse($treatments as $treatment)
-    <div class="grid grid-cols-7 gap-4 items-center border-b border-gray-200 py-3 text-gray-800 hover:bg-gray-50 transition text-center">
+    <div class="grid grid-cols-6 gap-4 items-center border-b border-gray-200 py-3 text-gray-800 hover:bg-gray-50 transition text-center">
         <div class="text-center">{{ $treatment->name ?? 'N/A' }}</div>
         <div class="text-center">{{ $treatment->ci_patient ?? 'N/A' }}</div>
         <div class="text-center">Bs. {{ number_format($treatment->total_amount, 2) }}</div>
         <div class="text-center">Bs. {{ number_format($treatment->discount, 2) }}</div>
         <div class="text-center">Bs. {{ number_format($treatment->amount, 2) }}</div>
-        <div>
-            @if ($treatment->pdf_path)
-                <a href="{{ route('treatments.downloadPdf', $treatment->id) }}" class="botton2">{{ __('Ver PDF') }}</a>
-            @else
-                —
-            @endif
-        </div>
         <div class="flex justify-end">
-            <a href="{{ route('payments.show',$treatment->id) }}" class="botton3">{{ __('Pagar') }}</a>
+            <a href="{{ route('payments.show',$treatment->id) }}" class="botton3">{{ __('Pagos') }}</a>
                 @auth
                 @if(Auth::user()->role === 'admin')  
                 <form method="POST" 
