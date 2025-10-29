@@ -67,25 +67,7 @@ class TreatmentController extends Controller
             'details' => $request->details,
             'pdf_path' => null,
         ]);
-/*
-        $budgets = Budget::whereIn('id', array_keys($budgetCodes))->get();
 
-        $pdf = Pdf::loadView('treatments.pdf', [
-            'treatment' => $treatment,
-            'budgets' => $budgets,
-            'author' => Auth::user()->name ?? 'Unknown User',
-        ])->setPaper('a4', 'portrait');
-
-        $fileName = 'treatment_' . $treatment->id . '.pdf';
-        $storagePath = 'treatments/' . $fileName;
-        $fullPath = public_path('storage/' . $storagePath);
-
-        $pdf->save($fullPath);
-
-        $treatment->update(['pdf_path' => 'storage/' . $storagePath]);
-
-        return response()->download($fullPath, $fileName)->deleteFileAfterSend(false);
-        */
         $budgets = Budget::whereIn('id', array_keys($budgetCodes))->get();
 
         $pdf = Pdf::loadView('treatments.pdf', [
@@ -120,7 +102,7 @@ class TreatmentController extends Controller
         ])->deleteFileAfterSend(false);
     
     }
-
+/*
     public function show($id)
     {
         $treatment = Treatment::findOrFail($id);
@@ -129,7 +111,7 @@ class TreatmentController extends Controller
 
         return view('treatments.show', compact('treatment', 'budgets'));
     }
-
+*/
     public function destroy($id)
     {
         $treatment = Treatment::findOrFail($id);
@@ -146,5 +128,24 @@ class TreatmentController extends Controller
         $treatments = Treatment::where('name', 'LIKE', '%' . $search . '%')
             ->orWhere('ci_patient', 'LIKE', '%' . $search . '%')->get();
         return view('treatments.search', compact('treatments'));
+    }
+        public function show($id)
+    {
+        // 1. Buscar el tratamiento por ID
+        $treatment = Treatment::findOrFail($id);
+
+        // 2. Obtener la ruta de almacenamiento
+        $filePath = $treatment->pdf_path; 
+
+        // 3. Verificar si el archivo existe en el Storage
+        if (!Storage::exists($filePath)) {
+            // Si no existe, lanza un error 404
+            abort(404, 'El archivo PDF del tratamiento no fue encontrado.');
+        }
+
+        // 4. Servir el archivo para descarga forzada
+        // El método download toma la ruta relativa al disco de almacenamiento
+        $fileName = basename($filePath);
+        return Storage::download($filePath, $fileName);
     }
 }

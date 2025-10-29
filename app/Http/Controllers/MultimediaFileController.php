@@ -43,55 +43,52 @@ class MultimediaFileController extends Controller
      */
     public function store(Request $request)
     {
-        // 1. Validar datos (incluyendo el archivo)
+        // 1. Validar datos. 'file' debe COINCIDIR con el atributo name del input en la vista Blade.
         $request->validate([
             'patient_id' => 'required|exists:patients,id',
-            // CORREGIDO: Cambiamos 'study_type' a 'file_type_tag' o similar si aplica al contexto multimedia
             'file_type_tag' => 'required|string|max:255', 
             'notes' => 'nullable|string', 
-            // El max:50000 es 50MB. Adaptar tipos MIME según los archivos multimedia
+            // Validamos que el campo 'file' sea un archivo. MIME types ajustados para genéricos.
             'file' => 'required|file|mimes:jpeg,png,jpg,gif,pdf,doc,docx,zip|max:50000', 
         ]);
         
-        // Obtener el objeto del archivo. Usa 'file' si ese es el nombre del input en Blade.
+        // Obtener el objeto del archivo.
         $multimediaFile = $request->file('file'); 
         
-        // Verificación de seguridad: si el archivo es null a pesar de la validación.
-        if (!$multimediaFile) {
-            Log::error("MultimediaController: El archivo es NULL después de la validación. Verificar ENCTYPE del formulario.");
-            return back()->withInput()->withErrors(['file' => 'Error interno al procesar el archivo.']);
+        // VERIFICACIÓN CRÍTICA: Si el archivo es NULL aquí, el formulario HTML está mal.
+        if (is_null($multimediaFile)) {
+            Log::error("MultimediaController: El archivo es NULL después de la validación. Revisar ENCTYPE del formulario y el atributo 'name' del input.");
+            return back()->withInput()->withErrors(['file' => 'Error: El archivo no fue recibido. Verifique el formulario.']);
         }
 
         try {
             DB::beginTransaction();
 
-            // Obtener paciente (necesario para la carpeta por CI)
             $patient = Patient::findOrFail($request->patient_id); 
             
-            // 1. Definir la ruta de destino: usa una carpeta genérica 'multimedia'
-            $destinationPath = 'multimedia/' . $patient->ci_patient; // CORREGIDO: Cambiado a 'multimedia'
+            // 1. Definir la ruta de destino: 'public/multimedia/{ci_patient}'
+            $destinationPath = 'multimedia/' . $patient->ci_patient; 
             $fullDestinationPath = public_path($destinationPath);
 
             if (!File::isDirectory($fullDestinationPath)) {
                 File::makeDirectory($fullDestinationPath, 0777, true, true);
             }
             
-            // 2. Crear nombre único del archivo
+            // 2. Crear nombre único del archivo (Línea crítica anterior)
             $extension = $multimediaFile->getClientOriginalExtension();
-            // CORREGIDO: Usamos $multimediaFile
             $fileName = time() . '_' . $patient->ci_patient . '.' . $extension; 
             $relativePath = $destinationPath . '/' . $fileName;
             
             // 3. Mover el archivo
             $multimediaFile->move($fullDestinationPath, $fileName);
             
-            // 4. Crear el registro en la base de datos (Modelo MultimediaFile)
-            $multimedia = MultimediaFile::create([ // CORREGIDO: Usamos MultimediaFile::create
+            // 4. Crear el registro en la base de datos
+            $multimedia = MultimediaFile::create([
                 'patient_id' => $patient->id,
                 'file_name' => $fileName,
-                'file_path' => $relativePath, // Guarda la ruta relativa para el acceso web
+                'file_path' => $relativePath, 
                 'file_type' => $multimediaFile->getClientMimeType(),
-                'file_type_tag' => $request->file_type_tag, // CORREGIDO: Usamos el nuevo nombre de campo
+                'file_type_tag' => $request->file_type_tag,
                 'notes' => $request->notes,
                 'name_patient' => $patient->name_patient,
                 'ci_patient' => $patient->ci_patient,     
@@ -99,7 +96,6 @@ class MultimediaFileController extends Controller
 
             DB::commit();
 
-            // CORREGIDO: Redirigir a la ruta correcta si tienes una para multimedia
             return redirect()->route('multimedia.index')->with('success', 'Archivo multimedia registrado con éxito.'); 
 
         } catch (Throwable $e) {
