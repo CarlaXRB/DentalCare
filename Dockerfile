@@ -4,6 +4,14 @@
 FROM node:18-bullseye AS assets_builder
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y \
+    libmagickwand-dev \
+    --no-install-recommends && rm -rf /var/lib/apt/lists/*
+
+# 2. Instalar la extensión PHP Imagick
+# El comando docker-php-ext-install se encarga de compilar e instalar la extensión
+RUN docker-php-ext-install imagick
+
 # Instalar build tools y limpiar caché. Removida la instalación global de yarn.
 RUN apt-get update && \
     apt-get install -y build-essential && \
