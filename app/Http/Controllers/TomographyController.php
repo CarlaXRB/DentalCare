@@ -115,7 +115,7 @@ class TomographyController extends Controller
         return redirect()->route('tomography.index')->with('success','Tomografía creada y archivos almacenados.');
     }
     
-    public function showSelectedImage($tomographyId, $image){
+    public function show($tomographyId, $image){
         $tomography = Tomography::findOrFail($tomographyId);
         // La ruta a las imágenes ahora debe ser dinámica y buscar dentro de la carpeta del ZIP extraído.
         // Asumiendo que las imágenes ya están en 'raw_data/{nombre_de_la_carpeta}/{imagen}'

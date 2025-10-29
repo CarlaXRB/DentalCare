@@ -45,7 +45,7 @@
         <div class="title4 mb-5">{{ __('Generar Resporte:') }}</div>
         <div class="group relative ml-5">
             <button id="report" class="btnimg" onclick="window.location.href='{{ route('report.form', ['type'=>'radiography','id'=>$radiography->id, 'name'=>$radiography->name_patient,'ci'=>$radiography->ci_patient]) }}'">
-                <img src="{{ asset('storage/assets/images/report.png') }}" width="50" height="50">
+                <img src="{{ asset('assets/images/report.png') }}" width="50" height="50">
             </button>
             <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1">
                 <span class="text-sm text-gray-800">{{ __('Reporte') }}</span>
@@ -54,7 +54,7 @@
     </div>
 
     <div>
-        <div class="flex justify-center mt-[30px] mb-[30px]"><img src="{{ asset('storage/radiographies/'.$radiography->radiography_uri)}}" style="max-width:80%; object-fit:contain;" /></div>
+        <div class="flex justify-center mt-[30px] mb-[30px]"><img src="{{ asset('radiographies/'.$radiography->radiography_uri)}}" style="max-width:80%; object-fit:contain;" /></div>
     </div>
     <!-- Herramientas -->
     <div class="flex justify-center">
