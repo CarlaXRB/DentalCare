@@ -175,6 +175,7 @@
           },
           eventClick: function(info) {
             const eventId = info.event.id;
+            const room = arg.event.extendedProps.room || '';
             window.location.href = `/events/${eventId}`;
           }
         });

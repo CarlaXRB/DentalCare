@@ -98,7 +98,7 @@
                 @error('event') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
             <div class="flex-1 min-w-[250px]">
-                <label class="title4 block mb-1">{{ __('Detallaes') }}:</label>
+                <label class="title4 block mb-1">{{ __('Detalles') }}:</label>
                 <input type="text" name="details" value="{{ old('details', $event->details) }}"
                     class="border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500" />
                 @error('details') <p class="error mt-1">{{ $message }}</p> @enderror
