@@ -125,7 +125,7 @@
     <div class="hero">
         <img src="{{ asset('assets/images/banner.png') }}" alt="Banner Dental Care" class="banner">
         <div class="hero-content">
-            <img src="{{ asset('assets/images/logo.png') }}" alt="Logo Dental Care" width="500">
+            <img src="{{ asset('assets/images/logo.png') }}" alt="Logo Dental Care" width="400">
             <h1>¡Bienvenido!</h1>
             <p>Gestión inteligente que cuida tu práctica y la sonrisa de tus pacientes.</p>
 

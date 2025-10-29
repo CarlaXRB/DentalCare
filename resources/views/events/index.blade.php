@@ -20,6 +20,7 @@
         background-color: #fff;
         border-radius: 8px;
       }
+
       .fc-scrollgrid,
       .fc-scrollgrid-section,
       .fc-scrollgrid-sync-table {
@@ -51,6 +52,7 @@
         border-color: #33ffc2ff !important;
         color: white !important;
       }
+
       .fc-event:hover {
         cursor: pointer !important;
       }
@@ -101,7 +103,8 @@
 
     <script>
       document.addEventListener('DOMContentLoaded', function() {
-        const events = @json($events);
+        // Asegúrate de que $events esté disponible y sea un JSON válido
+        const events = @json($events); 
         const calendarEl = document.getElementById('calendar');
 
         const calendar = new FullCalendar.Calendar(calendarEl, {
@@ -135,8 +138,7 @@
             if (arg.view.type !== 'dayGridMonth') {
               const start = arg.event.start;
               const end = arg.event.end;
-              const room = arg.event.extendedProps.room || '';
-              const doctor = arg.event.extendedProps.doctor || ''; 
+              const doctor = arg.event.extendedProps.doctor || '';
               const formatHour = (date) => date ? date.toLocaleTimeString([], {
                 hour: '2-digit',
                 minute: '2-digit',
@@ -157,7 +159,7 @@
               const start = info.event.start;
               const end = info.event.end;
               const room = info.event.extendedProps.room || '';
-              const doctor = info.event.extendedProps.doctor || ''; 
+              const doctor = info.event.extendedProps.doctor || '';
               const formatHour = (date) => date ? date.toLocaleTimeString([], {
                 hour: '2-digit',
                 minute: '2-digit',
@@ -173,9 +175,10 @@
                 </div>`;
             }
           },
+          // *** CORRECCIÓN APLICADA AQUÍ ***
           eventClick: function(info) {
             const eventId = info.event.id;
-            const room = arg.event.extendedProps.room || '';
+            // Se elimina la línea 'const room = arg.event...' que causaba el error.
             window.location.href = `/events/${eventId}`;
           }
         });

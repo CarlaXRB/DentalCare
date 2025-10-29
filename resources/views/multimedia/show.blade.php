@@ -40,19 +40,6 @@
         </div>
     </div>
 
-    <!-- Generar reporte -->
-    <div class="flex items-center space-y-4 ml-0 mb-6">
-        <div class="title4 mb-5">{{ __('Generar Resporte:') }}</div>
-        <div class="group relative ml-5">
-            <button id="report" class="btnimg" onclick="window.location.href='{{ route('report.form', ['type'=>'radiography','id'=>$file->id, 'name'=>$file->name_patient,'ci'=>$file->ci_patient]) }}'">
-                <img src="{{ asset('assets/images/report.png') }}" width="50" height="50">
-            </button>
-            <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1">
-                <span class="text-sm text-gray-800">{{ __('Reporte') }}</span>
-            </div>
-        </div>
-    </div>
-
     <div class="flex justify-center mt-[30px] mb-[30px] bg-gray-50 p-4 rounded-xl shadow-inner">
     <img src="{{ asset('storage/multimedia/'.$file->file_path) }}" 
          alt="Imagen del estudio: {{ $file->study_type }}" 
