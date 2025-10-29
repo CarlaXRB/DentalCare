@@ -66,7 +66,6 @@ class RadiographyController extends Controller
         $radiography->radiography_date=$request->radiography_date;
         $radiography->radiography_type=$request->radiography_type;
         $radiography->radiography_uri=$fileName; 
-        $radiography->radiography_dicom_uri = null;
         $radiography->radiography_doctor=$request->radiography_doctor;
         $radiography->radiography_charge=$request->radiography_charge;
         $radiography->save();

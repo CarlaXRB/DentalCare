@@ -127,7 +127,7 @@ class TomographyController extends Controller
         if (!file_exists($imagePath)) {
             abort(404, 'Imagen no encontrada');
         }
-        return view('tomography.show_image', compact('tomographyId', 'image', 'tomography'));
+        return view('tomography.mostrar', compact('tomographyId', 'image', 'tomography'));
     }
     public function report(Tomography $tomography):View{
         return view('tomography.report', compact('tomography'));
