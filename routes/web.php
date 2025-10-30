@@ -50,7 +50,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::delete('/admin/destroy/{user}', [AdminUserController::class, 'destroy'])->name('admin.destroy');
     Route::get('/data', [AdminUserController::class, 'data'])->name('admin.data');
     Route::get('/files', [AdminUserController::class, 'files'])->name('files.select');
-    
+
     Route::get('/new-radiography', [RadiographyController::class, 'new'])->name('radiography.new');
     Route::get('/radiography', [RadiographyController::class, 'index'])->name('radiography.index');
     Route::get('/radiography/create', [RadiographyController::class, 'create'])->name('radiography.create');
@@ -65,7 +65,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::post('/radiography/{radiography}/apply-filters', [RadiographyController::class, 'applyFilters'])->name('radiography.applyFilters');
     Route::post('/radiography/search', [RadiographyController::class, 'search'])->name('radiography.search');
     Route::delete('/radiography/destroy/{radiography}', [RadiographyController::class, 'destroy'])->name('radiography.destroy');
-    Route::get('/files', [RadiographyController::class, 'files'])->name('files.select');
+    //Route::get('/files', [RadiographyController::class, 'files'])->name('files.select');
 
     Route::get('/new-tomography', [TomographyController::class, 'new'])->name('tomography.new');
     Route::get('/tomography', [TomographyController::class, 'index'])->name('tomography.index');
