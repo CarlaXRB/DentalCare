@@ -128,4 +128,7 @@ class AdminUserController extends Controller
             'totalUsers','totalPatients','totalEvents','totalRadiographies','totalTomographies','totalReports','totalTreatments','monthlyPatients','monthlyEvents','monthlyRadiographies','monthlyTomographies','monthlyReports','monthlyUsers','monthlyData', 'monthlyTreatments'
         ));
     }   
+    public function files(){
+        return view('admin.files');
+    }
 }
