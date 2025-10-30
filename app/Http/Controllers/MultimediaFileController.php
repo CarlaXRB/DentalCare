@@ -33,7 +33,7 @@ class MultimediaFileController extends Controller
         $studyCode = strtoupper(Str::random(8));
         $studyDate = Carbon::now()->toDateString();
         $folderName = "{$studyCode}_{$studyDate}";
-        $basePath = public_path("multimedia/{$folderName}");
+        $basePath = storage_path("app/public/multimedia/{$folderName}");
 
         if (!file_exists($basePath)) {
             mkdir($basePath, 0775, true);
