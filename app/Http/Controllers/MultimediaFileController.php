@@ -7,7 +7,8 @@ use App\Models\MultimediaFile;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use ZipArchive;
-use Illuminate\Support\Facades\File; // Usaremos File para operaciones de directorio
+use Illuminate\Support\Facades\File; 
+use Illuminate\Support\Facades\Storage; // ¡Necesario para el Paso 3!
 
 class MultimediaFileController extends Controller
 {
@@ -37,12 +38,13 @@ class MultimediaFileController extends Controller
         $studyDate = Carbon::now()->toDateString();
         $folderName = "{$studyCode}_{$studyDate}";
         
-        // 🚨 CAMBIO CLAVE 1: Volvemos a guardar en public/multimedia
+        // 🚨 CAMBIO CLAVE 1: Usamos la ruta storage/app/public/multimedia (donde sí hay permisos)
         $diskPath = "multimedia/{$folderName}";
-        $basePath = public_path($diskPath);
+        $basePath = storage_path("app/public/{$diskPath}");
 
         // Crear carpeta si no existe
         if (!File::exists($basePath)) {
+            // Este mkdir funcionará porque apunta a la carpeta 'storage'
             File::makeDirectory($basePath, 0775, true);
         }
 
@@ -57,7 +59,7 @@ class MultimediaFileController extends Controller
             }
         }
 
-        // Subir carpeta ZIP
+        // Subir carpeta ZIP (lógica de conteo recursiva se mantiene)
         if ($request->hasFile('folder')) {
             $zip = new ZipArchive;
             $zipPath = $request->file('folder')->getRealPath();
@@ -66,7 +68,6 @@ class MultimediaFileController extends Controller
                 $zip->extractTo($basePath);
                 $zip->close();
                 
-                // Conteo recursivo (se mantiene la lógica que funciona)
                 $count = 0;
                 if (File::isDirectory($basePath)) {
                     $directoryIterator = new \RecursiveIteratorIterator(
@@ -103,8 +104,8 @@ class MultimediaFileController extends Controller
     {
         $study = MultimediaFile::findOrFail($id);
         
-        // 🚨 CAMBIO CLAVE 2: Buscamos las imágenes en 'public/ruta'
-        $imagesPath = public_path($study->study_uri); 
+        // 🚨 CAMBIO CLAVE 2: Ahora buscamos las imágenes en 'storage/app/public/ruta'
+        $imagesPath = storage_path("app/public/{$study->study_uri}"); 
         
         $imageUrls = [];
         if (File::isDirectory($imagesPath)) {
@@ -117,22 +118,44 @@ class MultimediaFileController extends Controller
 
             foreach ($directoryIterator as $file) {
                 if ($file->isFile() && preg_match($imagePattern, $file->getFilename())) {
-                    // Generamos la URL usando asset() directamente con la ruta relativa del estudio.
-                    // Esto funciona mejor en la mayoría de los hosts que no tienen storage:link configurado.
-                    $imageUrls[] = asset($study->study_uri . '/' . $file->getFilename()); 
+                    // 🚨 CAMBIO CLAVE 3: Generamos una ruta protegida hacia un NUEVO CONTROLADOR (ver Paso 3)
+                    $imageUrls[] = route('multimedia.image', [
+                        'studyCode' => $study->study_code, 
+                        'fileName' => $file->getFilename()
+                    ]); 
                 }
             }
         }
 
         return view('multimedia.show', compact('study', 'imageUrls'));
     }
+    
+    // Función para servir la imagen (Paso 3)
+    public function serveImage($studyCode, $fileName)
+    {
+        // 1. Encontramos el estudio para obtener la study_uri
+        $study = MultimediaFile::where('study_code', $studyCode)->firstOrFail();
+        
+        // 2. Construimos la ruta completa en el disco (storage/app/public/multimedia/CODIGO_FECHA/imagen.jpg)
+        $path = storage_path("app/public/{$study->study_uri}/{$fileName}");
+
+        // 3. Verificamos que el archivo existe y es una imagen
+        if (!File::exists($path) || !preg_match('/\.(png|jpg|jpeg)$/i', $fileName)) {
+            abort(404);
+        }
+
+        // 4. Devolvemos el archivo directamente al navegador
+        return response()->file($path);
+    }
+
+    // ... (destroy se mantiene, pero apunta a storage)
 
     public function destroy($id)
     {
         $study = MultimediaFile::findOrFail($id);
         
-        // 🚨 CAMBIO CLAVE 3: Apuntamos al directorio en 'public'
-        $dir = public_path($study->study_uri); 
+        // Apuntamos al directorio en 'storage'
+        $dir = storage_path("app/public/{$study->study_uri}"); 
 
         if (File::isDirectory($dir)) {
             File::deleteDirectory($dir);
