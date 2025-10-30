@@ -61,18 +61,9 @@ RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' \
     /etc/apache2/sites-available/000-default.conf \
     && a2enmod rewrite
 
-    # Permitir acceso a la carpeta multimedia desde Apache
-RUN echo '<Directory "/var/www/html/public/multimedia">\n\
-    Options Indexes FollowSymLinks\n\
-    AllowOverride All\n\
-    Require all granted\n\
-</Directory>' >> /etc/apache2/apache2.conf
-
-
-# CRÍTICO: Configurar permisos de escritura para storage, cache y multimedia
-RUN mkdir -p /var/www/html/public/multimedia \
-    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build /var/www/html/public/multimedia \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build /var/www/html/public/multimedia
+# CRÍTICO: Configurar permisos de escritura para storage y cache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build
 
 # Exponer el puerto por defecto de Apache
 EXPOSE 80
