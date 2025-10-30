@@ -20,67 +20,70 @@ class MultimediaFileController extends Controller
     {
         return view('multimedia.create');
     }
+public function store(Request $request)
+{
+    $request->validate([
+        'ci_patient' => 'required|exists:patients,ci_patient',
+        'study_type' => 'required|string',
+        'images.*' => 'nullable|mimes:png,jpg,jpeg|max:10240',
+        'folder' => 'nullable|file|mimetypes:application/zip,application/x-zip-compressed'
+    ]);
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'ci_patient' => 'required|exists:patients,ci_patient',
-            'study_type' => 'required|string',
-            'images.*' => 'nullable|mimes:png,jpg,jpeg|max:10240',
-            'folder' => 'nullable|file|mimetypes:application/zip,application/x-zip-compressed'
-        ]);
+    $studyCode = strtoupper(Str::random(8));
+    $studyDate = Carbon::now()->toDateString();
+    $folderName = "{$studyCode}_{$studyDate}";
+    $basePath = public_path("multimedia/{$folderName}");
 
-        $studyCode = strtoupper(Str::random(8));
-        $studyDate = Carbon::now()->toDateString();
-        $folderName = "{$studyCode}_{$studyDate}";
-        $basePath = storage_path("app/public/multimedia/{$folderName}");
-
-        if (!file_exists($basePath)) {
-            mkdir($basePath, 0775, true);
-        }
-
-        $count = 0;
-
-        // Subir imágenes individuales
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $img) {
-                $filename = Str::uuid() . '.' . $img->getClientOriginalExtension();
-                $img->move($basePath, $filename);
-                $count++;
-            }
-        }
-
-        // Subir carpeta ZIP
-        if ($request->hasFile('folder')) {
-            $zip = new ZipArchive;
-            $zipPath = $request->file('folder')->getRealPath();
-
-            if ($zip->open($zipPath) === true) {
-                $zip->extractTo($basePath);
-                $zip->close();
-
-                // Contar imágenes válidas
-                $allFiles = glob($basePath . '/*');
-                $count = count(array_filter($allFiles, function ($file) {
-                    return preg_match('/\.(png|jpg|jpeg)$/i', $file);
-                }));
-            }
-        }
-
-        $relativePath = "multimedia/{$folderName}";
-
-        MultimediaFile::create([
-            'ci_patient' => $request->ci_patient,
-            'study_code' => $studyCode,
-            'study_date' => $studyDate,
-            'study_type' => $request->study_type,
-            'study_uri' => $relativePath,
-            'description' => $request->input('description'),
-            'image_count' => $count,
-        ]);
-
-        return redirect()->route('multimedia.index')->with('success', 'Estudio cargado correctamente.');
+    // Crear carpeta si no existe
+    if (!file_exists($basePath)) {
+        mkdir($basePath, 0775, true);
     }
+
+    $count = 0;
+
+    // 📸 Subir imágenes individuales
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $img) {
+            $filename = Str::uuid() . '.' . $img->getClientOriginalExtension();
+            $img->move($basePath, $filename);
+            $count++;
+        }
+    }
+
+    // 🗂️ Subir carpeta ZIP
+    if ($request->hasFile('folder')) {
+        $zip = new ZipArchive;
+        $zipPath = $request->file('folder')->getRealPath();
+
+        if ($zip->open($zipPath) === true) {
+            $zip->extractTo($basePath);
+            $zip->close();
+
+            // Contar imágenes válidas
+            $allFiles = glob($basePath . '/*');
+            $count = count(array_filter($allFiles, function ($file) {
+                return preg_match('/\.(png|jpg|jpeg)$/i', $file);
+            }));
+        }
+    }
+
+    // 📁 Ruta relativa accesible desde el navegador
+    $relativePath = "multimedia/{$folderName}";
+
+    MultimediaFile::create([
+        'ci_patient'   => $request->ci_patient,
+        'study_code'   => $studyCode,
+        'study_date'   => $studyDate,
+        'study_type'   => $request->study_type,
+        'study_uri'    => $relativePath,
+        'description'  => $request->input('description'),
+        'image_count'  => $count,
+    ]);
+
+    return redirect()
+        ->route('multimedia.index')
+        ->with('success', 'Estudio cargado correctamente.');
+}
 
     public function show($id)
     {
