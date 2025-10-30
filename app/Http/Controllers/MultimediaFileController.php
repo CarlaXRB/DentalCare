@@ -132,22 +132,23 @@ class MultimediaFileController extends Controller
     
     // Función para servir la imagen (Paso 3)
     public function serveImage($studyCode, $fileName)
-    {
-        // 1. Encontramos el estudio para obtener la study_uri
-        $study = MultimediaFile::where('study_code', $studyCode)->firstOrFail();
-        
-        // 2. Construimos la ruta completa en el disco (storage/app/public/multimedia/CODIGO_FECHA/imagen.jpg)
-        $path = storage_path("app/public/{$study->study_uri}/{$fileName}");
+{
+    // 1. Encontramos el estudio para obtener la study_uri
+    $study = MultimediaFile::where('study_code', $studyCode)->firstOrFail();
+    
+    // 2. Construimos la ruta completa en el disco (storage/app/public/multimedia/CODIGO_FECHA/imagen.jpg)
+    $path = storage_path("app/public/{$study->study_uri}/{$fileName}");
 
-        // 3. Verificamos que el archivo existe y es una imagen
-        if (!File::exists($path) || !preg_match('/\.(png|jpg|jpeg)$/i', $fileName)) {
-            abort(404);
-        }
-
-        // 4. Devolvemos el archivo directamente al navegador
-        return response()->file($path);
+    // 3. Verificamos que el archivo existe
+    if (!File::exists($path)) {
+        // 🚨 CAMBIO DE DEBUG: Si no encuentra el archivo, arroja un 404 detallado
+        // Esto nos mostrará la ruta COMPLETA que Laravel intentó usar
+        abort(404, "ARCHIVO NO ENCONTRADO EN LA RUTA ESPERADA: {$path}");
     }
 
+    // 4. Devolvemos el archivo directamente al navegador
+    return response()->file($path);
+}
     // ... (destroy se mantiene, pero apunta a storage)
 
     public function destroy($id)

@@ -26,18 +26,36 @@ class MultimediaFile extends Model
 
     public function getFirstImageUrlAttribute()
     {
-        $imagesPath = public_path($this->study_uri);
+        // 1. Ruta base donde se guardan los archivos
+        $imagesPath = storage_path("app/public/{$this->study_uri}");
+        $firstImageName = null;
         
-        // El * es importante para FullCalendar
-        $images = File::glob($imagesPath . '/*.{png,jpg,jpeg}', GLOB_BRACE);
+        // 2. Búsqueda exhaustiva (recursiva) para encontrar la primera imagen
+        if (File::isDirectory($imagesPath)) {
+            $directoryIterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($imagesPath, \RecursiveDirectoryIterator::SKIP_DOTS),
+                \RecursiveIteratorIterator::SELF_FIRST
+            );
+            
+            $imagePattern = '/\.(png|jpg|jpeg)$/i';
 
-        if (!empty($images)) {
-            // Obtenemos el nombre del archivo (ej: 1234.jpg) y construimos la URL usando asset()
-            $fileName = basename($images[0]);
-            return asset($this->study_uri . '/' . $fileName);
+            foreach ($directoryIterator as $file) {
+                if ($file->isFile() && preg_match($imagePattern, $file->getFilename())) {
+                    $firstImageName = $file->getFilename();
+                    break; // Encontrada la primera imagen, salimos
+                }
+            }
         }
 
-        // Devolver un placeholder si no hay imágenes o la carpeta no existe
+        if ($firstImageName) {
+            // 3. Generamos la RUTA PROTEGIDA usando el código del estudio y el nombre del archivo
+            return route('multimedia.image', [
+                'studyCode' => $this->study_code, 
+                'fileName' => $firstImageName
+            ]);
+        }
+
+        // Si no hay imágenes, devolvemos un placeholder
         return 'https://placehold.co/100x100/A0AEC0/ffffff?text=No+Img';
     }
 }
