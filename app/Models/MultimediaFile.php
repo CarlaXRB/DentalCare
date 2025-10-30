@@ -26,11 +26,9 @@ class MultimediaFile extends Model
 
     public function getFirstImageUrlAttribute()
     {
-        // 1. Ruta base donde se guardan los archivos
         $imagesPath = storage_path("app/public/{$this->study_uri}");
         $firstImageName = null;
-        
-        // 2. Búsqueda exhaustiva (recursiva) para encontrar la primera imagen
+
         if (File::isDirectory($imagesPath)) {
             $directoryIterator = new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator($imagesPath, \RecursiveDirectoryIterator::SKIP_DOTS),
@@ -42,20 +40,17 @@ class MultimediaFile extends Model
             foreach ($directoryIterator as $file) {
                 if ($file->isFile() && preg_match($imagePattern, $file->getFilename())) {
                     $firstImageName = $file->getFilename();
-                    break; // Encontrada la primera imagen, salimos
+                    break;
                 }
             }
         }
 
         if ($firstImageName) {
-            // 3. Generamos la RUTA PROTEGIDA usando el código del estudio y el nombre del archivo
             return route('multimedia.image', [
                 'studyCode' => $this->study_code, 
                 'fileName' => $firstImageName
             ]);
         }
-
-        // Si no hay imágenes, devolvemos un placeholder
         return 'https://placehold.co/100x100/A0AEC0/ffffff?text=No+Img';
     }
 }
