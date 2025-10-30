@@ -105,14 +105,14 @@ class MultimediaFileController extends Controller
     {
         $study = MultimediaFile::findOrFail($id);
         
-        // La ruta donde están los archivos (storage/app/public/...)
-        $imagesPath = storage_path("app/public/{$study->study_uri}"); 
+        // La ruta base donde están los archivos (storage/app/public/...)
+        $diskRootPath = storage_path("app/public/{$study->study_uri}"); 
         
         $imageUrls = [];
         
-        if (File::isDirectory($imagesPath)) {
+        if (File::isDirectory($diskRootPath)) {
             $directoryIterator = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($imagesPath, \RecursiveDirectoryIterator::SKIP_DOTS),
+                new \RecursiveDirectoryIterator($diskRootPath, \RecursiveDirectoryIterator::SKIP_DOTS),
                 \RecursiveIteratorIterator::SELF_FIRST
             );
             
@@ -121,21 +121,18 @@ class MultimediaFileController extends Controller
             foreach ($directoryIterator as $file) {
                 if ($file->isFile() && preg_match($imagePattern, $file->getFilename())) {
                     
-                    // 🚨 CAMBIO CLAVE AQUÍ: 
-                    // Necesitamos obtener el nombre del archivo *relativo a la carpeta del estudio*
+                    // 🚨 CAMBIO CLAVE AQUÍ: Calculamos la ruta relativa de forma robusta
                     
-                    // 1. Obtener la ruta completa del archivo (Ej: .../storage/app/public/multimedia/CODIGO/sub/img.jpg)
+                    // 1. Obtener la ruta completa del archivo
                     $fullPath = $file->getPathname();
                     
-                    // 2. Calcular la ruta relativa al directorio raíz del estudio (study_uri)
-                    // (Ej: si $imagesPath es .../CODIGO, y $fullPath es .../CODIGO/sub/img.jpg, 
-                    // el resultado es 'sub/img.jpg')
-                    $relativePathToFile = str_replace($imagesPath . '/', '', $fullPath);
+                    // 2. Extraer la parte relativa al directorio raíz del estudio.
+                    // Esto maneja subcarpetas correctamente sin depender de str_replace con slashes.
+                    $relativePathToFile = substr($fullPath, strlen($diskRootPath) + 1);
 
-                    // 3. Generamos la ruta protegida. Le pasamos la ruta relativa
+                    // 3. Generamos la ruta protegida. Enviamos la ruta relativa completa
                     $imageUrls[] = route('multimedia.image', [
                         'studyCode' => $study->study_code, 
-                        // Enviamos la ruta relativa completa (ej: 'subfolder/image.jpg')
                         'fileName' => $relativePathToFile 
                     ]); 
                 }
@@ -151,12 +148,13 @@ class MultimediaFileController extends Controller
         // 1. Encontramos el estudio para obtener la study_uri
         $study = MultimediaFile::where('study_code', $studyCode)->firstOrFail();
         
-        // 2. Construimos la ruta completa en el disco.
-        // Ahora $fileName puede incluir subdirectorios (Ej: 'subfolder/image.jpg')
+        // 2. Construimos la ruta completa en el disco (storage/app/public/study_uri/fileName)
         $path = storage_path("app/public/{$study->study_uri}/{$fileName}");
 
         // 3. Verificamos que el archivo existe
         if (!File::exists($path)) {
+            // Puedes usar el 404 de depuración si falla
+            // abort(404, "ARCHIVO NO ENCONTRADO EN LA RUTA ESPERADA: {$path}");
             abort(404);
         }
 
