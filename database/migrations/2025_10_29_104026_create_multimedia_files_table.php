@@ -15,14 +15,13 @@ return new class extends Migration
     {
         Schema::create('multimedia_files', function (Blueprint $table) {
             $table->id();
-            $table->string('name_patient');
-            $table->unsignedBigInteger('ci_patient');
-            $table->unsignedBigInteger('radiography_id');
-            $table->date('radiography_date');
-            $table->string('file_path');
-            $table->string('file_type');
+            $table->string('ci_patient');
+            $table->string('study_code')->unique();
+            $table->date('study_date')->nullable();
             $table->string('study_type');
-            $table->unsignedBigInteger('size');
+            $table->text('study_uri');
+            $table->string('description')->nullable();
+            $table->integer('image_count')->default(0);
             $table->timestamps();
         });
     }
