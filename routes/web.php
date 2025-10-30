@@ -132,6 +132,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/multimedia/index', [MultimediaFileController::class, 'index'])->name('multimedia.index');
     Route::post('/multimedia/store', [MultimediaFileController::class, 'store'])->name('multimedia.store');
     Route::get('/multimedia/show/{id}', [MultimediaFileController::class, 'show'])->name('multimedia.show');
-});
+
 Route::get('multimedia/search', [MultimediaFileController::class, 'search'])->name('multimedia.search');
 });
