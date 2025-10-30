@@ -130,4 +130,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
     Route::resource('multimedia', MultimediaFileController::class);
 Route::get('multimedia/search', [MultimediaFileController::class, 'search'])->name('multimedia.search');
+Route::get('/multimedia/image/{studyCode}/{fileName}', [MultimediaFileController::class, 'serveImage'])
+    ->name('multimedia.image');
 });
