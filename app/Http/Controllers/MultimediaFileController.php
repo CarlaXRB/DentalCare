@@ -8,7 +8,8 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use ZipArchive;
 use Illuminate\Support\Facades\File; 
-use Illuminate\Support\Facades\Storage; // ¡Necesario para el Paso 3!
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response; // ¡Necesario para el Paso 3!
 
 class MultimediaFileController extends Controller
 {
@@ -104,10 +105,11 @@ class MultimediaFileController extends Controller
     {
         $study = MultimediaFile::findOrFail($id);
         
-        // 🚨 CAMBIO CLAVE 2: Ahora buscamos las imágenes en 'storage/app/public/ruta'
+        // La ruta donde están los archivos (storage/app/public/...)
         $imagesPath = storage_path("app/public/{$study->study_uri}"); 
         
         $imageUrls = [];
+        
         if (File::isDirectory($imagesPath)) {
             $directoryIterator = new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator($imagesPath, \RecursiveDirectoryIterator::SKIP_DOTS),
@@ -118,10 +120,23 @@ class MultimediaFileController extends Controller
 
             foreach ($directoryIterator as $file) {
                 if ($file->isFile() && preg_match($imagePattern, $file->getFilename())) {
-                    // 🚨 CAMBIO CLAVE 3: Generamos una ruta protegida hacia un NUEVO CONTROLADOR (ver Paso 3)
+                    
+                    // 🚨 CAMBIO CLAVE AQUÍ: 
+                    // Necesitamos obtener el nombre del archivo *relativo a la carpeta del estudio*
+                    
+                    // 1. Obtener la ruta completa del archivo (Ej: .../storage/app/public/multimedia/CODIGO/sub/img.jpg)
+                    $fullPath = $file->getPathname();
+                    
+                    // 2. Calcular la ruta relativa al directorio raíz del estudio (study_uri)
+                    // (Ej: si $imagesPath es .../CODIGO, y $fullPath es .../CODIGO/sub/img.jpg, 
+                    // el resultado es 'sub/img.jpg')
+                    $relativePathToFile = str_replace($imagesPath . '/', '', $fullPath);
+
+                    // 3. Generamos la ruta protegida. Le pasamos la ruta relativa
                     $imageUrls[] = route('multimedia.image', [
                         'studyCode' => $study->study_code, 
-                        'fileName' => $file->getFilename()
+                        // Enviamos la ruta relativa completa (ej: 'subfolder/image.jpg')
+                        'fileName' => $relativePathToFile 
                     ]); 
                 }
             }
@@ -132,23 +147,22 @@ class MultimediaFileController extends Controller
     
     // Función para servir la imagen (Paso 3)
     public function serveImage($studyCode, $fileName)
-{
-    // 1. Encontramos el estudio para obtener la study_uri
-    $study = MultimediaFile::where('study_code', $studyCode)->firstOrFail();
-    
-    // 2. Construimos la ruta completa en el disco (storage/app/public/multimedia/CODIGO_FECHA/imagen.jpg)
-    $path = storage_path("app/public/{$study->study_uri}/{$fileName}");
+    {
+        // 1. Encontramos el estudio para obtener la study_uri
+        $study = MultimediaFile::where('study_code', $studyCode)->firstOrFail();
+        
+        // 2. Construimos la ruta completa en el disco.
+        // Ahora $fileName puede incluir subdirectorios (Ej: 'subfolder/image.jpg')
+        $path = storage_path("app/public/{$study->study_uri}/{$fileName}");
 
-    // 3. Verificamos que el archivo existe
-    if (!File::exists($path)) {
-        // 🚨 CAMBIO DE DEBUG: Si no encuentra el archivo, arroja un 404 detallado
-        // Esto nos mostrará la ruta COMPLETA que Laravel intentó usar
-        abort(404, "ARCHIVO NO ENCONTRADO EN LA RUTA ESPERADA: {$path}");
+        // 3. Verificamos que el archivo existe
+        if (!File::exists($path)) {
+            abort(404);
+        }
+
+        // 4. Devolvemos el archivo directamente al navegador
+        return response()->file($path);
     }
-
-    // 4. Devolvemos el archivo directamente al navegador
-    return response()->file($path);
-}
     // ... (destroy se mantiene, pero apunta a storage)
 
     public function destroy($id)
