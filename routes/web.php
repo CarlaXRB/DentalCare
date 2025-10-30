@@ -129,6 +129,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/payments/index', [PaymentController::class, 'index'])->name('payments.index');
 
     Route::resource('multimedia', MultimediaFileController::class);
-    
+    Route::get('/multimedia', function () {
+    return view('multimedia.index');
+});
 Route::get('multimedia/search', [MultimediaFileController::class, 'search'])->name('multimedia.search');
 });
