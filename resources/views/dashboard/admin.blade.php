@@ -42,7 +42,7 @@
                         </a>
 
                         <!-- Archivos -->
-                        <a href="{{ route('files.select') }}"
+                        <a href="{{ route('multimedia.index') }}"
                             class="flex items-center p-6 bg-gray-20 rounded-2xl shadow-md hover:shadow-xl transition transform hover:scale-105 duration-300">
                             <img src="{{ asset('assets/images/file.png') }}" alt="Archivos" class="w-32 h-32 object-contain mr-6">
                             <div>
