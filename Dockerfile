@@ -61,9 +61,10 @@ RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' \
     /etc/apache2/sites-available/000-default.conf \
     && a2enmod rewrite
 
-# CRÍTICO: Configurar permisos de escritura para storage y cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build
+# CRÍTICO: Configurar permisos de escritura para storage, cache y multimedia
+RUN mkdir -p /var/www/html/public/multimedia \
+    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build /var/www/html/public/multimedia \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build /var/www/html/public/multimedia
 
 # Exponer el puerto por defecto de Apache
 EXPOSE 80
