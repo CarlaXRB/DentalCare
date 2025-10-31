@@ -31,7 +31,7 @@ public function edit(MultimediaFile $multimedia)
 
 public function update(Request $request, MultimediaFile $multimediaFile)
 {
-    // Validación de los campos que realmente se pueden editar
+    // Validar datos
     $validated = $request->validate([
         'name_patient' => 'required|string|max:255',
         'ci_patient' => 'required|string|max:50',
@@ -39,13 +39,21 @@ public function update(Request $request, MultimediaFile $multimediaFile)
         'description' => 'nullable|string',
     ]);
 
-    // Actualizar solo los campos permitidos
-    $multimediaFile->update($validated);
+    // Verificar si realmente hay cambios
+    if ($multimediaFile->isDirty($validated)) {
+        $multimediaFile->fill($validated);
+        $multimediaFile->save();
+
+        return redirect()
+            ->route('multimedia.index')
+            ->with('success', 'Información del estudio actualizada correctamente.');
+    }
 
     return redirect()
         ->route('multimedia.index')
-        ->with('success', 'Información del estudio actualizada correctamente.');
+        ->with('info', 'No se detectaron cambios en la información.');
 }
+
 
     public function store(Request $request)
     {
