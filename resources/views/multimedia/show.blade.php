@@ -16,7 +16,11 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 pb-5 text-black dark:text-white">
-        <div class="flex gap-2">
+    <div class="flex gap-2">
+            <h3 class="title4">{{ __('Nombre del Paciente:') }}</h3>
+            <span class="txt">{{ $study->name_patient }}</span>
+        </div>    
+    <div class="flex gap-2">
             <h3 class="title4">{{ __('C.I. del Paciente:') }}</h3>
             <span class="txt">{{ $study->ci_patient }}</span>
         </div>

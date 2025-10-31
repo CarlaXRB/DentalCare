@@ -14,19 +14,19 @@
         @csrf
 
         {{-- Título --}}
-        <h1 class="title1 text-center mb-8">{{ __('Información del Estudio Multimedia') }}</h1>
+        <h1 class="title1 text-center mb-8">{{ __('Información del Estudio') }}</h1>
 
         {{-- Grid principal --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
           <div>
-                <label class="title4 block mb-2">{{ __('Tipo de Estudio') }}:</label>
+                <label class="title4 block mb-2">{{ __('Nombre del paciente') }}:</label>
                 <input type="text" name="name_patient" value="{{ old('name_patient') }}"
                     class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500" />
                 @error('name_patient') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
               <div>
-                <label class="title4 block mb-2">{{ __('Tipo de Estudio') }}:</label>
+                <label class="title4 block mb-2">{{ __('C.I. del paciente') }}:</label>
                 <input type="text" name="ci_patient" value="{{ old('ci_patient') }}"
                     
                     class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500" />

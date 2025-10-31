@@ -8,7 +8,7 @@ use App\Models\Patient;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use ZipArchive;
-use Illuminate\Support\Facades\File; 
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 
@@ -19,11 +19,20 @@ class MultimediaFileController extends Controller
         $studies = MultimediaFile::with('patient')->latest()->get();
         return view('multimedia.index', compact('studies'));
     }
-    public function create(){
+    public function create()
+    {
         $patients = Patient::all();
         return view('multimedia.create', compact('patients'));
     }
-
+    public function edit(MultimediaFile $multimediaFile)
+    {
+        return view('multimedia.edit', compact('multimedia'));
+    }
+    public function update(Request $request, MultimediaFile $multimediaFile)
+    {
+        $multimediaFile->update($request->all());
+        return redirect()->route('multimedia.index')->with('success', 'Información actualizada');
+    }
     public function store(Request $request)
     {
         $request->validate([
@@ -62,7 +71,7 @@ class MultimediaFileController extends Controller
             if ($zip->open($zipPath) === true) {
                 $zip->extractTo($basePath);
                 $zip->close();
-                
+
                 $count = 0;
                 if (File::isDirectory($basePath)) {
                     $directoryIterator = new \RecursiveIteratorIterator(
@@ -79,7 +88,7 @@ class MultimediaFileController extends Controller
             }
         }
 
-        $relativePath = $diskPath; 
+        $relativePath = $diskPath;
 
         MultimediaFile::create([
             'name_patient' => $request->name_patient,
@@ -87,7 +96,7 @@ class MultimediaFileController extends Controller
             'study_code' => $studyCode,
             'study_date' => $studyDate,
             'study_type' => $request->study_type,
-            'study_uri' => $relativePath, 
+            'study_uri' => $relativePath,
             'description' => $request->input('description'),
             'image_count' => $count,
         ]);
@@ -98,16 +107,16 @@ class MultimediaFileController extends Controller
     public function show($id)
     {
         $study = MultimediaFile::findOrFail($id);
-        $diskRootPath = storage_path("app/public/{$study->study_uri}"); 
-        
+        $diskRootPath = storage_path("app/public/{$study->study_uri}");
+
         $imageUrls = [];
-        
+
         if (File::isDirectory($diskRootPath)) {
             $directoryIterator = new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator($diskRootPath, \RecursiveDirectoryIterator::SKIP_DOTS),
                 \RecursiveIteratorIterator::SELF_FIRST
             );
-            
+
             $imagePattern = '/\.(png|jpg|jpeg)$/i';
 
             foreach ($directoryIterator as $file) {
@@ -115,9 +124,9 @@ class MultimediaFileController extends Controller
                     $fullPath = $file->getPathname();
                     $relativePathToFile = substr($fullPath, strlen($diskRootPath) + 1);
                     $imageUrls[] = route('multimedia.image', [
-                        'studyCode' => $study->study_code, 
-                        'fileName' => $relativePathToFile 
-                    ]); 
+                        'studyCode' => $study->study_code,
+                        'fileName' => $relativePathToFile
+                    ]);
                 }
             }
         }
@@ -138,18 +147,19 @@ class MultimediaFileController extends Controller
     public function destroy($id)
     {
         $study = MultimediaFile::findOrFail($id);
-        $dir = storage_path("app/public/{$study->study_uri}"); 
+        $dir = storage_path("app/public/{$study->study_uri}");
         if (File::isDirectory($dir)) {
             File::deleteDirectory($dir);
         }
         $study->delete();
         return redirect()->route('multimedia.index')->with('success', 'Estudio eliminado correctamente.');
     }
-    public function search(Request $request){
+    public function search(Request $request)
+    {
         $search = $request->input('search');
         $files = MultimediaFile::where('ci_patient', 'LIKE', '%' . $search . '%')
-                ->orWhere('study_date', 'LIKE', '%' . $search . '%')
-                ->orWhere('study_code', 'LIKE', '%' . $search . '%')->get();
+            ->orWhere('study_date', 'LIKE', '%' . $search . '%')
+            ->orWhere('name_patient', 'LIKE', '%' . $search . '%')->get();
         return view('multimedia.search', compact('files'));
     }
 }

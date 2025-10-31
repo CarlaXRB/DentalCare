@@ -15,7 +15,7 @@
     </form>
 
     <!-- Menu button -->
-    <a href="{{ route('dashboard') }}" class="botton1">{{ __('Atrás') }}</a>
+    <a href="{{ route('multimedia.create') }}" class="botton1">{{ __('Subir Estudio') }}</a>
 </div>
 
 <h1 class="title1 text-center">{{ __('Lista de Estudios Multimedia') }}</h1>
@@ -44,6 +44,7 @@
         <div class="text-center">{{ $study->study_type }}</div>
         {{-- Acciones --}}
         <div class="flex justify-center gap-2">
+            <a href="{{ route('multimedia.edit', $study->id) }}" class="botton3">{{ __('Editar') }}</a>
             <a href="{{ route('multimedia.show', $study->id) }}" class="botton3">{{ __('Ver') }}</a>
             <form method="POST" action="{{ route('multimedia.destroy', $study->id) }}"
                   onsubmit="return confirm('{{ __('¿Seguro que deseas eliminar este estudio?') }}');">
