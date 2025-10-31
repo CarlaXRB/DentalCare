@@ -24,9 +24,9 @@ class MultimediaFileController extends Controller
         $patients = Patient::all();
         return view('multimedia.create', compact('patients'));
     }
-public function edit(MultimediaFile $multimediaFile)
+public function edit(MultimediaFile $multimedia)
 {
-    return view('multimedia.edit', compact('multimediaFile'));
+    return view('multimedia.edit', compact('multimedia'));
 }
 
 public function update(Request $request, MultimediaFile $multimediaFile)
