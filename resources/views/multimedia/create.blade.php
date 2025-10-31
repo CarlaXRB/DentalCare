@@ -33,7 +33,7 @@
             {{-- Paciente --}}
             <div>
                 <label class="title4 block mb-2">{{ __('Nombre del Paciente') }}:</label>
-                <input type="text" name="ci_patient" value="{{ old('name_patient') }}"
+                <input type="text" name="name_patient" value="{{ old('name_patient') }}"
                     class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500" />
                 @error('name_patient') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
