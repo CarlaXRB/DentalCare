@@ -19,28 +19,19 @@
         {{-- Grid principal --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-            {{-- Selección de paciente --}}
-            <div>
-                <label class="title4 block mb-2">{{ __('Paciente') }}:</label>
-                <select id="patientSelect" name="patient_id"
-                    class="border-gray-300 rounded-lg p-3 w-full text-black focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                    <option value="">{{ __('-- Seleccionar Paciente --') }}</option>
-                    @foreach($patients as $patient)
-                        <option value="{{ $patient->id }}"
-                            data-name="{{ $patient->name_patient }}"
-                            data-ci="{{ $patient->ci_patient }}"
-                            {{ old('patient_id') == $patient->id ? 'selected' : '' }}>
-                            {{ $patient->name_patient }} - CI: {{ $patient->ci_patient }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('patient_id') <p class="error mt-1">{{ $message }}</p> @enderror
+          <div>
+                <label class="title4 block mb-2">{{ __('Tipo de Estudio') }}:</label>
+                <input type="text" name="name_patient" value="{{ old('name_patient') }}"
+                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500" />
+                @error('name_patient') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
-
-            {{-- Campos ocultos para enviar nombre y CI automáticamente --}}
-            <input type="hidden" name="name_patient" id="namePatient" value="{{ old('name_patient') }}">
-            <input type="hidden" name="ci_patient" id="ciPatient" value="{{ old('ci_patient') }}">
-
+              <div>
+                <label class="title4 block mb-2">{{ __('Tipo de Estudio') }}:</label>
+                <input type="text" name="ci_patient" value="{{ old('ci_patient') }}"
+                    
+                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500" />
+                @error('ci_patient') <p class="error mt-1">{{ $message }}</p> @enderror
+            </div>
             {{-- Tipo de estudio --}}
             <div>
                 <label class="title4 block mb-2">{{ __('Tipo de Estudio') }}:</label>
@@ -88,31 +79,4 @@
         </div>
     </form>
 </div>
-
-{{-- Script para llenar automáticamente los hidden --}}
-<script>
-    const patientSelect = document.getElementById('patientSelect');
-    const namePatientInput = document.getElementById('namePatient');
-    const ciPatientInput = document.getElementById('ciPatient');
-
-    patientSelect.addEventListener('change', function() {
-        const selectedOption = this.options[this.selectedIndex];
-        if (selectedOption.value) { // solo si hay paciente seleccionado
-            namePatientInput.value = selectedOption.dataset.name || '';
-            ciPatientInput.value = selectedOption.dataset.ci || '';
-        } else {
-            namePatientInput.value = '';
-            ciPatientInput.value = '';
-        }
-    });
-
-    // Llenar automáticamente si hay old() al volver del validate
-    window.addEventListener('DOMContentLoaded', () => {
-        const selectedOption = patientSelect.options[patientSelect.selectedIndex];
-        if (selectedOption && selectedOption.value) {
-            namePatientInput.value = selectedOption.dataset.name || '';
-            ciPatientInput.value = selectedOption.dataset.ci || '';
-        }
-    });
-</script>
 @endsection
