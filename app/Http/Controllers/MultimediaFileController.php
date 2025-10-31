@@ -31,7 +31,7 @@ class MultimediaFileController extends Controller
 
     public function update(Request $request, MultimediaFile $multimedia)
     {
-        // Validar datos
+        // 1. Validar datos
         $validated = $request->validate([
             'name_patient' => 'required|string|max:255',
             'ci_patient' => 'required|max:50',
@@ -39,9 +39,11 @@ class MultimediaFileController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        // Verificar si realmente hay cambios
-        if ($multimedia->isDirty($validated)) {
-            $multimedia->fill($validated);
+        // 2. Llenar el modelo con los datos validados ANTES de la comprobación
+        $multimedia->fill($validated);
+
+        // 3. Verificar si realmente hay cambios usando isDirty() sin argumentos
+        if ($multimedia->isDirty()) {
             $multimedia->save();
 
             return redirect()
