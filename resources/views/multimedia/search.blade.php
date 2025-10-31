@@ -34,7 +34,7 @@
         {{-- Fecha --}}
         <div class="text-center">{{ $file->study_date }}</div>
         {{-- Nombre del Paciente --}}
-        <div class="text-center">{{ $file->patient ? $study->patient->name : 'Sin asignar' }}</div>
+        <div class="text-center">{{ $study->name_patient  }}</div>
         {{-- CI Paciente --}}
         <div class="text-center">{{ $file->ci_patient }}</div>
         {{-- Código --}}

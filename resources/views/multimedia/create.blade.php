@@ -14,7 +14,21 @@
         @csrf
 
         <h1 class="title1 text-center mb-8">{{ __('Información del Estudio Multimedia') }}</h1>
-
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {{-- Patient selection --}}
+            <div>
+                <label class="title4 block mb-2">{{ __('Paciente') }}:</label>
+                <select name="patient_id"
+                    class="border-gray-300 rounded-lg p-3 w-full text-black focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                    <option value="">{{ __('-- Seleccionar Paciente --') }}</option>
+                    @foreach($patients as $patient)
+                        <option value="{{ $patient->id }}" {{ old('patient_id') == $patient->id ? 'selected' : '' }}>
+                            {{ $patient->name_patient }} - CI: {{ $patient->ci_patient }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('patient_id') <p class="error mt-1">{{ $message }}</p> @enderror
+            </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             {{-- Paciente --}}
             <div>

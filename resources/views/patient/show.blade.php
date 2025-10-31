@@ -96,7 +96,7 @@
         <h1 class="title1 text-center pb-4">{{ __('Estudios del Paciente') }}</h1>
 
         @php
-        $allStudies = $patient->radiographies->merge($patient->tomographies);
+        $allStudies = $patient->multimediaFiles;
         @endphp
 
         @if($allStudies->isEmpty())
@@ -129,34 +129,6 @@
             <div class="flex justify-center"><span class="txt">{{ $tomography->tomography_charge }}</span></div>
             <div class="flex justify-center">
                 <a href="{{ route('tomography.show', $tomography->id ) }}" class="botton2">{{ __('Ver Estudio') }}</a>
-            </div>
-        </div>
-        @endforeach
-        @endif
-    </div>
-
-    <!-- Reportes del paciente -->
-    <div class="mt-8">
-        <h1 class="title1 text-center pb-4">{{ __('Reportes emitidos al Paciente') }}</h1>
-
-        @if($patient->reports->isEmpty())
-        <p class="text-gray-700 pl-4">{{ __('El paciente no tiene reportes emitidos.') }}</p>
-        @else
-        <div class="grid grid-cols-5 gap-4 font-semibold border-b border-gray-300 pb-2 mb-2">
-
-            <span class="title3">{{ __('C.I.') }}</span>
-            <span class="title3">{{ __('Fecha') }}</span>
-            <span class="title3">{{ __('ID') }}</span>
-            <span class="title3">{{ __('Creado Por') }}</span>
-        </div>
-        @foreach($patient->reports as $report)
-        <div class="grid grid-cols-5 gap-4 items-center border-b border-gray-200 mb-2 p-2">
-            <div class="flex justify-center"><span class="txt">{{ $report->ci_patient }}</span></div>
-            <div class="flex justify-center"><span class="txt">{{ \Carbon\Carbon::parse($report->report_date)->format('d-m-Y') }}</span></div>
-            <div class="flex justify-center"><span class="txt">{{ __('Report') }} - {{ $report->report_id }}</span></div>
-            <div class="flex justify-center"><span class="txt">{{ $report->created_by }}</span></div>
-            <div class="flex justify-center">
-                <a href="{{ route('report.view', $report->id ) }}" target="_blank" class="botton3">{{ __('Ver PDF') }}</a>
             </div>
         </div>
         @endforeach

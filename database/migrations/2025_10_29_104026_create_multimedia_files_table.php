@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('multimedia_files', function (Blueprint $table) {
             $table->id();
+            $table->string('name_patient');
             $table->string('ci_patient');
             $table->string('study_code')->unique();
             $table->date('study_date')->nullable();
