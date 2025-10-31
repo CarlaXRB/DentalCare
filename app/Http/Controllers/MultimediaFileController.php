@@ -8,7 +8,7 @@ use App\Models\Patient;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use ZipArchive;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\File; 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 
@@ -19,100 +19,94 @@ class MultimediaFileController extends Controller
         $studies = MultimediaFile::with('patient')->latest()->get();
         return view('multimedia.index', compact('studies'));
     }
-    public function create()
-    {
+    public function create(){
         $patients = Patient::all();
         return view('multimedia.create', compact('patients'));
     }
 
     public function store(Request $request)
     {
-        // 1️⃣ Validar los datos del formulario
         $request->validate([
-            'patient_id' => 'required|exists:patients,id',
+            'name_patient' => 'required|string',
+            'ci_patient' => 'required|exists:patients,ci_patient',
             'study_type' => 'required|string',
             'images.*' => 'nullable|mimes:png,jpg,jpeg|max:10240',
-            'folder' => 'nullable|file|mimetypes:application/zip,application/x-zip-compressed',
-            'description' => 'nullable|string'
+            'folder' => 'nullable|file|mimetypes:application/zip,application/x-zip-compressed'
         ]);
 
-        // 2️⃣ Buscar paciente
-        $patient = Patient::findOrFail($request->patient_id);
-
-        // 3️⃣ Definir carpeta de destino en /public/multimedia
         $studyCode = strtoupper(Str::random(8));
-        $studyDate = now()->format('Y-m-d');
+        $studyDate = Carbon::now()->toDateString();
         $folderName = "{$studyCode}_{$studyDate}";
 
-        $destinationPath = public_path("multimedia/{$folderName}");
+        $diskPath = "multimedia/{$folderName}";
+        $basePath = storage_path("app/public/{$diskPath}");
 
-        // Crear carpeta si no existe
-        if (!File::isDirectory($destinationPath)) {
-            File::makeDirectory($destinationPath, 0777, true, true);
+        if (!File::exists($basePath)) {
+            File::makeDirectory($basePath, 0775, true);
         }
 
-        // 4️⃣ Procesar imágenes sueltas
-        $imageCount = 0;
+        $count = 0;
+
         if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $fileName = Str::uuid() . '.' . $image->getClientOriginalExtension();
-                $image->move($destinationPath, $fileName);
-                $imageCount++;
+            foreach ($request->file('images') as $img) {
+                $filename = Str::uuid() . '.' . $img->getClientOriginalExtension();
+                $img->move($basePath, $filename);
+                $count++;
             }
         }
 
-        // 5️⃣ Procesar carpeta ZIP
         if ($request->hasFile('folder')) {
             $zip = new ZipArchive;
             $zipPath = $request->file('folder')->getRealPath();
 
             if ($zip->open($zipPath) === true) {
-                $zip->extractTo($destinationPath);
+                $zip->extractTo($basePath);
                 $zip->close();
-            }
-
-            // Contar imágenes extraídas
-            $imageCount = 0;
-            $iterator = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($destinationPath, \RecursiveDirectoryIterator::SKIP_DOTS),
-                \RecursiveIteratorIterator::SELF_FIRST
-            );
-            foreach ($iterator as $file) {
-                if ($file->isFile() && preg_match('/\.(png|jpg|jpeg)$/i', $file->getFilename())) {
-                    $imageCount++;
+                
+                $count = 0;
+                if (File::isDirectory($basePath)) {
+                    $directoryIterator = new \RecursiveIteratorIterator(
+                        new \RecursiveDirectoryIterator($basePath, \RecursiveDirectoryIterator::SKIP_DOTS),
+                        \RecursiveIteratorIterator::SELF_FIRST
+                    );
+                    $imagePattern = '/\.(png|jpg|jpeg)$/i';
+                    foreach ($directoryIterator as $file) {
+                        if ($file->isFile() && preg_match($imagePattern, $file->getFilename())) {
+                            $count++;
+                        }
+                    }
                 }
             }
         }
 
-        // 6️⃣ Crear registro en la base de datos
-        $multimedia = new MultimediaFile();
-        $multimedia->name_patient = $patient->name_patient;
-        $multimedia->ci_patient = $patient->ci_patient;
-        $multimedia->study_code = $studyCode;
-        $multimedia->study_date = $studyDate;
-        $multimedia->study_type = $request->study_type;
-        $multimedia->study_uri = "multimedia/{$folderName}";
-        $multimedia->description = $request->description;
-        $multimedia->image_count = $imageCount;
-        $multimedia->save();
+        $relativePath = $diskPath; 
 
-        return redirect()->route('multimedia.index')
-            ->with('success', 'Estudio multimedia cargado correctamente.');
+        MultimediaFile::create([
+            'ci_patient' => $request->ci_patient,
+            'study_code' => $studyCode,
+            'study_date' => $studyDate,
+            'study_type' => $request->study_type,
+            'study_uri' => $relativePath, 
+            'description' => $request->input('description'),
+            'image_count' => $count,
+        ]);
+
+        return redirect()->route('multimedia.index')->with('success', 'Estudio cargado correctamente.');
     }
 
     public function show($id)
     {
         $study = MultimediaFile::findOrFail($id);
-        $diskRootPath = storage_path("app/public/{$study->study_uri}");
-
+        $diskRootPath = storage_path("app/public/{$study->study_uri}"); 
+        
         $imageUrls = [];
-
+        
         if (File::isDirectory($diskRootPath)) {
             $directoryIterator = new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator($diskRootPath, \RecursiveDirectoryIterator::SKIP_DOTS),
                 \RecursiveIteratorIterator::SELF_FIRST
             );
-
+            
             $imagePattern = '/\.(png|jpg|jpeg)$/i';
 
             foreach ($directoryIterator as $file) {
@@ -120,9 +114,9 @@ class MultimediaFileController extends Controller
                     $fullPath = $file->getPathname();
                     $relativePathToFile = substr($fullPath, strlen($diskRootPath) + 1);
                     $imageUrls[] = route('multimedia.image', [
-                        'studyCode' => $study->study_code,
-                        'fileName' => $relativePathToFile
-                    ]);
+                        'studyCode' => $study->study_code, 
+                        'fileName' => $relativePathToFile 
+                    ]); 
                 }
             }
         }
@@ -143,19 +137,18 @@ class MultimediaFileController extends Controller
     public function destroy($id)
     {
         $study = MultimediaFile::findOrFail($id);
-        $dir = storage_path("app/public/{$study->study_uri}");
+        $dir = storage_path("app/public/{$study->study_uri}"); 
         if (File::isDirectory($dir)) {
             File::deleteDirectory($dir);
         }
         $study->delete();
         return redirect()->route('multimedia.index')->with('success', 'Estudio eliminado correctamente.');
     }
-    public function search(Request $request)
-    {
+    public function search(Request $request){
         $search = $request->input('search');
         $files = MultimediaFile::where('ci_patient', 'LIKE', '%' . $search . '%')
-            ->orWhere('study_date', 'LIKE', '%' . $search . '%')
-            ->orWhere('study_code', 'LIKE', '%' . $search . '%')->get();
+                ->orWhere('study_date', 'LIKE', '%' . $search . '%')
+                ->orWhere('study_code', 'LIKE', '%' . $search . '%')->get();
         return view('multimedia.search', compact('files'));
     }
 }
