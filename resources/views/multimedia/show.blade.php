@@ -58,7 +58,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8">
         @forelse($imageUrls as $img)
             <div class="flex justify-center">
-                <img src="{{ $img }}" alt="Imagen del estudio" class="rounded-lg shadow-lg max-h-64 object-cover" />
+                <img src="{{ $img }}" alt="Imagen del estudio" class="rounded-lg shadow-lg max-h-128 object-cover" />
             </div>
         @empty
             <p class="text-gray-500 text-center col-span-full">{{ __('No hay imágenes disponibles para este estudio.') }}</p>
