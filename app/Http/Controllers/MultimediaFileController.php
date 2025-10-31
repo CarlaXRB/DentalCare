@@ -28,7 +28,7 @@ class MultimediaFileController extends Controller
     {
         $request->validate([
             'name_patient' => 'required|string',
-            'ci_patient' => 'required|exists:patients,ci_patient',
+            'ci_patient' => 'required',
             'study_type' => 'required|string',
             'images.*' => 'nullable|mimes:png,jpg,jpeg|max:10240',
             'folder' => 'nullable|file|mimetypes:application/zip,application/x-zip-compressed'
