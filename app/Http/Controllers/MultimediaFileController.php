@@ -24,15 +24,29 @@ class MultimediaFileController extends Controller
         $patients = Patient::all();
         return view('multimedia.create', compact('patients'));
     }
-    public function edit(MultimediaFile $multimediaFile)
-    {
-        return view('multimedia.edit', compact('multimediaFile'));
-    }
-    public function update(Request $request, MultimediaFile $multimediaFile)
-    {
-        $multimediaFile->update($request->all());
-        return redirect()->route('multimedia.index')->with('success', 'Información actualizada');
-    }
+public function edit(MultimediaFile $multimediaFile)
+{
+    return view('multimedia.edit', compact('multimediaFile'));
+}
+
+public function update(Request $request, MultimediaFile $multimediaFile)
+{
+    // Validación de los campos que realmente se pueden editar
+    $validated = $request->validate([
+        'name_patient' => 'required|string|max:255',
+        'ci_patient' => 'required|string|max:50',
+        'study_type' => 'required|string|max:255',
+        'description' => 'nullable|string',
+    ]);
+
+    // Actualizar solo los campos permitidos
+    $multimediaFile->update($validated);
+
+    return redirect()
+        ->route('multimedia.index')
+        ->with('success', 'Información del estudio actualizada correctamente.');
+}
+
     public function store(Request $request)
     {
         $request->validate([
