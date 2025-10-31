@@ -24,36 +24,35 @@ class MultimediaFileController extends Controller
         $patients = Patient::all();
         return view('multimedia.create', compact('patients'));
     }
-public function edit(MultimediaFile $multimedia)
-{
-    return view('multimedia.edit', compact('multimedia'));
-}
+    public function edit(MultimediaFile $multimedia)
+    {
+        return view('multimedia.edit', compact('multimedia'));
+    }
 
-public function update(Request $request, MultimediaFile $multimedia)
-{
-    // Validar datos
-    $validated = $request->validate([
-        'name_patient' => 'required|string|max:255',
-        'ci_patient' => 'required|string|max:50',
-        'study_type' => 'required|string|max:255',
-        'description' => 'nullable|string',
-    ]);
+    public function update(Request $request, MultimediaFile $multimedia)
+    {
+        // Validar datos
+        $validated = $request->validate([
+            'name_patient' => 'required|string|max:255',
+            'ci_patient' => 'required|max:50',
+            'study_type' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
 
-    // Verificar si realmente hay cambios
-    if ($multimedia->isDirty($validated)) {
-        $multimedia->fill($validated);
-        $multimedia->save();
+        // Verificar si realmente hay cambios
+        if ($multimedia->isDirty($validated)) {
+            $multimedia->fill($validated);
+            $multimedia->save();
+
+            return redirect()
+                ->route('multimedia.index')
+                ->with('success', 'Información del estudio actualizada correctamente.');
+        }
 
         return redirect()
             ->route('multimedia.index')
-            ->with('success', 'Información del estudio actualizada correctamente.');
+            ->with('info', 'No se detectaron cambios en la información.');
     }
-
-    return redirect()
-        ->route('multimedia.index')
-        ->with('info', 'No se detectaron cambios en la información.');
-}
-
 
     public function store(Request $request)
     {
