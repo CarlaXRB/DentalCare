@@ -45,7 +45,7 @@
         <div class="text-center">{{ $file->study_type }}</div>
         
         {{-- Acciones --}}
-        <div class="flex justify-center gap-2">
+        <div class="flex justify-center gap-2 p-1">
             {{-- CORRECCIÓN: Usar $file en lugar de $study --}}
             <a href="{{ route('multimedia.show', $file->id) }}" class="botton2">{{ __('Ver') }}</a>
             <a href="{{ route('multimedia.edit', $file->id) }}" class="botton3">{{ __('Editar') }}</a>

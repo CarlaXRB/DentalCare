@@ -43,11 +43,9 @@
         {{-- Tipo --}}
         <div class="text-center">{{ $study->study_type }}</div>
         {{-- Acciones --}}
-        <div class="flex justify-center gap-2">
+        <div class="flex justify-center gap-2 p-1">
             <a href="{{ route('multimedia.show', $study->id) }}" class="botton2">{{ __('Ver') }}</a>
             <a href="{{ route('multimedia.edit', $study->id) }}" class="botton3">{{ __('Editar') }}</a>
-        </div>
-        <div class="flex justify-center gap-2">
             <form method="POST" action="{{ route('multimedia.destroy', $study->id) }}"
                 onsubmit="return confirm('{{ __('¿Seguro que deseas eliminar este estudio?') }}');">
                 @csrf
