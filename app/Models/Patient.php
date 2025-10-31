@@ -40,4 +40,7 @@ class Patient extends Model implements Auditable
     public function treatments():HasMany{
         return $this->hasMany(Treatment::class, 'ci_patient', 'ci_patient');
     }
+    public function multimediaFiles():HasMany{
+        return $this->hasMany(Tool::class, 'ci_patient', 'ci_patient');
+    }
 }

@@ -35,7 +35,7 @@
         {{-- Fecha --}}
         <div class="text-center">{{ $study->study_date }}</div>
         {{-- Nombre del Paciente --}}
-        <div class="text-center">{{ $multimediaFile->patient->name_patient }}</div>
+        <div class="text-center">{{ optional($multimediaFile->patient)->name_patient ?? 'Paciente no encontrado' }}</div>
         {{-- CI Paciente --}}
         <div class="text-center">{{ $study->ci_patient }}</div>
         {{-- Código --}}
