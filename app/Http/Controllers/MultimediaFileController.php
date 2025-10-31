@@ -29,7 +29,7 @@ public function edit(MultimediaFile $multimedia)
     return view('multimedia.edit', compact('multimedia'));
 }
 
-public function update(Request $request, MultimediaFile $multimediaFile)
+public function update(Request $request, MultimediaFile $multimedia)
 {
     // Validar datos
     $validated = $request->validate([
@@ -40,9 +40,9 @@ public function update(Request $request, MultimediaFile $multimediaFile)
     ]);
 
     // Verificar si realmente hay cambios
-    if ($multimediaFile->isDirty($validated)) {
-        $multimediaFile->fill($validated);
-        $multimediaFile->save();
+    if ($multimedia->isDirty($validated)) {
+        $multimedia->fill($validated);
+        $multimedia->save();
 
         return redirect()
             ->route('multimedia.index')
