@@ -26,7 +26,7 @@ class MultimediaFileController extends Controller
     }
     public function edit(MultimediaFile $multimediaFile)
     {
-        return view('multimedia.edit', compact('multimedia'));
+        return view('multimedia.edit', compact('multimediaFile'));
     }
     public function update(Request $request, MultimediaFile $multimediaFile)
     {
