@@ -82,7 +82,7 @@ class MultimediaFileController extends Controller
         $relativePath = $diskPath; 
 
         MultimediaFile::create([
-            'ci_patient' => $request->name_patient,
+            'name_patient' => $request->name_patient,
             'ci_patient' => $request->ci_patient,
             'study_code' => $studyCode,
             'study_date' => $studyDate,
