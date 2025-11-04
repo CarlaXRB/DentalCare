@@ -25,14 +25,14 @@ FROM php:8.2-apache AS final_stage
 RUN apt-get update && \
     apt-get install -y \
     libzip-dev zip unzip git curl libsqlite3-dev \
+    python3 python3-pip python3-venv \
+    libgl1 libglib2.0-0 \
     libpq-dev \
-    python3 python3-pip \
     --no-install-recommends \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # --- Instalación de extensiones necesarias ---
-
-    RUN pip3 install --no-cache-dir numpy opencv-python pillow
+    RUN pip3 install --no-cache-dir numpy pillow opencv-python-headless
 # Instalar extensiones PHP principales (pdo, zip, pdo_pgsql, etc.)
 # 'zip' se instala aquí para ZipArchive
 RUN docker-php-ext-install pdo zip pdo_sqlite pgsql pdo_pgsql
@@ -45,7 +45,7 @@ WORKDIR /var/www/html
 # Copiar archivos de Composer
 COPY composer.json composer.lock ./
 # Copiar TODO el código de la aplicación
-COPY . /var/www/html
+COPY . .
 
 # Instalar dependencias PHP
 RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts
