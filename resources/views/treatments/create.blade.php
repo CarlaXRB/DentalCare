@@ -82,7 +82,6 @@
                 class="border-black rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500">{{ old('description') }}</textarea>
             @error('details') <p class="error mt-1">{{ $message }}</p> @enderror
         </div>
-        {{-- Buttons --}}
         <div class="flex justify-center gap-4 mt-6">
             <button type="submit" class="botton2">{{ __('Crear Tratamiento') }}</button>
         </div>

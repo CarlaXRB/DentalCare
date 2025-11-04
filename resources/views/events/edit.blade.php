@@ -60,7 +60,7 @@
             <div class="flex-1 min-w-[200px]">
                 <label for="room" class="title4 block mb-1">{{ __('Consultorio') }}:</label>
                 <select name="room"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white">
                     <option value="{{ $event->room }}">{{ $event->room ?? __('-- Selecciona un consultorio--') }}</option>
                     <option value="Consultorio 1">{{ __('Consultorio 1') }}</option>
                     <option value="Consultorio 2">{{ __('Consultorio 2') }}</option>
@@ -71,7 +71,7 @@
             <div class="flex-1 min-w-[250px]">
                 <label class="title4 block mb-1">{{ __('Doctor') }}:</label>
                 <select name="assigned_doctor"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white">
                     <option value="{{ $event->assigned_doctor }}">
                         {{ $event->assignedDoctor->name ?? __('-- Seleccione al Doctor asignado --') }}
                     </option>

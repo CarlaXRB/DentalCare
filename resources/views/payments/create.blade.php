@@ -16,7 +16,7 @@
         @csrf
         <div>
             <label class="block text-gray-700">{{ __('Método de pago') }}</label>
-            <select name="method" class="input">
+            <select name="method" class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white" >
                 <option value="Efectivo">Efectivo</option>
                 <option value="Tarjeta">Tarjeta</option>
                 <option value="Transferencia">Transferencia</option>
@@ -24,11 +24,11 @@
         </div>
         <div>
             <label class="block text-gray-800">{{ __('Monto') }}(Bs)</label>
-            <input type="number" step="0.01" name="amount" required class="input1 w-full">
+            <input type="number" step="0.01" name="amount" required class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white">
         </div>
         <div>
             <label class="block text-gray-800">{{ __('Detalles') }}</label>
-            <textarea name="notes" class="input1 w-full" rows="2"></textarea>
+            <textarea name="notes" class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white" rows="2"></textarea>
         </div>
         <div class="text-right">
             <button type="submit" class="botton2">{{ __('Guardar') }}</button>
