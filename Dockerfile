@@ -27,11 +27,14 @@ RUN apt-get update && \
     libzip-dev zip unzip git curl libsqlite3-dev \
     libpq-dev \
     python3 python3-pip \
+    libicu-dev libpng-dev libjpeg-dev libfreetype6-dev \
     --no-install-recommends \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # --- Instalación de extensiones necesarias ---
-RUN docker-php-ext-install pdo zip pdo_sqlite pgsql pdo_pgsql bcmath intl gd
+# (IMPORTANTE: agregar dependencias de intl y gd antes)
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
+    docker-php-ext-install pdo zip pdo_sqlite pgsql pdo_pgsql bcmath intl gd
 
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
