@@ -36,15 +36,15 @@
                     class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
                 @error('study_type') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
-            <div class="md:col-span-2">
+            <div>
                 <label class="title4 block mb-2">{{ __('Descripción') }}:</label>
                 <textarea name="description" rows="3"
-                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500">{{ old('description', $multimedia->description) }}</textarea>
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm  focus:outline-none focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white">{{ old('description', $multimedia->description) }}</textarea>
                 @error('description') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
         </div>
         <div class="flex justify-center mt-6">
-            <button type="submit" class="botton2">{{ __('Actualizar Información') }}</button>
+            <button type="submit" class="botton2">{{ __('Actualizar') }}</button>
         </div>
     </form>
 </div>

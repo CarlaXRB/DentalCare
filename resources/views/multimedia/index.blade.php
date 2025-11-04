@@ -31,13 +31,12 @@
 
     @forelse($studies as $study)
     <div class="grid grid-cols-6 gap-4 items-center border-b border-gray-200 py-3 text-gray-800 hover:bg-gray-50 transition">
-        <div class="text-center">{{ $study->study_date }}</div>
-        <div class="text-center">{{ $study->name_patient  }}</div>
-        <div class="text-center">{{ $study->ci_patient }}</div>
-        <div class="text-center">{{ $study->study_code }}</div>
-        <div class="text-center">{{ $study->study_type }}</div>
+        <div class="text-center"><a href="{{ route('multimedia.show', $study->id) }}">{{ $study->study_date }}</a></div>
+        <div class="text-center"><a href="{{ route('multimedia.show', $study->id) }}">{{ $study->name_patient }}</a></div>
+        <div class="text-center"><a href="{{ route('multimedia.show', $study->id) }}">{{ $study->ci_patient }}</a></div>
+        <div class="text-center"><a href="{{ route('multimedia.show', $study->id) }}">{{ $study->study_code }}</a></div>
+        <div class="text-center"><a href="{{ route('multimedia.show', $study->id) }}">{{ $study->study_type }}</a></div>
         <div class="flex justify-center gap-2 p-1">
-            <a href="{{ route('multimedia.show', $study->id) }}" class="botton2">{{ __('Ver') }}</a>
             <a href="{{ route('multimedia.edit', $study->id) }}" class="botton3">{{ __('Editar') }}</a>
         </div>
         <div class="flex justify-center gap-2 p-1">
