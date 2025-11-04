@@ -14,29 +14,24 @@
     <form method="POST" id="treatmentForm" action="{{ route('treatments.store') }}" enctype="multipart/form-data" id="treatmentForm">
         @csrf
         <h1 class="title1 text-center mb-8">{{ __('Información del tratamiento') }}</h1>
-
-        {{-- Patient info --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
                 <label class="title4 block mb-2">{{ __('Nombre del paciente') }}:</label>
                 <input type="text" name="name" value="{{ old('name') }}"
-                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500" />
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
                 @error('name') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
-
             <div>
                 <label class="title4 block mb-2">{{ __('C.I.') }}:</label>
                 <input type="text" name="ci_patient" value="{{ old('ci_patient') }}"
-                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500" />
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
                 @error('ci_patient') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
         </div>
-
-        {{-- Budget selector --}}
         <div class="mb-6">
             <h3 class="title4 mb-2">{{ __('Selecciona un tratamiento') }}:</h3>
             <div class="flex items-center gap-3">
-                <select id="budgetSelect" class="border rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                <select id="budgetSelect" class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white">
                     <option value="">{{ __('-- Selecciona un tratamiento --') }}</option>
                     @foreach($budgets as $budget)
                         <option value="{{ $budget->id }}" data-description="{{ $budget->description }}" data-procedure="{{ $budget->procedure }}" data-price="{{ $budget->total_amount }}">
@@ -59,7 +54,7 @@
             <div>
                 <label class="title4 block mb-2">{{ __('Costo Total (Bs)') }}:</label>
                 <input type="text" name="total_amount" id="totalAmount" readonly
-                    class="border-gray-300 rounded-lg p-3 w-full bg-gray-100" />
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
             </div>
             <div>
                 <label class="title4 block mb-2">{{ __('Descuento') }}:</label>
@@ -69,7 +64,7 @@
             <div>
                 <label class="title4 block mb-2">{{ __('Tipo de Descuento') }}:</label>
                 <select id="discountType" name="discount_type"
-                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
                     <option value="fixed">{{ __('Cantidad fija') }}</option>
                     <option value="percentage">{{ __('Porcentaje (%)') }}</option>
                 </select>
@@ -78,14 +73,13 @@
             <div>
                 <label class="title4 block mb-2">{{ __('Costo Final (Bs)') }}:</label>
                 <input type="text" name="amount" id="amount" readonly
-                    class="border-gray-300 rounded-lg p-3 w-full bg-gray-100" />
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
             </div>
         </div>
-                    {{-- Details --}}
             <div>
                 <label class="title4 block mb-2">{{ __('Detalles') }}:</label>
                 <textarea name="details" 
-                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500">{{ old('details') }}</textarea>
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
                 @error('details') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
         {{-- Buttons --}}

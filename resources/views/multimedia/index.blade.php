@@ -21,7 +21,7 @@
 <h1 class="title1 text-center">{{ __('Lista de Estudios Multimedia') }}</h1>
 
 <div class="max-w-6xl mx-auto bg-white rounded-xl p-4 text-gray-900 shadow-md">
-    <div class="grid grid-cols-7 gap-4 border-b border-gray-300 pb-2 mb-3">
+    <div class="grid grid-cols-6 gap-4 border-b border-gray-300 pb-2 mb-3">
         <h3 class="title4 text-center">{{ __('Fecha') }}</h3>
         <h3 class="title4 text-center">{{ __('Nombre') }}</h3>
         <h3 class="title4 text-center">{{ __('C.I. Paciente') }}</h3>
