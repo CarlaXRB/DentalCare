@@ -32,6 +32,7 @@ RUN apt-get update && \
 
 # --- Instalación de extensiones necesarias ---
 
+    RUN pip3 install --no-cache-dir numpy opencv-python pillow
 # Instalar extensiones PHP principales (pdo, zip, pdo_pgsql, etc.)
 # 'zip' se instala aquí para ZipArchive
 RUN docker-php-ext-install pdo zip pdo_sqlite pgsql pdo_pgsql
