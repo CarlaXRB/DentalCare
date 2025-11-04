@@ -7,6 +7,10 @@ use Symfony\Component\Process\Process;
 
 class MedicionesController extends Controller
 {
+    public function index()
+    {
+        return view('mediciones.index'); // Blade: resources/views/mediciones.blade.php
+    }
 public function analyze(Request $request)
     {
         $filePath = $request->file('image')->getRealPath();

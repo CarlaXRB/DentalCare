@@ -22,7 +22,7 @@
             <div>
                 <label class="title4 block mb-2">{{ __('Nombre del paciente') }}:</label>
                 <input type="text" name="name_patient" value="{{ old('name_patient') }}" 
-                    class="border-gray-500 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
                 @error('name_patient') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
 
@@ -30,7 +30,7 @@
             <div>
                 <label class="title4 block mb-2">{{ __('C.I.') }}:</label>
                 <input type="text" name="ci_patient" value="{{ old('ci_patient') }}" 
-                    class="border-gray-500 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
                 @error('ci_patient') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
 
@@ -38,8 +38,8 @@
             <div>
                 <label class="title4 block mb-2">{{ __('Fecha de Nacimiento') }}:</label>
                 <input type="date" name="birth_date" value="{{ old('birth_date') }}" 
-                    class="border-gray-500 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                />
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
+                
                 @error('birth_date') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
 
@@ -47,8 +47,8 @@
             <div>
                 <label class="title4 block mb-2">{{ __('Género') }}:</label>
                 <select name="gender" 
-                    class="border-gray-500 rounded-lg p-3 w-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                    <option value="">{{ __('-- Seleccionar género --') }}</option>
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
+                <option value="">{{ __('-- Seleccionar género --') }}</option>
                     <option value="femenino" {{ old('gender') == 'femenino' ? 'selected' : '' }}>{{ __('Femenino') }}</option>
                     <option value="masculino" {{ old('gender') == 'masculino' ? 'selected' : '' }}>{{ __('Masculino') }}</option>
                 </select>
@@ -59,8 +59,7 @@
             <div>
                 <label class="title4 block mb-2">{{ __('Número de celular') }}:</label>
                 <input type="text" name="patient_contact" value="{{ old('patient_contact') }}" 
-                    class="border-gray-500 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                />
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
                 @error('patient_contact') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
         </div>

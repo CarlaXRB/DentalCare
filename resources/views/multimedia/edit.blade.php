@@ -18,14 +18,14 @@
                 <label class="title4 block mb-2">{{ __('Nombre del paciente') }}:</label>
                 <input type="text" name="name_patient"
                     value="{{ old('name_patient', $multimedia->name_patient) }}"
-                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500" />
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
                 @error('name_patient') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="title4 block mb-2">{{ __('C.I. del paciente') }}:</label>
                 <input type="text" name="ci_patient"
                     value="{{ old('ci_patient', $multimedia->ci_patient) }}"
-                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500" />
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
                 @error('ci_patient') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
@@ -33,13 +33,13 @@
                 <input type="text" name="study_type"
                     value="{{ old('study_type', $multimedia->study_type) }}"
                     placeholder="{{ __('Ej: Radiografía panorámica, Tomografía dental...') }}"
-                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500" />
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
                 @error('study_type') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
             <div class="md:col-span-2">
                 <label class="title4 block mb-2">{{ __('Descripción') }}:</label>
                 <textarea name="description" rows="3"
-                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500">{{ old('description', $multimedia->description) }}</textarea>
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
                 @error('description') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
         </div>
