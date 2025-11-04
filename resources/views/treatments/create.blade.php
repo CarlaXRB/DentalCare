@@ -1,7 +1,7 @@
 @extends('layouts._partials.layout')
 @section('title', __('Crear Tratamiento'))
 @section('subtitle')
-    {{ __('Crear Tratamiento') }}
+{{ __('Crear Tratamiento') }}
 @endsection
 @section('content')
 
@@ -18,13 +18,13 @@
             <div>
                 <label class="title4 block mb-2">{{ __('Nombre del paciente') }}:</label>
                 <input type="text" name="name" value="{{ old('name') }}"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white" />
                 @error('name') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="title4 block mb-2">{{ __('C.I.') }}:</label>
                 <input type="text" name="ci_patient" value="{{ old('ci_patient') }}"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white" />
                 @error('ci_patient') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
         </div>
@@ -34,9 +34,9 @@
                 <select id="budgetSelect" class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white">
                     <option value="">{{ __('-- Selecciona un tratamiento --') }}</option>
                     @foreach($budgets as $budget)
-                        <option value="{{ $budget->id }}" data-description="{{ $budget->description }}" data-procedure="{{ $budget->procedure }}" data-price="{{ $budget->total_amount }}">
-                            {{ $budget->procedure }} — ${{ number_format($budget->total_amount, 2) }}
-                        </option>
+                    <option value="{{ $budget->id }}" data-description="{{ $budget->description }}" data-procedure="{{ $budget->procedure }}" data-price="{{ $budget->total_amount }}">
+                        {{ $budget->procedure }} — ${{ number_format($budget->total_amount, 2) }}
+                    </option>
                     @endforeach
                 </select>
                 <button type="button" id="addBudget" class="botton2">{{ __('Añadir') }}</button>
@@ -54,34 +54,34 @@
             <div>
                 <label class="title4 block mb-2">{{ __('Costo Total (Bs)') }}:</label>
                 <input type="text" name="total_amount" id="totalAmount" readonly
-                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white" />
             </div>
             <div>
                 <label class="title4 block mb-2">{{ __('Descuento') }}:</label>
                 <input type="number" name="discount" id="discount" min="0" value="0"
-                    class="border-gray-300 rounded-lg p-3 w-full" />
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white" />
             </div>
             <div>
                 <label class="title4 block mb-2">{{ __('Tipo de Descuento') }}:</label>
                 <select id="discountType" name="discount_type"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
-            <option value="fixed">{{ __('Cantidad fija') }}</option>
-                    <option value="percentage">{{ __('Porcentaje (%)') }}</option>
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white" />
+                <option value="fixed">{{ __('Cantidad fija') }}</option>
+                <option value="percentage">{{ __('Porcentaje (%)') }}</option>
                 </select>
             </div>
 
             <div>
                 <label class="title4 block mb-2">{{ __('Costo Final (Bs)') }}:</label>
                 <input type="text" name="amount" id="amount" readonly
-                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white" />
             </div>
         </div>
-            <div>
-                <label class="title4 block mb-2">{{ __('Detalles') }}:</label>
-                <textarea name="details" 
-                    class="border-black rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500">{{ old('description') }}</textarea>
+        <div>
+            <label class="title4 block mb-2">{{ __('Detalles') }}:</label>
+            <textarea name="details"
+                class="border-black rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500">{{ old('description') }}</textarea>
             @error('details') <p class="error mt-1">{{ $message }}</p> @enderror
-            </div>
+        </div>
         {{-- Buttons --}}
         <div class="flex justify-center gap-4 mt-6">
             <button type="submit" class="botton2">{{ __('Crear Tratamiento') }}</button>
@@ -91,37 +91,40 @@
 
 {{-- Script for dynamic budgets and calculations --}}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const addButton = document.getElementById('addBudget');
-    const budgetSelect = document.getElementById('budgetSelect');
-    const container = document.getElementById('budgetsContainer');
-    const selectedSection = document.getElementById('selectedBudgets');
+    document.addEventListener('DOMContentLoaded', function() {
+        const addButton = document.getElementById('addBudget');
+        const budgetSelect = document.getElementById('budgetSelect');
+        const container = document.getElementById('budgetsContainer');
+        const selectedSection = document.getElementById('selectedBudgets');
 
-    const totalAmountInput = document.getElementById('totalAmount');
-    const discountInput = document.getElementById('discount');
-    const discountTypeSelect = document.getElementById('discountType');
-    const amountInput = document.getElementById('amount');
+        const totalAmountInput = document.getElementById('totalAmount');
+        const discountInput = document.getElementById('discount');
+        const discountTypeSelect = document.getElementById('discountType');
+        const amountInput = document.getElementById('amount');
 
-    let selectedBudgets = {};
+        let selectedBudgets = {};
 
-    addButton.addEventListener('click', function() {
-        const selectedOption = budgetSelect.options[budgetSelect.selectedIndex];
-        const id = selectedOption.value;
-        if (!id) return;
-        if (selectedBudgets[id]) return alert('This budget is already added.');
+        addButton.addEventListener('click', function() {
+            const selectedOption = budgetSelect.options[budgetSelect.selectedIndex];
+            const id = selectedOption.value;
+            if (!id) return;
+            if (selectedBudgets[id]) return alert('This budget is already added.');
 
-        const procedure = selectedOption.dataset.procedure;
-        const description = selectedOption.dataset.description;
-        const price = parseFloat(selectedOption.dataset.price);
+            const procedure = selectedOption.dataset.procedure;
+            const description = selectedOption.dataset.description;
+            const price = parseFloat(selectedOption.dataset.price);
 
-        selectedBudgets[id] = { price: price, quantity: 1 };
+            selectedBudgets[id] = {
+                price: price,
+                quantity: 1
+            };
 
-        selectedSection.classList.remove('hidden');
+            selectedSection.classList.remove('hidden');
 
-        const div = document.createElement('div');
-        div.classList.add('flex', 'items-center', 'gap-2', 'border', 'p-3', 'rounded-lg', 'hover:bg-gray-50');
-        div.dataset.id = id;
-        div.innerHTML = `
+            const div = document.createElement('div');
+            div.classList.add('flex', 'items-center', 'gap-2', 'border', 'p-3', 'rounded-lg', 'hover:bg-gray-50');
+            div.dataset.id = id;
+            div.innerHTML = `
             <input type="checkbox" name="selected_budgets[]" value="${id}" class="budget-checkbox" checked data-price="${price}">
             <div>
                 <span class="font-semibold">${procedure}</span><br>
@@ -134,96 +137,96 @@ document.addEventListener('DOMContentLoaded', function() {
                 <button type="button" class="removeBudget text-red-600 hover:text-red-800 text-sm">×</button>
             </div>
         `;
-        container.appendChild(div);
+            container.appendChild(div);
 
-        updateTotals();
-    });
-
-    // Remove budget
-    container.addEventListener('click', function(e) {
-        if (e.target.classList.contains('removeBudget')) {
-            const parent = e.target.closest('div[data-id]');
-            const id = parent.dataset.id;
-            delete selectedBudgets[id];
-            parent.remove();
             updateTotals();
-            if (Object.keys(selectedBudgets).length === 0) selectedSection.classList.add('hidden');
-        }
-    });
+        });
 
-    // Update totals when inputs change
-    container.addEventListener('input', updateTotals);
-    discountInput.addEventListener('input', updateTotals);
-    discountTypeSelect.addEventListener('change', updateTotals);
-
-    function updateTotals() {
-        let total = 0;
-        const rows = container.querySelectorAll('[data-id]');
-        rows.forEach(row => {
-            const checkbox = row.querySelector('.budget-checkbox');
-            const quantityInput = row.querySelector('.quantity-input');
-            if (checkbox.checked) {
-                const quantity = parseInt(quantityInput.value) || 1;
-                const price = parseFloat(checkbox.dataset.price);
-                total += price * quantity;
+        // Remove budget
+        container.addEventListener('click', function(e) {
+            if (e.target.classList.contains('removeBudget')) {
+                const parent = e.target.closest('div[data-id]');
+                const id = parent.dataset.id;
+                delete selectedBudgets[id];
+                parent.remove();
+                updateTotals();
+                if (Object.keys(selectedBudgets).length === 0) selectedSection.classList.add('hidden');
             }
         });
 
-        totalAmountInput.value = total.toFixed(2);
+        // Update totals when inputs change
+        container.addEventListener('input', updateTotals);
+        discountInput.addEventListener('input', updateTotals);
+        discountTypeSelect.addEventListener('change', updateTotals);
 
-        const discountType = discountTypeSelect.value;
-        const discountValue = parseFloat(discountInput.value) || 0;
-        let finalAmount = total;
+        function updateTotals() {
+            let total = 0;
+            const rows = container.querySelectorAll('[data-id]');
+            rows.forEach(row => {
+                const checkbox = row.querySelector('.budget-checkbox');
+                const quantityInput = row.querySelector('.quantity-input');
+                if (checkbox.checked) {
+                    const quantity = parseInt(quantityInput.value) || 1;
+                    const price = parseFloat(checkbox.dataset.price);
+                    total += price * quantity;
+                }
+            });
 
-        if (discountType === 'percentage') {
-            const discount = (discountValue / 100) * total;
-            finalAmount = total - discount;
-        } else {
-            finalAmount = total - discountValue;
+            totalAmountInput.value = total.toFixed(2);
+
+            const discountType = discountTypeSelect.value;
+            const discountValue = parseFloat(discountInput.value) || 0;
+            let finalAmount = total;
+
+            if (discountType === 'percentage') {
+                const discount = (discountValue / 100) * total;
+                finalAmount = total - discount;
+            } else {
+                finalAmount = total - discountValue;
+            }
+
+            amountInput.value = finalAmount.toFixed(2);
         }
-
-        amountInput.value = finalAmount.toFixed(2);
-    }
-});
-document.getElementById('treatmentForm').addEventListener('submit', function (e) {
-    e.preventDefault(); // evita que recargue la página directamente
-
-    const form = this;
-    const formData = new FormData(form);
-
-    // Envía la solicitud normalmente
-    fetch(form.action, {
-        method: 'POST',
-        body: formData,
-    })
-    .then(response => {
-        if (response.ok) {
-            // Convierte la respuesta a un blob (archivo)
-            return response.blob();
-        } else {
-            throw new Error('Error al generar el archivo.');
-        }
-    })
-    .then(blob => {
-        // Crea un enlace temporal para descargar el archivo
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-
-        // Opcional: define el nombre del archivo
-        a.download = 'treatment.pdf';
-        document.body.appendChild(a);
-        a.click();
-
-        // Espera un poco y redirige al index
-        setTimeout(() => {
-            window.location.href = "{{ route('treatments.index') }}";
-        }, 2000);
-    })
-    .catch(error => {
-        console.error(error);
-        alert('Hubo un problema al generar el archivo.');
     });
-});
+    document.getElementById('treatmentForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // evita que recargue la página directamente
+
+        const form = this;
+        const formData = new FormData(form);
+
+        // Envía la solicitud normalmente
+        fetch(form.action, {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Convierte la respuesta a un blob (archivo)
+                    return response.blob();
+                } else {
+                    throw new Error('Error al generar el archivo.');
+                }
+            })
+            .then(blob => {
+                // Crea un enlace temporal para descargar el archivo
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+
+                // Opcional: define el nombre del archivo
+                a.download = 'treatment.pdf';
+                document.body.appendChild(a);
+                a.click();
+
+                // Espera un poco y redirige al index
+                setTimeout(() => {
+                    window.location.href = "{{ route('treatments.index') }}";
+                }, 2000);
+            })
+            .catch(error => {
+                console.error(error);
+                alert('Hubo un problema al generar el archivo.');
+            });
+    });
 </script>
 @endsection
