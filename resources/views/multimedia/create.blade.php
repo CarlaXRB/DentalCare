@@ -38,21 +38,21 @@
             <div>
                 <label class="title4 block mb-2">{{ __('Subir Imágenes (PNG, JPG, JPEG)') }}:</label>
                 <input type="file" name="images[]" multiple
-                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
+                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500" />
                 @error('images.*') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
                 <label class="title4 block mb-2">{{ __('Subir Carpeta (ZIP)') }}:</label>
                 <input type="file" name="folder"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
+                    class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500" />
                 @error('folder') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
         </div>
         <div class="md:col-span-2">
             <label class="title4 block mb-2">{{ __('Descripción') }}:</label>
             <textarea name="description" rows="3"
-                class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white">
-                @error('description') <p class="error mt-1">{{ $message }}</p> @enderror
+                class="border-black rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500">{{ old('description') }}</textarea>
+            @error('description') <p class="error mt-1">{{ $message }}</p> @enderror
         </div>
         <div class="flex justify-center mt-6">
             <button type="submit" class="botton2">{{ __('Subir Estudio') }}</button>
