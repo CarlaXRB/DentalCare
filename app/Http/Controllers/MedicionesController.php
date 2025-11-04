@@ -3,22 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Symfony\Component\Process\Process;
 
 class MedicionesController extends Controller
 {
-    public function run(Request $request)
+public function analyze(Request $request)
     {
-        $image = public_path('storage/' . $request->image);
-        $x1 = $request->x1;
-        $y1 = $request->y1;
-        $x2 = $request->x2;
-        $y2 = $request->y2;
-        $zoom = $request->zoom;
+        $filePath = $request->file('image')->getRealPath();
 
-        // Ejecutar script Python
-        $command = escapeshellcmd("python " . base_path('scripts/measure.py') . " \"$image\" $x1 $y1 $x2 $y2 $zoom");
-        $output = shell_exec($command);
+        $process = new Process(['python3', base_path('scripts/measure_study.py'), $filePath]);
+        $process->run();
 
-        return response()->json(json_decode($output, true));
+        if (!$process->isSuccessful()) {
+            return response()->json(['error' => $process->getErrorOutput()], 500);
+        }
+
+        return response()->json(['result' => $process->getOutput()]);
     }
 }

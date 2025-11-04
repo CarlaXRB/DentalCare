@@ -5,69 +5,73 @@
 @endsection
 
 @section('content')
-<div class="container mx-auto text-center">
-    <h2 class="text-xl font-semibold mb-4">Herramienta de Medición</h2>
+<div class="max-w-5xl mx-auto p-6">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Medición de Estudio</h1>
 
-    <div id="image-container" style="display:inline-block; position:relative;">
-        <img id="target-image"
-             src="{{ asset('storage/uploads/ejemplo_radiografia.jpg') }}"
-             alt="Imagen dental"
-             style="max-width: 90%; cursor: crosshair;">
-        <canvas id="canvas" style="position:absolute; top:0; left:0;"></canvas>
+    <div class="bg-white shadow-lg rounded-xl p-6 space-y-4">
+        <form id="measureForm" enctype="multipart/form-data">
+            @csrf
+            <label class="block font-semibold text-gray-700">Seleccionar imagen del estudio</label>
+            <input type="file" name="image"
+                class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                accept="image/png, image/jpeg, image/jpg" required>
+
+            <button type="button" id="measureBtn"
+                class="mt-4 bg-cyan-600 hover:bg-cyan-700 text-white font-semibold px-6 py-2 rounded-lg">
+                Medir Estudio
+            </button>
+        </form>
+
+        <div id="result" class="hidden mt-6 p-4 bg-gray-100 rounded-lg">
+            <h2 class="font-bold text-gray-700">Resultado:</h2>
+            <pre id="output" class="text-sm text-gray-800 mt-2"></pre>
+        </div>
     </div>
 
-    <p class="mt-4 text-gray-700">
-        Click en dos puntos para medir distancia. Usa la rueda del ratón para hacer zoom.
-    </p>
-
-    <div id="result" class="mt-3 text-lg font-bold text-green-700"></div>
+    <!-- Modal -->
+    <div id="modal"
+        class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 backdrop-blur-sm">
+        <div class="bg-white p-6 rounded-xl max-w-2xl w-full relative shadow-xl">
+            <button id="closeModal"
+                class="absolute top-2 right-3 text-gray-500 hover:text-red-500 font-bold text-lg">&times;</button>
+            <h2 class="text-xl font-bold mb-4">Medir Estudio</h2>
+            <canvas id="measureCanvas" class="border rounded-lg w-full h-[400px]"></canvas>
+        </div>
+    </div>
 </div>
 
 <script>
-const img = document.getElementById('target-image');
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-let points = [];
-let zoom = 1;
+    const measureBtn = document.getElementById('measureBtn');
+    const resultBox = document.getElementById('result');
+    const output = document.getElementById('output');
+    const modal = document.getElementById('modal');
+    const closeModal = document.getElementById('closeModal');
 
-function resizeCanvas() {
-    canvas.width = img.clientWidth;
-    canvas.height = img.clientHeight;
-}
-window.addEventListener('resize', resizeCanvas);
-img.onload = resizeCanvas;
+    measureBtn.addEventListener('click', async () => {
+        const form = document.getElementById('measureForm');
+        const formData = new FormData(form);
 
-canvas.addEventListener('wheel', e => {
-    e.preventDefault();
-    zoom += e.deltaY * -0.001;
-    zoom = Math.min(Math.max(.5, zoom), 3);
-    img.style.transform = `scale(${zoom})`;
-});
+        // Mostrar modal
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
 
-canvas.addEventListener('click', e => {
-    const rect = canvas.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / zoom;
-    const y = (e.clientY - rect.top) / zoom;
-    points.push({x, y});
-    if (points.length === 2) {
-        medir();
-    }
-});
+        const response = await fetch('{{ route("analyze") }}', {
+            method: 'POST',
+            body: formData
+        });
 
-async function medir() {
-    const res = await fetch('{{ route("measure.run") }}', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}'},
-        body: JSON.stringify({
-            image: 'uploads/ejemplo_radiografia.jpg',
-            x1: points[0].x, y1: points[0].y,
-            x2: points[1].x, y2: points[1].y,
-            zoom: zoom
-        })
+        const data = await response.json();
+
+        if (data.error) {
+            output.innerText = "Error: " + data.error;
+        } else {
+            output.innerText = data.result;
+            resultBox.classList.remove('hidden');
+        }
     });
-    const data = await res.json();
-    document.getElementById('result').textContent = `Distancia: ${data.distance_real.toFixed(2)} px`;
-    points = [];
-}
+
+    closeModal.addEventListener('click', () => {
+        modal.classList.add('hidden');
+    });
 </script>
 @endsection
