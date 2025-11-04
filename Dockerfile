@@ -25,17 +25,13 @@ FROM php:8.2-apache AS final_stage
 RUN apt-get update && \
     apt-get install -y \
     libzip-dev zip unzip git curl libsqlite3-dev \
-    python3 python3-pip python3-venv \
-    libgl1 libglib2.0-0 \
     libpq-dev \
+    python3 python3-pip \
     --no-install-recommends \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # --- Instalación de extensiones necesarias ---
-    RUN pip3 install --no-cache-dir numpy pillow opencv-python-headless
-# Instalar extensiones PHP principales (pdo, zip, pdo_pgsql, etc.)
-# 'zip' se instala aquí para ZipArchive
-RUN docker-php-ext-install pdo zip pdo_sqlite pgsql pdo_pgsql
+RUN docker-php-ext-install pdo zip pdo_sqlite pgsql pdo_pgsql bcmath intl gd
 
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -44,28 +40,47 @@ WORKDIR /var/www/html
 
 # Copiar archivos de Composer
 COPY composer.json composer.lock ./
+
 # Copiar TODO el código de la aplicación
-COPY . .
+COPY . /var/www/html
 
 # Instalar dependencias PHP
 RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts
 
-# Ejecutar comandos Artisan
-RUN php artisan key:generate
-RUN php artisan package:discover
-
-# CRÍTICO: Copiar los assets de Vite compilados
+# Copiar los assets compilados
 COPY --from=assets_builder /app/public/build /var/www/html/public/build
 
-# Configurar Apache para servir desde /public y habilitar mod_rewrite
-RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' \
-    /etc/apache2/sites-available/000-default.conf \
-    && a2enmod rewrite
+# Ejecutar comandos Artisan
+RUN php artisan key:generate || true
+RUN php artisan package:discover || true
 
-# CRÍTICO: Configurar permisos de escritura para storage y cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build
+# -----------------------------------------------------------------
+# 🔧 Configuración de Apache y permisos
+# -----------------------------------------------------------------
+# Establecer DocumentRoot y habilitar mod_rewrite
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|' \
+    /etc/apache2/sites-available/000-default.conf && \
+    a2enmod rewrite
+
+# Asegurar que Apache permita sobreescritura .htaccess
+RUN echo '<Directory /var/www/html/public>\n\
+    AllowOverride All\n\
+    Require all granted\n\
+</Directory>' > /etc/apache2/conf-available/laravel.conf && \
+    a2enconf laravel
+
+# Permisos de escritura
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build && \
+    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public/build
+
+# -----------------------------------------------------------------
+# 🌍 Variables de entorno de Laravel (opcional)
+# -----------------------------------------------------------------
+ENV APP_ENV=production
+ENV APP_DEBUG=false
+ENV APP_STORAGE=/var/www/html/storage
 
 # Exponer el puerto por defecto de Apache
 EXPOSE 80
+
 CMD ["apache2-foreground"]
