@@ -31,21 +31,16 @@
 
     @forelse($studies as $study)
     <div class="grid grid-cols-6 gap-4 items-center border-b border-gray-200 py-3 text-gray-800 hover:bg-gray-50 transition">
-
-        {{-- Fecha --}}
         <div class="text-center">{{ $study->study_date }}</div>
-        {{-- Nombre del Paciente --}}
         <div class="text-center">{{ $study->name_patient  }}</div>
-        {{-- CI Paciente --}}
         <div class="text-center">{{ $study->ci_patient }}</div>
-        {{-- Código --}}
         <div class="text-center">{{ $study->study_code }}</div>
-        {{-- Tipo --}}
         <div class="text-center">{{ $study->study_type }}</div>
-        {{-- Acciones --}}
         <div class="flex justify-center gap-2 p-1">
             <a href="{{ route('multimedia.show', $study->id) }}" class="botton2">{{ __('Ver') }}</a>
             <a href="{{ route('multimedia.edit', $study->id) }}" class="botton3">{{ __('Editar') }}</a>
+        </div>
+        <div class="flex justify-center gap-2 p-1">
             <form method="POST" action="{{ route('multimedia.destroy', $study->id) }}"
                 onsubmit="return confirm('{{ __('¿Seguro que deseas eliminar este estudio?') }}');">
                 @csrf
