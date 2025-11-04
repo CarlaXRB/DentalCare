@@ -52,7 +52,7 @@
         <div class="md:col-span-2">
             <label class="title4 block mb-2">{{ __('Descripción') }}:</label>
             <textarea name="description" rows="3"
-                class="border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500">{{ old('description') }}</textarea>
+                class="border-black rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-cyan-500">{{ old('description') }}</textarea>
             @error('description') <p class="error mt-1">{{ $message }}</p> @enderror
         </div>
         <div class="flex justify-center mt-6">
