@@ -23,34 +23,30 @@
 
 <!-- Herramientas -->
 <div class="relative flex justify-center space-x-2 mb-6">
+    @php
+        $tools = [
+            ['id'=>'distance','img'=>'distance.png','title'=>'Medir Distancia'],
+            ['id'=>'delimited','img'=>'distances.png','title'=>'Marcar Contorno'],
+            ['id'=>'angle','img'=>'angle.png','title'=>'Medir Ángulo'],
+            ['id'=>'arco','img'=>'arco.png','title'=>'Medir Arco'],
+            ['id'=>'paint','img'=>'paint.png','title'=>'Pintar'],
+            ['id'=>'downloadImage','img'=>'download.png','title'=>'Descargar']
+        ];
+    @endphp
+    @foreach($tools as $tool)
     <div class="group relative">
-        <button id="distance" class="btnimg"><img src="{{ asset('assets/images/distance.png') }}" width="50" height="50"></button>
-        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Medir Distancia</span></div>
+        <button id="{{ $tool['id'] }}" class="btnimg">
+            <img src="{{ asset('assets/images/'.$tool['img']) }}" width="50" height="50">
+        </button>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1">
+            <span class="text-xs text-gray-800">{{ $tool['title'] }}</span>
+        </div>
     </div>
-    <div class="group relative">
-        <button id="delimited" class="btnimg"><img src="{{ asset('assets/images/distances.png') }}" width="50" height="50"></button>
-        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Marcar Contorno</span></div>
-    </div>
-    <div class="group relative">
-        <button id="angle" class="btnimg"><img src="{{ asset('assets/images/angle.png') }}" width="50" height="50"></button>
-        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Medir Ángulo</span></div>
-    </div>
-    <div class="group relative">
-        <button id="arco" class="btnimg"><img src="{{ asset('assets/images/arco.png') }}" width="50" height="50"></button>
-        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Medir Arco</span></div>
-    </div>
-    <div class="group relative">
-        <button id="paint" class="btnimg"><img src="{{ asset('assets/images/paint.png') }}" width="50" height="50"></button>
-        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Pintar</span></div>
-    </div>
-    <div class="group relative">
-        <button id="downloadImage" class="btnimg"><img src="{{ asset('assets/images/download.png') }}" width="50" height="50"></button>
-        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Descargar</span></div>
-    </div>
+    @endforeach
 </div>
 
 <div class="flex justify-center mt-4 mb-4">
-    <canvas id="measureCanvas" class="border rounded-lg w-full max-w-6xl h-[600px]"></canvas>
+    <canvas id="measureCanvas" class="border rounded-lg"></canvas>
 </div>
 
 <p id="measureOutput" class="font-semibold text-gray-700 text-center mb-4">
@@ -65,25 +61,29 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js"></script>
 <script>
-const canvas = new fabric.Canvas('measureCanvas');
+const canvas = new fabric.Canvas('measureCanvas', { preserveObjectStacking: true });
 const imageSelect = document.getElementById('imageSelect');
 const output = document.getElementById('measureOutput');
 const resetBtn = document.getElementById('resetBtn');
 
 let imgUrl = imageSelect.value;
-let scaleFactor = 1;
+let currentImage;
 
-// Cargar imagen seleccionada
+// Función para cargar imagen sin estirarla
 function loadImage(url) {
     imgUrl = url;
     fabric.Image.fromURL(url, function(fabricImg) {
         canvas.clear();
+        currentImage = fabricImg;
+
+        // Ajustar canvas al tamaño natural de la imagen
         canvas.setWidth(fabricImg.width);
         canvas.setHeight(fabricImg.height);
+
         fabricImg.set({ left: 0, top: 0, selectable: false });
         canvas.setBackgroundImage(fabricImg, canvas.renderAll.bind(canvas));
         output.textContent = "Haz clic en dos puntos para medir distancia.";
-    });
+    }, { crossOrigin: 'anonymous' });
 }
 
 imageSelect.addEventListener('change', (e) => loadImage(e.target.value));

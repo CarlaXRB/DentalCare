@@ -2,7 +2,8 @@
 @section('title', __('Ver Estudio Multimedia'))
 @section('subtitle')
 {{ __('Ver Estudio Multimedia') }}
-@endsect
+@endsection
+
 @section('content')
 <div class="flex justify-end pt-5 pr-5">
     <a href="{{ route('multimedia.index') }}" class="botton1">{{ __('Atrás') }}</a>
@@ -52,11 +53,10 @@
         @empty
         <p class="text-gray-500 text-center col-span-full">{{ __('No hay imágenes disponibles para este estudio.') }}</p>
         @endforelse
-        <div class="flex justify-center mt-8">
-            <a href="{{ route('multimedia.measure', $study->id) }}" class="botton2">Herramienta de Medición</a>
-        </div>
     </div>
-
+    <div class="flex justify-center mt-8">
+        <a href="{{ route('multimedia.measure', $study->id) }}" class="botton2">Herramienta de Medición</a>
+    </div>
     {{-- Botón eliminar --}}
     <div class="flex justify-end mt-6">
         <form method="POST" action="{{ route('multimedia.destroy', $study->id) }}"
