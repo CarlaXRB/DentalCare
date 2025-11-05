@@ -45,9 +45,11 @@
     @endforeach
 </div>
 
-<div class="flex justify-center mt-4 mb-4">
+<div class="flex justify-center mt-4 mb-2">
     <canvas id="measureCanvas" class="border rounded-lg"></canvas>
 </div>
+
+<p id="scaleMessage" class="text-center text-sm text-red-600 mb-2"></p>
 
 <p id="measureOutput" class="font-semibold text-gray-700 text-center mb-4">
     Haz clic en dos puntos para medir distancia.
@@ -64,21 +66,41 @@
 const canvas = new fabric.Canvas('measureCanvas', { preserveObjectStacking: true });
 const imageSelect = document.getElementById('imageSelect');
 const output = document.getElementById('measureOutput');
+const scaleMessage = document.getElementById('scaleMessage');
 const resetBtn = document.getElementById('resetBtn');
 
 let imgUrl = imageSelect.value;
 let currentImage;
+let scaleFactor = 1;
 
-// Función para cargar imagen sin estirarla
+// Función para cargar imagen
 function loadImage(url) {
     imgUrl = url;
     fabric.Image.fromURL(url, function(fabricImg) {
         canvas.clear();
         currentImage = fabricImg;
 
-        // Ajustar canvas al tamaño natural de la imagen
-        canvas.setWidth(fabricImg.width);
-        canvas.setHeight(fabricImg.height);
+        // Tamaño máximo del canvas según la ventana
+        const maxWidth = window.innerWidth * 0.9;
+        const maxHeight = window.innerHeight * 0.7;
+
+        // Calcular escala proporcional
+        let scale = 1;
+        if (fabricImg.width > maxWidth || fabricImg.height > maxHeight) {
+            const widthScale = fabricImg.width / maxWidth;
+            const heightScale = fabricImg.height / maxHeight;
+            const maxScale = Math.max(widthScale, heightScale);
+            scale = Math.ceil(maxScale); // escala a número entero
+            scaleFactor = 1 / scale;
+            fabricImg.scale(scaleFactor);
+            scaleMessage.textContent = `Imagen escalada 1:${scale}`;
+        } else {
+            scaleFactor = 1;
+            scaleMessage.textContent = '';
+        }
+
+        canvas.setWidth(fabricImg.width * scaleFactor);
+        canvas.setHeight(fabricImg.height * scaleFactor);
 
         fabricImg.set({ left: 0, top: 0, selectable: false });
         canvas.setBackgroundImage(fabricImg, canvas.renderAll.bind(canvas));
