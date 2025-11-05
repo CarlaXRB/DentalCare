@@ -91,7 +91,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::post('multimedia/search', [MultimediaFileController::class, 'search'])->name('multimedia.search');
     Route::get('/multimedia/image/{studyCode}/{fileName}', [MultimediaFileController::class, 'serveImage'])
         ->where('fileName', '.*')->name('multimedia.image');
-Route::post('/analyze', [App\Http\Controllers\MedicionesController::class, 'analyze'])->name('analyze');
-Route::get('/mediciones', [App\Http\Controllers\MedicionesController::class, 'index'])->name('mediciones');
+    Route::get('/multimedia/{id}/measure', [MultimediaFileController::class, 'measure'])
+    ->name('multimedia.measure');
+
 });
 

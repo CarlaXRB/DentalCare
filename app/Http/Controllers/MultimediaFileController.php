@@ -185,4 +185,33 @@ class MultimediaFileController extends Controller
             ->orWhere('name_patient', 'LIKE', '%' . $search . '%')->get();
         return view('multimedia.search', compact('files'));
     }
+    public function measure($id)
+    {
+        $study = MultimediaFile::findOrFail($id);
+
+        $diskRootPath = storage_path("app/public/{$study->study_uri}");
+        $imageUrls = [];
+
+        if (File::isDirectory($diskRootPath)) {
+            $directoryIterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($diskRootPath, \RecursiveDirectoryIterator::SKIP_DOTS),
+                \RecursiveIteratorIterator::SELF_FIRST
+            );
+
+            $imagePattern = '/\.(png|jpg|jpeg)$/i';
+
+            foreach ($directoryIterator as $file) {
+                if ($file->isFile() && preg_match($imagePattern, $file->getFilename())) {
+                    $fullPath = $file->getPathname();
+                    $relativePathToFile = substr($fullPath, strlen($diskRootPath) + 1);
+                    $imageUrls[] = route('multimedia.image', [
+                        'studyCode' => $study->study_code,
+                        'fileName' => $relativePathToFile
+                    ]);
+                }
+            }
+        }
+
+        return view('multimedia.measure', compact('study', 'imageUrls'));
+    }
 }

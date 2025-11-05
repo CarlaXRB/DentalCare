@@ -35,7 +35,8 @@
         </div>
         @if($study->description)
         <div class="mb-6">
-            <h3 class="title4">{{ __('Descripción:') }}</h3><p class="txt">{{ $study->description }}</p>
+            <h3 class="title4">{{ __('Descripción:') }}</h3>
+            <p class="txt">{{ $study->description }}</p>
         </div>
         @endif
         <div class="flex gap-2">
@@ -48,6 +49,13 @@
         <div class="flex justify-center">
             <img src="{{ $img }}" alt="Imagen del estudio" class="rounded-lg shadow-lg max-h-128 object-cover" />
         </div>
+        <div class="flex justify-center mt-8">
+            <a href="{{ route('multimedia.measure', $study->id) }}"
+                class="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-3 rounded-lg font-semibold">
+                Abrir Herramienta de Medición
+            </a>
+        </div>
+
         @empty
         <p class="text-gray-500 text-center col-span-full">{{ __('No hay imágenes disponibles para este estudio.') }}</p>
         @endforelse
