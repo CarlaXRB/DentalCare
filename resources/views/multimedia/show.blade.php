@@ -49,16 +49,12 @@
         <div class="flex justify-center">
             <img src="{{ $img }}" alt="Imagen del estudio" class="rounded-lg shadow-lg max-h-128 object-cover" />
         </div>
-        <div class="flex justify-center mt-8">
-            <a href="{{ route('multimedia.measure', $study->id) }}"
-                class="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-3 rounded-lg font-semibold">
-                Abrir Herramienta de Medición
-            </a>
-        </div>
-
         @empty
         <p class="text-gray-500 text-center col-span-full">{{ __('No hay imágenes disponibles para este estudio.') }}</p>
         @endforelse
+        <div class="flex justify-center mt-8">
+            <a href="{{ route('multimedia.measure', $study->id) }}" class="botton2">Herramienta de Medición</a>
+        </div>
     </div>
 
     {{-- Botón eliminar --}}

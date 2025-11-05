@@ -21,7 +21,7 @@
 <h1 class="title1 text-center">{{ __('Resultados de Búsqueda') }}</h1>
 
 <div class="max-w-6xl mx-auto bg-white rounded-xl p-4 text-gray-900 shadow-md">
-    <div class="grid grid-cols-7 gap-4 border-b border-gray-300 pb-2 mb-3">
+    <div class="grid grid-cols-6 gap-4 border-b border-gray-300 pb-2 mb-3">
         <h3 class="title4 text-center">{{ __('Fecha') }}</h3>
         <h3 class="title4 text-center">{{ __('Nombre') }}</h3>
         <h3 class="title4 text-center">{{ __('C.I. Paciente') }}</h3>
@@ -30,17 +30,14 @@
     </div>
 
     @forelse($files as $file)
-    <div class="grid grid-cols-7 gap-4 items-center border-b border-gray-200 py-3 text-gray-800 hover:bg-gray-50 transition">
-        <div class="text-center">{{ $file->study_date }}</div>
-        <div class="text-center">{{ $file->name_patient }}</div>
-        <div class="text-center">{{ $file->ci_patient }}</div>
-        <div class="text-center">{{ $file->study_code }}</div>
-        <div class="text-center">{{ $file->study_type }}</div>
+    <div class="grid grid-cols-6 gap-4 items-center border-b border-gray-200 py-3 text-gray-800 hover:bg-gray-50 transition">
+        <div class="text-center"><a href="{{ route('multimedia.show', $file->id) }}">{{ $file->study_date }}</a></div>
+        <div class="text-center"><a href="{{ route('multimedia.show', $file->id) }}">{{ $file->name_patient }}</a></div>
+        <div class="text-center"><a href="{{ route('multimedia.show', $file->id) }}">{{ $file->ci_patient }}</a></div>
+        <div class="text-center"><a href="{{ route('multimedia.show', $file->id) }}">{{ $file->study_code }}</a></div>
+        <div class="text-center"><a href="{{ route('multimedia.show', $file->id) }}">{{ $file->study_type }}</a></div>
         <div class="flex justify-center gap-2 p-1">
-            <a href="{{ route('multimedia.show', $file->id) }}" class="botton2">{{ __('Ver') }}</a>
             <a href="{{ route('multimedia.edit', $file->id) }}" class="botton3">{{ __('Editar') }}</a>
-        </div>
-        <div class="flex justify-center gap-2 p-1">
             <form method="POST" action="{{ route('multimedia.destroy', $file->id) }}"
                 onsubmit="return confirm('{{ __('¿Seguro que deseas eliminar este estudio?') }}');">
                 @csrf
