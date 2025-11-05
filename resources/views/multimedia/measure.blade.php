@@ -3,69 +3,94 @@
 @section('subtitle')
 {{ __('Herramientas de Medición') }}
 @endsection
+
 @section('content')
-<div class="flex justify-end p-5">
-    <a href="{{ route('radiography.tool', $radiography->id) }}" class="botton1">{{ __('Atrás') }}</a>
-</div>
+
 
 <h1 class="title1">{{ __('Herramientas de Medición') }}</h1>
 
 <!-- Botones de herramientas de medición -->
-<div class="relative flex justify-center space-x-2 mb-4">
+<div class="relative flex justify-center flex-wrap gap-2 mb-4">
     <!-- Medición -->
     <div class="group relative">
         <button id="distance" class="btnimg"><img src="{{ asset('assets/images/distance.png') }}" width="50" height="50"></button>
-        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Medir_Distancia</span></div>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1">
+            <span class="text-xs text-gray-800">Medir_Distancia</span>
+        </div>
     </div>
     <div class="group relative">
         <button id="delimited" class="btnimg"><img src="{{ asset('assets/images/distances.png') }}" width="50" height="50"></button>
-        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Marcar_Contorno</span></div>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1">
+            <span class="text-xs text-gray-800">Marcar_Contorno</span>
+        </div>
     </div>
     <div class="group relative">
         <button id="angle" class="btnimg"><img src="{{ asset('assets/images/angle.png') }}" width="50" height="50"></button>
-        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Medir_Ángulo</span></div>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1">
+            <span class="text-xs text-gray-800">Medir_Ángulo</span>
+        </div>
     </div>
     <div class="group relative">
         <button id="arco" class="btnimg"><img src="{{ asset('assets/images/arco.png') }}" width="50" height="50"></button>
-        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Medir_Arco</span></div>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1">
+            <span class="text-xs text-gray-800">Medir_Arco</span>
+        </div>
     </div>
     <div class="group relative">
         <button id="paint" class="btnimg"><img src="{{ asset('assets/images/paint.png') }}" width="50" height="50"></button>
-        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Pintar</span></div>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1">
+            <span class="text-xs text-gray-800">Pintar</span>
+        </div>
     </div>
 
     <!-- Filtros de imagen -->
     <div class="group relative">
         <button id="zoomIn" class="btnimg"><img src="{{ asset('assets/images/zoom.png') }}" width="50" height="50"></button>
-        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-sm text-gray-800">Acercar</span></div>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1">
+            <span class="text-sm text-gray-800">Acercar</span>
+        </div>
     </div>
     <div class="group relative">
         <button id="zoomOut" class="btnimg"><img src="{{ asset('assets/images/unzoom.png') }}" width="50" height="50"></button>
-        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-sm text-gray-800">Alejar</span></div>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1">
+            <span class="text-sm text-gray-800">Alejar</span>
+        </div>
     </div>
     <div class="group relative">
         <button id="invertColors" class="btnimg"><img src="{{ asset('assets/images/negative.png') }}" width="50" height="50"></button>
-        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-sm text-gray-800">Negativo</span></div>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1">
+            <span class="text-sm text-gray-800">Negativo</span>
+        </div>
     </div>
     <div class="group relative">
         <button id="increaseBrightness" class="btnimg"><img src="{{ asset('assets/images/filter3.png') }}" width="50" height="50"></button>
-        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Más_Brillo</span></div>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1">
+            <span class="text-xs text-gray-800">Más_Brillo</span>
+        </div>
     </div>
     <div class="group relative">
         <button id="decreaseBrightness" class="btnimg"><img src="{{ asset('assets/images/filter4.png') }}" width="50" height="50"></button>
-        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Menos_Brillo</span></div>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1">
+            <span class="text-xs text-gray-800">Menos_Brillo</span>
+        </div>
     </div>
     <div class="group relative">
         <button id="increaseContrast" class="btnimg"><img src="{{ asset('assets/images/filter1.png') }}" width="50" height="50"></button>
-        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Más_Contraste</span></div>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1">
+            <span class="text-xs text-gray-800">Más_Contraste</span>
+        </div>
     </div>
     <div class="group relative">
         <button id="decreaseContrast" class="btnimg"><img src="{{ asset('assets/images/filter2.png') }}" width="50" height="50"></button>
-        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Menos_Contraste</span></div>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1">
+            <span class="text-xs text-gray-800">Menos_Contraste</span>
+        </div>
     </div>
     <div class="group relative">
         <button id="edgesButton" class="btnimg"><img src="{{ asset('assets/images/edge.png') }}" width="50" height="50"></button>
-        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Marcar_Bordes</span></div>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1">
+            <span class="text-xs text-gray-800">Marcar_Bordes</span>
+        </div>
     </div>
 
     <!-- Guardar y descargar -->
@@ -73,12 +98,16 @@
         @csrf
         <div class="group relative">
             <button id="save" class="btnimg" type="submit"><img src="{{ asset('assets/images/save.png') }}" width="50" height="50"></button>
-            <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-sm text-gray-800">Guardar</span></div>
+            <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1">
+                <span class="text-sm text-gray-800">Guardar</span>
+            </div>
         </div>
     </form>
     <div class="group relative">
         <button id="downloadImage" class="btnimg"><img src="{{ asset('assets/images/download.png') }}" width="50" height="50"></button>
-        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Descargar</span></div>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1">
+            <span class="text-xs text-gray-800">Descargar</span>
+        </div>
     </div>
 </div>
 
@@ -160,15 +189,16 @@ let zoom = 1, brightness = 0, contrast = 1, isNegative=false, edgesApplied=false
 // Cargar imagen
 function loadImage(){
     fabric.Image.fromURL(imgUrl, function(fabricImg){
-        const maxWidth = window.innerWidth * 0.9;
+        // Ajuste para mantener proporciones sin deformar
+        const maxWidth = window.innerWidth * 0.8;
         const maxHeight = window.innerHeight * 0.7;
         const factorX = maxWidth / fabricImg.width;
         const factorY = maxHeight / fabricImg.height;
-        scaleFactor = Math.min(factorX,factorY,1);
+        scaleFactor = Math.min(factorX, factorY, 1);
         fabricImg.set({left:0, top:0, selectable:false});
-        fabricImg.scale(scaleFactor*zoom);
-        canvas.setWidth(fabricImg.width*scaleFactor*zoom);
-        canvas.setHeight(fabricImg.height*scaleFactor*zoom);
+        fabricImg.scale(scaleFactor * zoom);
+        canvas.setWidth(fabricImg.width * scaleFactor * zoom);
+        canvas.setHeight(fabricImg.height * scaleFactor * zoom);
         canvas.setBackgroundImage(fabricImg, canvas.renderAll.bind(canvas));
         applyFilters();
     });
@@ -187,6 +217,7 @@ function applyFilters(){
     bg.applyFilters();
     canvas.renderAll();
 }
+
 loadImage();
 
 // Botones filtros
@@ -206,44 +237,65 @@ document.getElementById('delimited').onclick = ()=>{ measuringContours=!measurin
 document.getElementById('arco').onclick = ()=>{ measuringArcs=!measuringArcs; arcPoints=[]; };
 document.getElementById('paint').onclick = ()=>{ painting=!painting; if(!painting) canvas.off('mouse:move', paint); };
 
-// Dibujar mediciones
+// Dibujar mediciones y pintura
 canvas.on('mouse:down', function(opt){
     const pointer = canvas.getPointer(opt.e);
 
     // Distancia
     if(measuringDist){
-        addCircle(pointer.x,pointer.y,'cyan'); pointDist.push({x:pointer.x,y:pointer.y});
+        addCircle(pointer.x, pointer.y, 'cyan'); 
+        pointDist.push({x:pointer.x, y:pointer.y});
         if(pointDist.length===2){
-            const line = new fabric.Line([pointDist[0].x,pointDist[0].y,pointDist[1].x,pointDist[1].y],{stroke:'cyan',strokeWidth:2,selectable:false});
+            const line = new fabric.Line([pointDist[0].x, pointDist[0].y, pointDist[1].x, pointDist[1].y], {stroke:'cyan', strokeWidth:2, selectable:false});
             canvas.add(line);
-            const distVal = Math.sqrt(Math.pow(pointDist[1].x-pointDist[0].x,2)+Math.pow(pointDist[1].y-pointDist[0].y,2))*scaleFactor;
-            const txt = new fabric.Text(`Distancia: ${Math.round(distVal)} mm`,{left:(pointDist[0].x+pointDist[1].x)/2,top:(pointDist[0].y+pointDist[1].y)/2-20,fontSize:16,fill:'cyan',selectable:false});
-            canvas.add(txt); pointDist=[];
-        } return;
+            // Conversión a mm según escala
+            const scaleSelect = document.getElementById('scaleSelect');
+            const measurementScale = parseFloat(scaleSelect.value);
+            const distVal = Math.sqrt(Math.pow(pointDist[1].x-pointDist[0].x,2)+Math.pow(pointDist[1].y-pointDist[0].y,2)) * measurementScale;
+            const txt = new fabric.Text(`Distancia: ${distVal.toFixed(1)} mm`, {
+                left:(pointDist[0].x+pointDist[1].x)/2,
+                top:(pointDist[0].y+pointDist[1].y)/2 - 20,
+                fontSize:16,
+                fill:'cyan',
+                selectable:false
+            });
+            canvas.add(txt);
+            pointDist=[];
+        }
+        return;
     }
 
     // Pintura
     if(painting){
-        previousPoint={x:pointer.x,y:pointer.y};
+        previousPoint = {x:pointer.x, y:pointer.y};
         canvas.on('mouse:move', paint);
     }
 });
 
-function addCircle(x,y,color='red'){ canvas.add(new fabric.Circle({left:x-4,top:y-4,radius:4,fill:color,selectable:false})); }
-function paint(opt){
-    if(!painting||!previousPoint) return;
-    const pointer = canvas.getPointer(opt.e);
-    canvas.add(new fabric.Line([previousPoint.x,previousPoint.y,pointer.x,pointer.y],{stroke:'red',strokeWidth:1,selectable:false}));
-    previousPoint={x:pointer.x,y:pointer.y};
+function addCircle(x, y, color='red'){
+    canvas.add(new fabric.Circle({left:x-4, top:y-4, radius:4, fill:color, selectable:false}));
 }
 
-document.getElementById('clearButton').onclick=()=>{ canvas.clear(); loadImage(); pointDist=[]; anglePoints=[]; contourPoints=[]; arcPoints=[]; previousPoint=null; };
+function paint(opt){
+    if(!painting || !previousPoint) return;
+    const pointer = canvas.getPointer(opt.e);
+    canvas.add(new fabric.Line([previousPoint.x, previousPoint.y, pointer.x, pointer.y], {stroke:'red', strokeWidth:1, selectable:false}));
+    previousPoint = {x:pointer.x, y:pointer.y};
+}
+
+document.getElementById('clearButton').onclick = ()=>{ 
+    canvas.clear(); 
+    loadImage(); 
+    pointDist=[]; anglePoints=[]; contourPoints=[]; arcPoints=[]; previousPoint=null; 
+};
 
 // Descargar imagen
-document.getElementById('downloadImage').onclick=()=>{
-    const dataURL = canvas.toDataURL({format:'png',quality:1});
-    const link = document.createElement('a'); link.href=dataURL;
-    link.download=`mediciones_{{ $radiography->radiography_id }}_{{ $radiography->ci_patient }}.png`; link.click();
+document.getElementById('downloadImage').onclick = ()=>{
+    const dataURL = canvas.toDataURL({format:'png', quality:1});
+    const link = document.createElement('a');
+    link.href = dataURL;
+    link.download = `mediciones_{{ $radiography->radiography_id }}_{{ $radiography->ci_patient }}.png`;
+    link.click();
 };
 </script>
 @endsection
