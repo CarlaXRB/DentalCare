@@ -52,7 +52,7 @@
 <p id="scaleMessage" class="text-center text-sm text-red-600 mb-2"></p>
 
 <p id="measureOutput" class="font-semibold text-gray-700 text-center mb-4">
-    Haz clic en dos puntos para medir distancia.
+    Selecciona una herramienta para comenzar.
 </p>
 
 <div class="flex justify-center mb-4">
@@ -72,25 +72,24 @@ const resetBtn = document.getElementById('resetBtn');
 let imgUrl = imageSelect.value;
 let currentImage;
 let scaleFactor = 1;
+let activeTool = null;
 
-// Función para cargar imagen
+// === FUNCIÓN: CARGAR IMAGEN ===
 function loadImage(url) {
     imgUrl = url;
     fabric.Image.fromURL(url, function(fabricImg) {
         canvas.clear();
         currentImage = fabricImg;
 
-        // Tamaño máximo del canvas según la ventana
         const maxWidth = window.innerWidth * 0.9;
         const maxHeight = window.innerHeight * 0.7;
 
-        // Calcular escala proporcional
         let scale = 1;
         if (fabricImg.width > maxWidth || fabricImg.height > maxHeight) {
             const widthScale = fabricImg.width / maxWidth;
             const heightScale = fabricImg.height / maxHeight;
             const maxScale = Math.max(widthScale, heightScale);
-            scale = Math.ceil(maxScale); // escala a número entero
+            scale = Math.ceil(maxScale);
             scaleFactor = 1 / scale;
             fabricImg.scale(scaleFactor);
             scaleMessage.textContent = `Imagen escalada 1:${scale}`;
@@ -101,56 +100,77 @@ function loadImage(url) {
 
         canvas.setWidth(fabricImg.width * scaleFactor);
         canvas.setHeight(fabricImg.height * scaleFactor);
-
         fabricImg.set({ left: 0, top: 0, selectable: false });
+
         canvas.setBackgroundImage(fabricImg, canvas.renderAll.bind(canvas));
-        output.textContent = "Haz clic en dos puntos para medir distancia.";
+        output.textContent = "Selecciona una herramienta para comenzar.";
     }, { crossOrigin: 'anonymous' });
 }
 
+// === CAMBIO DE IMAGEN ===
 imageSelect.addEventListener('change', (e) => loadImage(e.target.value));
 
-// Medición de distancia
-let points = [];
-let line, lineText;
+// === FUNCIÓN: ACTIVAR HERRAMIENTA ===
+function activateTool(tool) {
+    activeTool = tool;
+    output.textContent = `Herramienta activa: ${tool}`;
+    canvas.off('mouse:down'); // Desactivar eventos previos
 
-canvas.on('mouse:down', function(options) {
-    const pointer = canvas.getPointer(options.e);
-    points.push({x: pointer.x, y: pointer.y});
-
-    const circle = new fabric.Circle({
-        left: pointer.x - 4,
-        top: pointer.y - 4,
-        radius: 4,
-        fill: 'red',
-        selectable: false
-    });
-    canvas.add(circle);
-
-    if(points.length === 2){
-        line = new fabric.Line([points[0].x, points[0].y, points[1].x, points[1].y], {
-            strokeWidth: 2,
-            stroke: 'lime',
-            selectable: false
-        });
-        canvas.add(line);
-
-        const distPx = Math.sqrt((points[1].x - points[0].x)**2 + (points[1].y - points[0].y)**2);
-        lineText = new fabric.Text(`Distancia: ${distPx.toFixed(2)} px`, {
-            left: (points[0].x + points[1].x)/2,
-            top: (points[0].y + points[1].y)/2 - 20,
-            fontSize: 16,
-            fill: 'lime',
-            selectable: false
-        });
-        canvas.add(lineText);
-        points = [];
+    if (tool === 'distance') {
+        activateDistanceTool();
     }
+}
+
+// === HERRAMIENTA: MEDIR DISTANCIA ===
+function activateDistanceTool() {
+    let points = [];
+
+    canvas.on('mouse:down', function(options) {
+        const pointer = canvas.getPointer(options.e);
+        points.push({x: pointer.x, y: pointer.y});
+
+        const circle = new fabric.Circle({
+            left: pointer.x - 4,
+            top: pointer.y - 4,
+            radius: 4,
+            fill: 'red',
+            selectable: false
+        });
+        canvas.add(circle);
+
+        if(points.length === 2){
+            const line = new fabric.Line([points[0].x, points[0].y, points[1].x, points[1].y], {
+                strokeWidth: 2,
+                stroke: 'lime',
+                selectable: false
+            });
+            canvas.add(line);
+
+            const distPx = Math.sqrt((points[1].x - points[0].x)**2 + (points[1].y - points[0].y)**2);
+            const lineText = new fabric.Text(`Distancia: ${distPx.toFixed(2)} px`, {
+                left: (points[0].x + points[1].x)/2,
+                top: (points[0].y + points[1].y)/2 - 20,
+                fontSize: 16,
+                fill: 'lime',
+                selectable: false
+            });
+            canvas.add(lineText);
+            points = [];
+        }
+    });
+}
+
+// === BOTONES ===
+document.getElementById('distance').addEventListener('click', () => activateTool('distance'));
+
+resetBtn.addEventListener('click', () => {
+    canvas.off('mouse:down');
+    loadImage(imgUrl);
+    activeTool = null;
+    output.textContent = "Selecciona una herramienta para comenzar.";
 });
 
-resetBtn.addEventListener('click', () => loadImage(imgUrl));
-
-// Cargar la primera imagen al inicio
+// === CARGA INICIAL ===
 if(imageSelect.options.length > 0){
     loadImage(imageSelect.value);
 }
