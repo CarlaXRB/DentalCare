@@ -1,18 +1,14 @@
 @extends('layouts._partials.layout')
-@section('title', 'Medición Interactiva')
+@section('title', 'Herramientas')
 @section('subtitle')
-{{ __('Medición Interactiva') }}
+{{ __('Herramientas') }}
 @endsection
 
 @section('content')
 <div class="flex justify-end pt-5 pr-5">
     <a href="{{ route('multimedia.show', $study->id) }}" class="botton1">Volver al Estudio</a>
 </div>
-
-<h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">
-    Medición Interactiva — {{ $study->name_patient }}
-</h1>
-
+<h1 class="text-2xl font-bold text-gray-800 mb-6 text-center"> {{ $study->name_patient }} - {{ $study->ci_patient }}</h1>
 <div class="flex justify-center mb-4">
     <select id="imageSelect" class="border border-gray-300 rounded-lg p-2">
         @foreach($imageUrls as $url)
@@ -20,35 +16,94 @@
         @endforeach
     </select>
 </div>
-
-<!-- Herramientas -->
-<div class="relative flex justify-center flex-wrap gap-2 mb-6">
+<!--
+<div class="relative flex justify-center space-x-2 mb-6">
     @php
         $tools = [
             ['id'=>'distance','img'=>'distance.png','title'=>'Medir Distancia'],
             ['id'=>'delimited','img'=>'distances.png','title'=>'Marcar Contorno'],
             ['id'=>'angle','img'=>'angle.png','title'=>'Medir Ángulo'],
-            ['id'=>'zoomIn','img'=>'zoom-in.png','title'=>'Acercar'],
-            ['id'=>'zoomOut','img'=>'zoom-out.png','title'=>'Alejar'],
-            ['id'=>'increaseBrightness','img'=>'bright.png','title'=>'Aumentar Brillo'],
-            ['id'=>'decreaseBrightness','img'=>'dark.png','title'=>'Disminuir Brillo'],
-            ['id'=>'increaseContrast','img'=>'contrast-up.png','title'=>'Aumentar Contraste'],
-            ['id'=>'decreaseContrast','img'=>'contrast-down.png','title'=>'Disminuir Contraste'],
-            ['id'=>'invertColors','img'=>'invert.png','title'=>'Negativo'],
-            ['id'=>'edgesButton','img'=>'edges.png','title'=>'Detectar Bordes'],
+            ['id'=>'arco','img'=>'arco.png','title'=>'Medir Arco'],
+            ['id'=>'paint','img'=>'paint.png','title'=>'Pintar'],
             ['id'=>'downloadImage','img'=>'download.png','title'=>'Descargar']
         ];
     @endphp
     @foreach($tools as $tool)
     <div class="group relative">
         <button id="{{ $tool['id'] }}" class="btnimg">
-            <img src="{{ asset('assets/images/'.$tool['img']) }}" width="45" height="45">
+            <img src="{{ asset('assets/images/'.$tool['img']) }}" width="50" height="50">
         </button>
         <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1">
             <span class="text-xs text-gray-800">{{ $tool['title'] }}</span>
         </div>
     </div>
     @endforeach
+</div>
+    -->
+<div class="relative flex justify-center space-x-2">
+    <div class="group relative">
+        <button id="distance" class="btnimg"><img src="{{ asset('assets/images/distance.png') }}" width="50" height="50"></button>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Medir_Distancia</span></div>
+    </div>
+    <div class="group relative">
+        <button id="delimited" class="btnimg"><img src="{{ asset('assets/images/distances.png') }}" width="50" height="50"></button>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Marcar_Contorno</span></div>
+    </div>
+    <div class="group relative">
+        <button id="angle" class="btnimg"><img src="{{ asset('assets/images/angle.png') }}" width="50" height="50"></button>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Medir_Ángulo</span></div>
+    </div>
+    <div class="group relative">
+        <button id="arco" class="btnimg"><img src="{{ asset('assets/images/arco.png') }}" width="50" height="50"></button>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Medir_Arco</span></div>
+    </div>
+    <div class="group relative">
+        <button id="paint" class="btnimg"><img src="{{ asset('assets/images/paint.png') }}" width="50" height="50"></button>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Pintar</span></div>
+    </div>
+    <div class="group relative">
+        <button id="downloadImage" class="btnimg"><img src="{{ asset('assets/images/download.png') }}" width="50" height="50"></button>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Decargar</span></div>
+    </div>
+</div>
+
+<div class="relative flex justify-center space-x-2">
+    <div class="group relative">
+        <button id="zoomIn" class="btnimg"><img src="{{ asset('assets/images/zoom.png') }}" width="50" height="50"></button>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-sm text-gray-800">Acercar</span></div>
+    </div>
+    <div class="group relative">
+        <button id="zoomOut" class="btnimg"><img src="{{ asset('assets/images/unzoom.png') }}" width="50" height="50"></button>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-sm text-gray-800">Alejar</span></div>
+    </div>
+    <div class="group relative">
+        <button id="invertColors" class="btnimg"><img src="{{ asset('assets/images/negative.png') }}" width="50" height="50"></button>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-sm text-gray-800">Negativo</span></div>
+    </div>
+    <div class="group relative">
+        <button id="increaseBrightness" class="btnimg"><img src="{{ asset('assets/images/filter3.png') }}" width="50" height="50"></button>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Más_Brillo</span></div>
+    </div>
+    <div class="group relative">
+        <button id="decreaseBrightness" class="btnimg"><img src="{{ asset('assets/images/filter4.png') }}" width="50" height="50"></button>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Menos_Brillo</span></div>
+    </div>
+    <div class="group relative">
+        <button id="increaseContrast" class="btnimg"><img src="{{ asset('assets/images/filter1.png') }}" width="50" height="50"></button>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Más_Contraste</span></div>
+    </div>
+    <div class="group relative">
+        <button id="decreaseContrast" class="btnimg"><img src="{{ asset('assets/images/filter2.png') }}" width="50" height="50"></button>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Menos_Contraste</span></div>
+    </div>
+    <div class="group relative">
+        <button id="edgesButton" class="btnimg"><img src="{{ asset('assets/images/edge.png') }}" width="50" height="50"></button>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Marcar_Bordes</span></div>
+    </div>
+    <div class="group relative">
+        <button id="downloadImage" class="btnimg"><img src="{{ asset('assets/images/download.png') }}" width="50" height="50"></button>
+        <div class="hidden group-hover:block absolute left-0 mt-2 bg-blue-300 bg-opacity-50 text-center rounded-md px-2 py-1"><span class="text-xs text-gray-800">Descargar</span></div>
+    </div>
 </div>
 
 <div class="flex justify-center mt-4 mb-2">
@@ -66,7 +121,6 @@
         Reiniciar
     </button>
 </div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.5.0/fabric.min.js"></script>
 <script>
 const canvas = new fabric.Canvas('measureCanvas', { preserveObjectStacking: true });
@@ -75,165 +129,192 @@ const output = document.getElementById('measureOutput');
 const scaleMessage = document.getElementById('scaleMessage');
 const resetBtn = document.getElementById('resetBtn');
 
-let currentImage;
+let currentImage = null;
 let scaleFactor = 1;
-let activeTool = null; // para activar/desactivar herramientas
-let imgUrl = imageSelect.value;
-let brightness = 0;
-let contrast = 1;
-let isNegative = false;
-let edgesApplied = false;
-let zoom = 1;
+let activeTool = null;
 
-// Cargar imagen y escalar correctamente
+// === CARGAR IMAGEN ===
 function loadImage(url) {
-    imgUrl = url;
-    fabric.Image.fromURL(url, function(fabricImg) {
+    fabric.Image.fromURL(url, function(img) {
         canvas.clear();
-        currentImage = fabricImg;
+        currentImage = img;
+        currentImage.crossOrigin = "anonymous";
 
-        const maxWidth = window.innerWidth * 0.9;
-        const maxHeight = window.innerHeight * 0.7;
+        // Escalado proporcional (mejorado)
+        const maxWidth = 800;
+        const maxHeight = 600;
+        let scale = Math.max(img.width / maxWidth, img.height / maxHeight);
+        if (scale < 1) scale = 1;
+        scaleFactor = 1 / scale;
+        img.scale(scaleFactor);
 
-        let scale = 1;
-        if (fabricImg.width > maxWidth || fabricImg.height > maxHeight) {
-            const widthScale = fabricImg.width / maxWidth;
-            const heightScale = fabricImg.height / maxHeight;
-            const maxScale = Math.max(widthScale, heightScale);
-            scale = Math.ceil(maxScale);
-            scaleFactor = 1 / scale;
-            fabricImg.scale(scaleFactor);
-            scaleMessage.textContent = `Imagen escalada 1:${scale}`;
-        } else {
-            scaleFactor = 1;
-            scaleMessage.textContent = '';
-        }
+        canvas.setWidth(img.width * scaleFactor);
+        canvas.setHeight(img.height * scaleFactor);
 
-        canvas.setWidth(fabricImg.width * scaleFactor);
-        canvas.setHeight(fabricImg.height * scaleFactor);
-        fabricImg.set({ left: 0, top: 0, selectable: false });
-        canvas.setBackgroundImage(fabricImg, canvas.renderAll.bind(canvas));
+        img.set({ left: 0, top: 0, selectable: false });
+        canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+        scaleMessage.textContent = `Imagen escalada 1:${Math.round(scale)}`;
         output.textContent = "Selecciona una herramienta para comenzar.";
     }, { crossOrigin: 'anonymous' });
 }
 
-// Filtros CSS simulados con Fabric.js
-function updateFilters() {
+imageSelect.addEventListener('change', e => loadImage(e.target.value));
+
+// === CAMBIO DE HERRAMIENTAS ===
+function activateTool(tool) {
+    activeTool = tool;
+    output.textContent = `Herramienta activa: ${tool}`;
+    canvas.off('mouse:down');
+    if (tool === 'distance') activateDistanceTool();
+    if (tool === 'angle') activateAngleTool();
+    if (tool === 'delimited') activateContourTool();
+    if (tool === 'arco') activateArcTool();
+}
+
+// === MEDIR DISTANCIA ===
+function activateDistanceTool() {
+    let p1 = null;
+    canvas.on('mouse:down', e => {
+        const p = canvas.getPointer(e.e);
+        if (!p1) {
+            p1 = p;
+            canvas.add(new fabric.Circle({ left:p.x-3, top:p.y-3, radius:3, fill:'red', selectable:false }));
+        } else {
+            const p2 = p;
+            canvas.add(new fabric.Circle({ left:p2.x-3, top:p2.y-3, radius:3, fill:'red', selectable:false }));
+            const line = new fabric.Line([p1.x,p1.y,p2.x,p2.y], { stroke:'lime', strokeWidth:2, selectable:false });
+            canvas.add(line);
+            const dist = Math.hypot(p2.x - p1.x, p2.y - p1.y) * scaleFactor;
+            canvas.add(new fabric.Text(`Distancia: ${dist.toFixed(2)} px`, {
+                left:(p1.x+p2.x)/2, top:(p1.y+p2.y)/2 - 20,
+                fontSize:16, fill:'lime', selectable:false
+            }));
+            p1 = null;
+        }
+    });
+}
+
+// === MEDIR ÁNGULO ===
+function activateAngleTool() {
+    let pts = [];
+    canvas.on('mouse:down', e => {
+        const p = canvas.getPointer(e.e);
+        pts.push(p);
+        canvas.add(new fabric.Circle({ left:p.x-3, top:p.y-3, radius:3, fill:'#29ff1b', selectable:false }));
+        if (pts.length === 3) {
+            const [A,B,C] = pts;
+            canvas.add(new fabric.Line([A.x,A.y,B.x,B.y], { stroke:'#29ff1b', strokeWidth:2, selectable:false }));
+            canvas.add(new fabric.Line([B.x,B.y,C.x,C.y], { stroke:'#29ff1b', strokeWidth:2, selectable:false }));
+            const angle = calculateAngle(A,B,C);
+            canvas.add(new fabric.Text(`Ángulo: ${angle.toFixed(1)}°`, {
+                left:B.x, top:B.y - 30, fontSize:16, fill:'#29ff1b', selectable:false
+            }));
+            pts = [];
+        }
+    });
+}
+
+function calculateAngle(A,B,C) {
+    const AB = {x:A.x-B.x, y:A.y-B.y}, CB = {x:C.x-B.x, y:C.y-B.y};
+    const dot = AB.x*CB.x + AB.y*CB.y;
+    return Math.acos(dot / (Math.hypot(AB.x,AB.y)*Math.hypot(CB.x,CB.y))) * 180 / Math.PI;
+}
+
+// === MEDIR CONTORNO ===
+function activateContourTool() {
+    let pts = [];
+    let poly;
+    canvas.on('mouse:down', e => {
+        const p = canvas.getPointer(e.e);
+        pts.push(p);
+        canvas.add(new fabric.Circle({ left:p.x-3, top:p.y-3, radius:3, fill:'#8607f7', selectable:false }));
+        if (pts.length >= 2) {
+            const pathStr = pts.map((pt,i)=>i===0?`M ${pt.x} ${pt.y}`:`L ${pt.x} ${pt.y}`).join(' ');
+            if (poly) canvas.remove(poly);
+            poly = new fabric.Path(pathStr, { stroke:'#8607f7', strokeWidth:2, fill:'', selectable:false });
+            canvas.add(poly);
+            const len = calculateContourLength(pts)*scaleFactor;
+            output.textContent = `Longitud total: ${len.toFixed(2)} px`;
+        }
+    });
+}
+
+function calculateContourLength(pts) {
+    let len = 0;
+    for (let i=1;i<pts.length;i++)
+        len += Math.hypot(pts[i].x - pts[i-1].x, pts[i].y - pts[i-1].y);
+    return len;
+}
+
+// === MEDIR ARCO ===
+function activateArcTool() {
+    let pts = [];
+    canvas.on('mouse:down', e => {
+        const p = canvas.getPointer(e.e);
+        pts.push(p);
+        canvas.add(new fabric.Circle({ left:p.x-3, top:p.y-3, radius:3, fill:'blue', selectable:false }));
+        if (pts.length === 3) {
+            drawArc(pts[0], pts[1], pts[2]);
+            pts = [];
+        }
+    });
+}
+
+function drawArc(p1, p2, center) {
+    const r = Math.hypot(center.x - p1.x, center.y - p1.y);
+    const a1 = Math.atan2(p1.y - center.y, p1.x - center.x);
+    const a2 = Math.atan2(p2.y - center.y, p2.x - center.x);
+    const path = new fabric.Path(`M ${p1.x} ${p1.y} A ${r} ${r} 0 0 1 ${p2.x} ${p2.y}`, {
+        stroke:'blue', strokeWidth:2, fill:'', selectable:false
+    });
+    canvas.add(path);
+    const angle = Math.abs(a2 - a1) * (180 / Math.PI);
+    const arcLen = r * (angle * Math.PI / 180) * scaleFactor;
+    canvas.add(new fabric.Text(`Arco: ${arcLen.toFixed(2)} px`, {
+        left:center.x, top:center.y - 20, fontSize:16, fill:'blue', selectable:false
+    }));
+}
+
+// === FILTROS ===
+function applyFilter(callback) {
     if (!currentImage) return;
-    currentImage.filters = [];
-
-    currentImage.filters.push(new fabric.Image.filters.Brightness({ brightness: brightness }));
-    currentImage.filters.push(new fabric.Image.filters.Contrast({ contrast: contrast - 1 }));
-    if (isNegative) currentImage.filters.push(new fabric.Image.filters.Invert());
-
+    callback(currentImage);
     currentImage.applyFilters();
     canvas.renderAll();
 }
 
-document.getElementById('zoomIn').onclick = () => {
-    zoom += 0.1;
-    canvas.setZoom(zoom);
-};
-document.getElementById('zoomOut').onclick = () => {
-    if (zoom > 0.5) {
-        zoom -= 0.1;
-        canvas.setZoom(zoom);
-    }
-};
-document.getElementById('increaseBrightness').onclick = () => {
-    brightness = Math.min(brightness + 0.1, 1);
-    updateFilters();
-};
-document.getElementById('decreaseBrightness').onclick = () => {
-    brightness = Math.max(brightness - 0.1, -1);
-    updateFilters();
-};
-document.getElementById('increaseContrast').onclick = () => {
-    contrast = Math.min(contrast + 0.1, 3);
-    updateFilters();
-};
-document.getElementById('decreaseContrast').onclick = () => {
-    contrast = Math.max(contrast - 0.1, 0);
-    updateFilters();
-};
-document.getElementById('invertColors').onclick = () => {
-    isNegative = !isNegative;
-    updateFilters();
-};
-
-// Detección de bordes simple
-document.getElementById('edgesButton').onclick = () => {
-    if (!currentImage) return;
-    if (edgesApplied) {
-        loadImage(imgUrl);
-        edgesApplied = false;
-        return;
-    }
-    const filter = new fabric.Image.filters.Convolute({
-        matrix: [ -1,-1,-1, -1,8,-1, -1,-1,-1 ]
-    });
-    currentImage.filters.push(filter);
-    currentImage.applyFilters();
-    canvas.renderAll();
-    edgesApplied = true;
-};
-
-// Medición solo cuando el usuario elige la herramienta
-let points = [];
-let line, lineText;
-
-document.getElementById('distance').addEventListener('click', () => {
-    activeTool = 'distance';
-    output.textContent = "Haz clic en dos puntos para medir distancia.";
+document.getElementById('invertColors')?.addEventListener('click', () => {
+    applyFilter(img => img.filters.push(new fabric.Image.filters.Invert()));
+});
+document.getElementById('increaseBrightness')?.addEventListener('click', () => {
+    applyFilter(img => img.filters.push(new fabric.Image.filters.Brightness({ brightness: 0.1 })));
+});
+document.getElementById('decreaseBrightness')?.addEventListener('click', () => {
+    applyFilter(img => img.filters.push(new fabric.Image.filters.Brightness({ brightness: -0.1 })));
+});
+document.getElementById('increaseContrast')?.addEventListener('click', () => {
+    applyFilter(img => img.filters.push(new fabric.Image.filters.Contrast({ contrast: 0.1 })));
+});
+document.getElementById('decreaseContrast')?.addEventListener('click', () => {
+    applyFilter(img => img.filters.push(new fabric.Image.filters.Contrast({ contrast: -0.1 })));
+});
+document.getElementById('edgesButton')?.addEventListener('click', () => {
+    applyFilter(img => img.filters.push(new fabric.Image.filters.Convolute({
+        matrix: [ -1, -1, -1, -1,  8, -1, -1, -1, -1 ]
+    })));
 });
 
-canvas.on('mouse:down', function(options) {
-    if (activeTool !== 'distance') return;
-    const pointer = canvas.getPointer(options.e);
-    points.push({x: pointer.x, y: pointer.y});
+// === RESET ===
+resetBtn.onclick = () => {
+    canvas.clear();
+    loadImage(imageSelect.value);
+    activeTool = null;
+};
 
-    const circle = new fabric.Circle({
-        left: pointer.x - 4,
-        top: pointer.y - 4,
-        radius: 4,
-        fill: 'red',
-        selectable: false
-    });
-    canvas.add(circle);
-
-    if(points.length === 2){
-        line = new fabric.Line([points[0].x, points[0].y, points[1].x, points[1].y], {
-            strokeWidth: 2,
-            stroke: 'lime',
-            selectable: false
-        });
-        canvas.add(line);
-
-        const distPx = Math.sqrt((points[1].x - points[0].x)**2 + (points[1].y - points[0].y)**2);
-        lineText = new fabric.Text(`Distancia: ${distPx.toFixed(2)} px`, {
-            left: (points[0].x + points[1].x)/2,
-            top: (points[0].y + points[1].y)/2 - 20,
-            fontSize: 16,
-            fill: 'lime',
-            selectable: false
-        });
-        canvas.add(lineText);
-        points = [];
-    }
-});
-
-document.getElementById('downloadImage').addEventListener('click', () => {
-    const link = document.createElement('a');
-    link.download = 'imagen_filtrada.png';
-    link.href = canvas.toDataURL();
-    link.click();
-});
-
-resetBtn.addEventListener('click', () => loadImage(imgUrl));
-imageSelect.addEventListener('change', (e) => loadImage(e.target.value));
-
-if(imageSelect.options.length > 0){
+// === CARGA INICIAL ===
+if (imageSelect.options.length > 0) {
     loadImage(imageSelect.value);
 }
 </script>
+
 @endsection
