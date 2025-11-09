@@ -93,7 +93,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         ->where('fileName', '.*')->name('multimedia.image');
     Route::get('/multimedia/{id}/measure', [MultimediaFileController::class, 'measure'])
     ->name('multimedia.measure');
-    Route::get('/multimedia/{id}/tool', [MultimediaFileController::class, 'tool'])
+    Route::get('/multimedia/tool/{id}', [MultimediaFileController::class, 'tool'])
     ->name('multimedia.tool');
 
 });
