@@ -41,13 +41,13 @@
     <!-- Table body -->
     @forelse($payments as $p)
     <div class="grid grid-cols-8 gap-4 items-center border-b border-gray-200 py-3 text-gray-800 hover:bg-gray-50 transition text-center">
-        <div><a href="{{ route('payments.show',$p->treatment->id) }}" class="txt hover:text-cyan-600">{{ $p->created_at->format('d/m/Y H:i') }}</a></div>
-        <div><a href="{{ route('payments.show',$p->treatment->id) }}" class="txt hover:text-cyan-600">{{ $p->treatment->name }}</a></div>
-        <div><a href="{{ route('payments.show',$p->treatment->id) }}" class="txt hover:text-cyan-600">{{ $p->treatment->ci_patient }}</a></div>
-        <div><a href="{{ route('payments.show',$p->treatment->id) }}" class="txt hover:text-cyan-600">Bs. {{ number_format($p->treatment->amount, 2) }}</a></div>
-        <div><a href="{{ route('payments.show',$p->treatment->id) }}" class="txt hover:text-cyan-600">Bs. {{ number_format($p->amount, 2) }}</a></div>
-        <div><a href="{{ route('payments.show',$p->treatment->id) }}" class="txt hover:text-cyan-600">{{ $p->method ?? '-' }}</a></div>
-        <div><a href="{{ route('payments.show',$p->treatment->id) }}" class="txt hover:text-cyan-600">{{ $p->notes ?? '-' }}</a></div>
+        <div><a href="{{ route('payments.show',$p->treatment->id) }}" class="flex justify-center hover:text-cyan-600">{{ $p->created_at->format('d/m/Y H:i') }}</a></div>
+        <div><a href="{{ route('payments.show',$p->treatment->id) }}" class="flex justify-center hover:text-cyan-600">{{ $p->treatment->name }}</a></div>
+        <div><a href="{{ route('payments.show',$p->treatment->id) }}" class="flex justify-center hover:text-cyan-600">{{ $p->treatment->ci_patient }}</a></div>
+        <div><a href="{{ route('payments.show',$p->treatment->id) }}" class="flex justify-center hover:text-cyan-600">Bs. {{ number_format($p->treatment->amount, 2) }}</a></div>
+        <div><a href="{{ route('payments.show',$p->treatment->id) }}" class="flex justify-center hover:text-cyan-600">Bs. {{ number_format($p->amount, 2) }}</a></div>
+        <div><a href="{{ route('payments.show',$p->treatment->id) }}" class="flex justify-center hover:text-cyan-600">{{ $p->method ?? '-' }}</a></div>
+        <div><a href="{{ route('payments.show',$p->treatment->id) }}" class="flex justify-center hover:text-cyan-600">{{ $p->notes ?? '-' }}</a></div>
     </div>
     @empty
     <p class="text-gray-600 text-center py-4">{{ __('Aún no se han registrado pagos.') }}</p>

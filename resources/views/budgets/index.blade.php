@@ -37,12 +37,12 @@
     <div class="grid grid-cols-4 gap-4 items-center border-b border-gray-200 py-3 text-gray-800 hover:bg-gray-50 transition">
         <!-- Budget code -->
         <div class="text-center">
-            <a href="{{ route('budgets.show', $budget->id) }}" class="txt hover:text-cyan-600">{{ $budget->budget }}</a>
+            <a href="{{ route('budgets.show', $budget->id) }}" class="flex justify-center hover:text-cyan-600">{{ $budget->budget }}</a>
         </div>
 
         <!-- Procedure -->
         <div class="text-center">
-            <a href="{{ route('budgets.show', $budget->id) }}" class="txt hover:text-cyan-600">{{ $budget->procedure }}</a>
+            <a href="{{ route('budgets.show', $budget->id) }}" class="flex justify-center hover:text-cyan-600">{{ $budget->procedure }}</a>
         </div>
 
         <!-- Total amount -->
