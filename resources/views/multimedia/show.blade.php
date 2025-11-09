@@ -56,6 +56,8 @@
     </div>
     <div class="flex justify-center mt-8">
         <a href="{{ route('multimedia.measure', $study->id) }}" class="botton2">Herramienta de Medición</a>
+
+        <a href="{{ route('multimedia.tool', $study->id) }}" class="botton3">Filtros</a>
     </div>
     {{-- Botón eliminar --}}
     <div class="flex justify-end mt-6">

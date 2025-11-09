@@ -25,13 +25,13 @@
     </div>
 
     @forelse($patients as $patient)
-    <div class="grid grid-cols-6 gap-4 items-center border-b border-gray-200 py-3 text-gray-800 hover:bg-gray-50 transition">
+    <div class="grid grid-cols-5 gap-4 items-center border-b border-gray-200 py-3 text-gray-800 hover:bg-gray-50 transition">
         <div class="text-center">
             <a href="{{ route('patient.show', $patient->id) }}" class="txt hover:text-cyan-600">{{ $patient->ci_patient }}</a>
         </div>
         <div class="text-center">
             <a href="{{ route('patient.show', $patient->id) }}" class="txt hover:text-cyan-600">{{ $patient->name_patient }}</a>
-        </div>.
+        </div>
         <div class="text-center">
             <a href="{{ route('patient.show', $patient->id) }}" class="txt hover:text-cyan-600">{{ $patient->birth_date }}</a>
         </div>
