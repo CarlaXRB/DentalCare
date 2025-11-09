@@ -15,17 +15,16 @@
                         <!-- Citas -->
                         <a href="{{ route('events.index') }}"
                             class="flex items-center p-6 bg-gray-20 rounded-2xl shadow-md hover:shadow-xl transition transform hover:scale-105 duration-300">
-                            <img src="{{ asset('storage/assets/images/calendar.png') }}" alt="Citas" class="w-32 h-32 object-contain mr-6">
+                            <img src="{{ asset('assets/images/calendar.png') }}" alt="Citas" class="w-32 h-32 object-contain mr-6">
                             <div>
                                 <h5 class="text-2xl font-semibold text-blue-600">{{ __('Citas') }}</h5>
                                 <p class="text-gray-600 mt-2 text-sm">{{ __('Programe, modifique y visualice las citas de los pacientes.') }}</p>
                             </div>
                         </a>
-
                         <!-- Pacientes -->
                         <a href="{{ route('patient.index') }}"
                             class="flex items-center p-6 bg-gray-20 rounded-2xl shadow-md hover:shadow-xl transition transform hover:scale-105 duration-300">
-                            <img src="{{ asset('storage/assets/images/patient.png') }}" alt="Pacientes" class="w-32 h-32 object-contain mr-6">
+                            <img src="{{ asset('assets/images/patient.png') }}" alt="Pacientes" class="w-32 h-32 object-contain mr-6">
                             <div>
                                 <h5 class="text-2xl font-semibold text-blue-600">{{ __('Pacientes') }}</h5>
                                 <p class="text-gray-600 mt-2 text-sm">{{ __('Acceder y gestionar registros y datos de pacientes.') }}</p>

@@ -10,26 +10,16 @@
             margin: 30px;
             color: #333;
         }
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .logo {
-            width: 80px;
-            height: auto;
-        }
         h1 {
             text-align: center;
             color: #040035ff;
-            margin: 0;
+            margin: 0 0 15px 0;
             font-size: 18px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
+            margin-top: 10px;
         }
         th, td {
             border: 1px solid #333;
@@ -51,15 +41,16 @@
             font-size: 10px;
             color: #666;
         }
+        .info {
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
-    <header>
-        <div class="title-container">
-            <img src="{{ public_path('storage/assets/images/logoD.png') }}" class="logo" alt="Logo">
-            <h1>Presupuesto de Tratamiento</h1>
-        </div>
-    </header>
+    <h1>Presupuesto de Tratamiento</h1>
+
+    <p class="info"><strong>Nota:</strong> Los valores presentados a continuación representan un <em>aproximado del costo del tratamiento necesario</em>. Pueden estar sujetos a cambios según el procedimiento final y materiales utilizados.</p>
 
     <p><strong>Paciente:</strong> {{ $treatment->name ?? 'N/A' }}</p>
     <p><strong>CI:</strong> {{ $treatment->ci_patient }}</p>
@@ -107,7 +98,9 @@
             </tr>
         </tbody>
     </table>
-        <p><strong>Detalles:</strong> {{ $treatment->details ?? 'Sin información adicional' }}</p>
+
+    <p><strong>Detalles:</strong> {{ $treatment->details ?? 'Sin información adicional' }}</p>
+
     <footer>
         <p>Fecha de emisión: {{ now()->format('d/m/Y H:i') }}</p>
         <p>Emitido por: <strong>{{ $author }}</strong></p>

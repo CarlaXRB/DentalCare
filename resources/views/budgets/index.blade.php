@@ -43,7 +43,7 @@
             <a href="{{ route('budgets.show', $budget->id) }}" class="flex justify-center hover:text-cyan-600">{{ $budget->procedure }}</a>
         </div>
         <div class="text-center">
-            Bs. {{ number_format($budget->total_amount, 2) }}
+            <a href="{{ route('budgets.show', $budget->id) }}" class="flex justify-center hover:text-cyan-600">Bs. {{ number_format($budget->total_amount, 2) }}</a>
         </div>
         <div class="text-center">
             <a href="{{ route('budgets.show', $budget->id) }}" class="flex justify-center hover:text-cyan-600">{{ $budget->description }}</a>
