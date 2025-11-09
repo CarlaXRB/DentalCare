@@ -35,7 +35,7 @@
 
     <!-- Table body -->
     @forelse($budgets as $budget)
-    <div class="grid grid-cols-6 gap-4 items-center border-b border-gray-200 py-3 text-gray-800 hover:bg-gray-50 transition">
+    <div class="grid grid-cols-5 gap-4 items-center border-b border-gray-200 py-3 text-gray-800 hover:bg-gray-50 transition">
         <div class="text-center">
             <a href="{{ route('budgets.show', $budget->id) }}" class="flex justify-center hover:text-cyan-600">{{ $budget->budget }}</a>
         </div>
@@ -46,12 +46,11 @@
             Bs. {{ number_format($budget->total_amount, 2) }}
         </div>
         <div class="text-center">
-            <a href="{{ route('budgets.show', $budget->id) }}" class="flex justify-center hover:text-cyan-600">{{ $budget->details }}</a>
+            <a href="{{ route('budgets.show', $budget->id) }}" class="flex justify-center hover:text-cyan-600">{{ $budget->description }}</a>
         </div>
         <!-- Actions -->
         <div class="flex justify-center gap-3">
             <a href="{{ route('budgets.edit', $budget->id) }}" class="botton3">{{ __('Editar') }}</a>
-        </div>
         @auth
         @if(Auth::user()->role === 'admin')
         <form method="POST"
