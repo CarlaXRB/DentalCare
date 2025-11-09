@@ -55,9 +55,6 @@
             <div class="flex justify-end">
                 <a href="{{ route('payments.show',$treatment->id) }}" class="botton3">{{ __('Ver Pagos') }}</a>
             </div>
-            <div class="flex justify-center">
-                <a href="{{ asset($treatment->pdf_path) }}" class="botton2">{{ __('Ver PDF') }}</a>
-            </div>
         </div>
         @endforeach
         @endif

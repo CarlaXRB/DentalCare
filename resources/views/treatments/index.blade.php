@@ -26,11 +26,11 @@
 
     @forelse($treatments as $treatment)
     <div class="grid grid-cols-6 gap-4 items-center border-b border-gray-200 py-3 text-gray-800 hover:bg-gray-50 transition text-center">
-        <div class="text-center">{{ $treatment->name ?? 'N/A' }}</div>
-        <div class="text-center">{{ $treatment->ci_patient ?? 'N/A' }}</div>
-        <div class="text-center">Bs. {{ number_format($treatment->total_amount, 2) }}</div>
-        <div class="text-center">Bs. {{ number_format($treatment->discount, 2) }}</div>
-        <div class="text-center">Bs. {{ number_format($treatment->amount, 2) }}</div>
+        <div><a href="{{ route('payments.show',$treatment->id) }}" class="txt hover:text-cyan-600">{{ $treatment->name ?? 'N/A' }}</a></div>
+        <div><a href="{{ route('payments.show',$treatment->id) }}" class="txt hover:text-cyan-600">{{ $treatment->ci_patient ?? 'N/A' }}</a></div>
+        <div><a href="{{ route('payments.show',$treatment->id) }}" class="txt hover:text-cyan-600">Bs. {{ number_format($treatment->total_amount, 2) }}</a></div>
+        <div><a href="{{ route('payments.show',$treatment->id) }}" class="txt hover:text-cyan-600">Bs. {{ number_format($treatment->discount, 2) }}</a></div>
+        <div><a href="{{ route('payments.show',$treatment->id) }}" class="txt hover:text-cyan-600">Bs. {{ number_format($treatment->amount, 2) }}</a></div>
         <div class="flex justify-end">
             <a href="{{ route('payments.show',$treatment->id) }}" class="botton3">{{ __('Pagos') }}</a>
                 @auth
