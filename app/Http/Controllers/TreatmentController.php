@@ -111,7 +111,7 @@ class TreatmentController extends Controller
         }
         $treatment->delete();
 
-        return redirect()->route('treatments.index')->with('success', 'Tratamiento eliminado con éxito.');
+        return redirect()->route('treatments.index')->with('danger', 'Tratamiento eliminado con éxito.');
     }
     public function search(Request $request)
     {

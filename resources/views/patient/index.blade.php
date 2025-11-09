@@ -19,7 +19,7 @@
 <div class="max-w-6xl mx-auto bg-white rounded-xl p-3 text-gray-900 shadow-md">
     <div class="grid grid-cols-5 gap-4 border-b border-gray-300 pb-2 mb-3">
         <h3 class="title4 text-center">{{ __('Carnet de Identidad') }}</h3>
-        <h3 class="title4 text-center">{{ __('Nombre del Paciente') }}</h3>
+        <h3 class="title4 text-center">{{ __('Nombre') }}</h3>
         <h3 class="title4 text-center">{{ __('Fecha de nacimiento') }}</h3>
         <h3 class="title4 text-center">{{ __('Celular') }}</h3>
     </div>

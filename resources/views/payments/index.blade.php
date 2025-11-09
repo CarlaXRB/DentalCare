@@ -28,7 +28,7 @@
 <!-- Payments table -->
 <div class="max-w-6xl mx-auto bg-white rounded-xl p-3 text-gray-900 shadow-md">
     <!-- Table header -->
-    <div class="grid grid-cols-8 gap-4 border-b border-gray-300 pb-2 mb-3">
+    <div class="grid grid-cols-7 gap-4 border-b border-gray-300 pb-2 mb-3">
         <h3 class="title4 text-center">{{ __('Fecha') }}</h3>
         <h3 class="title4 text-center">{{ __('Nombre') }}</h3>
         <h3 class="title4 text-center">{{ __('C.I.') }}</h3>
@@ -40,7 +40,7 @@
 
     <!-- Table body -->
     @forelse($payments as $p)
-    <div class="grid grid-cols-8 gap-4 items-center border-b border-gray-200 py-3 text-gray-800 hover:bg-gray-50 transition text-center">
+    <div class="grid grid-cols-7 gap-4 items-center border-b border-gray-200 py-3 text-gray-800 hover:bg-gray-50 transition text-center">
         <div><a href="{{ route('payments.show',$p->treatment->id) }}" class="flex justify-center hover:text-cyan-600">{{ $p->created_at->format('d/m/Y H:i') }}</a></div>
         <div><a href="{{ route('payments.show',$p->treatment->id) }}" class="flex justify-center hover:text-cyan-600">{{ $p->treatment->name }}</a></div>
         <div><a href="{{ route('payments.show',$p->treatment->id) }}" class="flex justify-center hover:text-cyan-600">{{ $p->treatment->ci_patient }}</a></div>

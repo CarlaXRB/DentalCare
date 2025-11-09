@@ -175,7 +175,7 @@ class MultimediaFileController extends Controller
             File::deleteDirectory($dir);
         }
         $study->delete();
-        return redirect()->route('multimedia.index')->with('success', 'Estudio eliminado correctamente.');
+        return redirect()->route('multimedia.index')->with('danger', 'Estudio eliminado correctamente.');
     }
     public function search(Request $request)
     {

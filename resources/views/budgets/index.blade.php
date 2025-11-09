@@ -29,8 +29,8 @@
     <div class="grid grid-cols-5 gap-4 border-b border-gray-300 pb-2 mb-3">
         <h3 class="title4 text-center">{{ __('Codigo') }}</h3>
         <h3 class="title4 text-center">{{ __('Procedimiento') }}</h3>
-        <h3 class="title4 text-center">{{ __('Detalles') }}</h3>
         <h3 class="title4 text-center">{{ __('Costo Total') }}</h3>
+        <h3 class="title4 text-center">{{ __('Detalles') }}</h3>
     </div>
 
     <!-- Table body -->
@@ -43,36 +43,35 @@
             <a href="{{ route('budgets.show', $budget->id) }}" class="flex justify-center hover:text-cyan-600">{{ $budget->procedure }}</a>
         </div>
         <div class="text-center">
-            <a href="{{ route('budgets.show', $budget->id) }}" class="flex justify-center hover:text-cyan-600">{{ $budget->details }}</a>
-        </div>
-        <div class="text-center">
             Bs. {{ number_format($budget->total_amount, 2) }}
         </div>
-
+        <div class="text-center">
+            <a href="{{ route('budgets.show', $budget->id) }}" class="flex justify-center hover:text-cyan-600">{{ $budget->details }}</a>
+        </div>
         <!-- Actions -->
         <div class="flex justify-center gap-3">
             <a href="{{ route('budgets.edit', $budget->id) }}" class="botton3">{{ __('Editar') }}</a>
-
-            @auth
-            @if(Auth::user()->role === 'admin')
-            <form method="POST"
-                action="{{ route('budgets.destroy', $budget->id) }}"
-                onsubmit="return confirm('{{ __('¿Estás seguro de que quieres eliminar este presupuesto?') }}');">
-                @csrf
-                @method('DELETE')
-                <input type="submit" value="{{ __('Eliminar') }}" class="bottonDelete cursor-pointer" />
-            </form>
-            @endif
-            @endauth
         </div>
+        @auth
+        @if(Auth::user()->role === 'admin')
+        <form method="POST"
+            action="{{ route('budgets.destroy', $budget->id) }}"
+            onsubmit="return confirm('{{ __('¿Estás seguro de que quieres eliminar este presupuesto?') }}');">
+            @csrf
+            @method('DELETE')
+            <input type="submit" value="{{ __('Eliminar') }}" class="bottonDelete cursor-pointer" />
+        </form>
+        @endif
+        @endauth
     </div>
-    @empty
-    <p class="text-gray-600 text-center py-4">{{ __('Aún no hay presupuestos registrados.') }}</p>
-    @endforelse
+</div>
+@empty
+<p class="text-gray-600 text-center py-4">{{ __('Aún no hay presupuestos registrados.') }}</p>
+@endforelse
 
-    <!-- Pagination -->
-    <div class="pt-4">
-        {{ $budgets->links() }}
-    </div>
+<!-- Pagination -->
+<div class="pt-4">
+    {{ $budgets->links() }}
+</div>
 </div>
 @endsection

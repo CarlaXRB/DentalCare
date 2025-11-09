@@ -41,6 +41,7 @@
         @else
         <div class="grid grid-cols-6 gap-4 font-semibold border-b border-gray-300 pb-2 mb-2">
             <span class="title3">{{ __('C.I.') }}</span>
+            <span class="title3">{{ __('Nombre') }}</span>
             <span class="title3">{{ __('Total') }}</span>
             <span class="title3">{{ __('Descuento') }}</span>
             <span class="title3">{{ __('Costo Final') }}</span>
@@ -49,6 +50,7 @@
         @foreach($patient->treatments as $treatment)
         <div class=" grid grid-cols-6 gap-4 items-center border-b border-gray-200 mb-2 p-2">
             <div class="flex text-center"><span class="txt">{{ $treatment->ci_patient ?? 'N/A' }}</span></div>
+            <div class="flex text-center"><span class="txt">{{ $treatment->name ?? 'N/A' }}</span></div>
             <div class="flex text-center"><span class="txt">Bs. {{ number_format($treatment->total_amount, 2) }}</span></div>
             <div class="flex text-center"><span class="txt">Bs. {{ number_format($treatment->discount, 2) }}</span></div>
             <div class="flex text-center"><span class="txt">Bs. {{ number_format($treatment->amount, 2) }}</span></div>
@@ -81,7 +83,7 @@
             <div class="flex justify-center"><span class="txt">{{ $event->assignedDoctor->name ?? __('Not assigned') }}</span></div>
             <div class="flex justify-center"><span class="txt">{{ $event->room }}</span></div>
             <div class="flex justify-center">
-                <a href="{{ route('events.show', $event->id ) }}" class="botton3">{{ __('Detalles') }}</a>
+                <a href="{{ route('events.show', $event->id ) }}" class="botton2">{{ __('Detalles') }}</a>
             </div>
         </div>
         @endforeach

@@ -54,7 +54,7 @@ class PaymentController extends Controller
     {
         $payment = Payment::where('treatment_id', $treatment_id)->findOrFail($id);
         $payment->delete();
-        return back()->with('success', 'Pago eliminado correctamente.');
+        return back()->with('danger', 'Pago eliminado correctamente.');
     }
     public function search(Request $request, $treatment_id = null)
     {

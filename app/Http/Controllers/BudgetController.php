@@ -52,7 +52,7 @@ class BudgetController extends Controller
     public function destroy(Budget $budget){
         $budget->delete();
         return redirect()->route('budgets.index')
-            ->with('success', 'Presupuesto eliminado exitosamente.');
+            ->with('danger', 'Presupuesto eliminado exitosamente.');
     }
     public function search(Request $request) {
         $search = $request->input('search');
