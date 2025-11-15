@@ -29,10 +29,11 @@ class AdminUserController extends Controller
     {
         if (Auth::user()->role === 'superadmin') {
             $clinics = Clinic::all();
+            return view('admin.create', compact('clinics'));
         } else {
             $clinics = Clinic::where('id', Auth::user()->clinic_id)->get();
         }
-        return view('admin.create', compact('clinics'));
+        return view('admin.create');
     }
     public function store(Request $request)
     {
