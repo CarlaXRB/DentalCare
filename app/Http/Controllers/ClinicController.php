@@ -30,24 +30,26 @@ class ClinicController extends Controller
             'rooms_count' => 'required|integer|min:1',
         ]);
 
-        // Ruta de almacenamiento seguro en storage/app/public/logos
         $storagePath = storage_path('app/public/logos');
-
         if (!File::exists($storagePath)) {
-            File::makeDirectory($storagePath, 0775, true); // crea la carpeta si no existe
+            File::makeDirectory($storagePath, 0775, true);
         }
 
         if ($request->hasFile('logo')) {
             $logo = $request->file('logo');
             $filename = time() . '_' . $logo->getClientOriginalName();
             $logo->move($storagePath, $filename);
-            // Guardamos la ruta relativa que funcionará con el link de storage
             $validated['logo'] = 'storage/logos/' . $filename;
         }
 
         Clinic::create($validated);
 
         return redirect()->route('clinics.index')->with('success', 'Clínica creada exitosamente');
+    }
+
+    public function show(Clinic $clinic){
+        // Retornamos la vista con la clínica específica
+        return view('clinics.show', compact('clinic'));
     }
 
     public function edit(Clinic $clinic){
@@ -64,13 +66,11 @@ class ClinicController extends Controller
         ]);
 
         $storagePath = storage_path('app/public/logos');
-
         if (!File::exists($storagePath)) {
             File::makeDirectory($storagePath, 0775, true);
         }
 
         if ($request->hasFile('logo')) {
-            // Eliminar logo anterior si existe
             if ($clinic->logo) {
                 $oldPath = str_replace('storage/', storage_path('app/public/') , $clinic->logo);
                 if (File::exists($oldPath)) {
@@ -99,10 +99,11 @@ class ClinicController extends Controller
         $clinic->delete();
         return redirect()->route('clinics.index')->with('danger', 'Clínica eliminada');
     }
+
     public function search(Request $request) {
         $search = $request->input('search');
         $clinics = Clinic::where('name', 'LIKE', '%' . $search . '%')
                 ->orWhere('phone', 'LIKE', '%' . $search . '%')->get();
-        return view('clinic.search', compact('clinics'));
+        return view('clinics.search', compact('clinics'));
     }
 }
