@@ -21,6 +21,8 @@ return new class extends Migration
             $table->enum('gender',['Masculino','Femenino']);
             $table->integer('patient_contact');
             $table->foreignId('clinic_id')->constrained();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('edit_by')->nullable();
             $table->timestamps();
         });
     }

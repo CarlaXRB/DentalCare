@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('method')->nullable();
             $table->string('notes')->nullable();
             $table->foreignId('clinic_id')->constrained();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('edit_by')->nullable();
             $table->timestamps();
         });
     }

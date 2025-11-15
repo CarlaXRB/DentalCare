@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->decimal('total_amount', 10, 2);
             $table->foreignId('clinic_id')->constrained();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('edit_by')->nullable();
             $table->timestamps();
         });
     }

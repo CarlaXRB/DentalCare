@@ -46,11 +46,13 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::resource('/patient', PatientController::class);
     Route::post('/search', [PatientController::class, 'search'])->name('patient.search');
 
-    Route::get('admin/users/create', [AdminUserController::class, 'create'])->name('admin.create');
-    Route::post('admin/users/new', [AdminUserController::class, 'store'])->name('admin.store');
-    Route::get('admin/users/list', [AdminUserController::class, 'index'])->name('admin.users');
-    Route::delete('/admin/destroy/{user}', [AdminUserController::class, 'destroy'])->name('admin.destroy');
-    Route::get('/data', [AdminUserController::class, 'data'])->name('admin.data');
+    Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.users');
+    Route::get('/admin/users/create', [AdminUserController::class, 'create'])->name('admin.create');
+    Route::post('/admin/users', [AdminUserController::class, 'store'])->name('admin.store');
+    Route::get('/admin/users/{user}/edit', [AdminUserController::class, 'edit'])->name('admin.edit');
+    Route::put('/admin/users/{user}', [AdminUserController::class, 'update'])->name('admin.update');
+    Route::delete('/admin/users/{user}', [AdminUserController::class, 'destroy'])->name('admin.destroy');
+    Route::get('/admin/users/search', [AdminUserController::class, 'search'])->name('admin.search');
 
     Route::get('/tool', [ToolController::class, 'index'])->name('tool.index');
     Route::post('/tool/new/tool/{tomography_id}/{ci_patient}/{id}', [ToolController::class, 'new'])->name('tool.new');
