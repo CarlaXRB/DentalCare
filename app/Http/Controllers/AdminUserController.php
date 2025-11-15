@@ -18,13 +18,9 @@ class AdminUserController extends Controller
     // Listado de usuarios
     public function index()
     {
-        if (Auth::user()->role === 'superadmin') {
-            $users = User::with('clinic')->simplePaginate(10);
-        } else {
-            $users = User::with('clinic')
-                ->where('clinic_id', Auth::user()->clinic_id)
-                ->simplePaginate(10);
-        }
+        $users = Auth::user()->role === 'superadmin'
+            ? User::with('clinic')->simplePaginate(10)
+            : User::with('clinic')->where('clinic_id', Auth::user()->clinic_id)->simplePaginate(10);
 
         return view('admin.users', compact('users'));
     }
@@ -32,13 +28,8 @@ class AdminUserController extends Controller
     // Formulario de creación
     public function create()
     {
-        if (Auth::user()->role === 'superadmin') {
-            $clinics = Clinic::all();
-            return view('admin.create', compact('clinics'));
-        }
-
-        // Para admin normal, no mostrar select de clínica
-        return view('admin.create');
+        $clinics = Auth::user()->role === 'superadmin' ? Clinic::all() : collect();
+        return view('admin.create', compact('clinics'));
     }
 
     // Almacenar nuevo usuario
@@ -56,8 +47,7 @@ class AdminUserController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'ci' => $validated['ci'],
-            // La contraseña se asigna automáticamente igual al CI
-            'password' => Hash::make($validated['ci']),
+            'password' => Hash::make($validated['ci']), // Contraseña = CI
             'role' => $validated['rol'],
             'clinic_id' => Auth::user()->role === 'superadmin'
                 ? ($validated['clinic_id'] ?? null)
@@ -77,13 +67,8 @@ class AdminUserController extends Controller
             abort(403, 'No tienes permiso para editar este usuario');
         }
 
-        if (Auth::user()->role === 'superadmin') {
-            $clinics = Clinic::all();
-            return view('admin.edit', compact('user', 'clinics'));
-        }
-
-        // Para admin normal, no mostrar select de clínica
-        return view('admin.edit', compact('user'));
+        $clinics = Auth::user()->role === 'superadmin' ? Clinic::all() : collect();
+        return view('admin.edit', compact('user', 'clinics'));
     }
 
     // Actualizar usuario
@@ -120,16 +105,16 @@ class AdminUserController extends Controller
         return redirect()->route('admin.users')
             ->with('success', 'Usuario actualizado correctamente');
     }
+
+    // Mostrar usuario
     public function show(User $user)
     {
-        // Validación de permisos: los admins solo pueden ver usuarios de su clínica
         if (Auth::user()->role !== 'superadmin' && $user->clinic_id !== Auth::user()->clinic_id) {
             abort(403, 'No tienes permiso para ver este usuario');
         }
 
         return view('admin.show', compact('user'));
     }
-
 
     // Eliminar usuario
     public function destroy(User $user)
@@ -152,8 +137,8 @@ class AdminUserController extends Controller
         $users = User::with('clinic')
             ->where(function ($q) use ($query) {
                 $q->where('name', 'like', "%{$query}%")
-                    ->orWhere('email', 'like', "%{$query}%")
-                    ->orWhere('ci', 'like', "%{$query}%");
+                  ->orWhere('email', 'like', "%{$query}%")
+                  ->orWhere('ci', 'like', "%{$query}%");
             });
 
         if (Auth::user()->role !== 'superadmin') {
