@@ -98,4 +98,5 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/multimedia/{id}/measure', [MultimediaFileController::class, 'measure'])->name('multimedia.measure');
     Route::get('/multimedia/tool/{id}', [MultimediaFileController::class, 'tool'])->name('multimedia.tool');
     Route::resource('clinics', ClinicController::class);
+    Route::post('/clinics-search', [ClinicController::class, 'search'])->name('clinics.search');
 });

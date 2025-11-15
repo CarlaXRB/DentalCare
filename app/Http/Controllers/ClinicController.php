@@ -99,4 +99,10 @@ class ClinicController extends Controller
         $clinic->delete();
         return redirect()->route('clinics.index')->with('danger', 'Clínica eliminada');
     }
+    public function search(Request $request) {
+        $search = $request->input('search');
+        $clinics = Clinic::where('name', 'LIKE', '%' . $search . '%')
+                ->orWhere('phone', 'LIKE', '%' . $search . '%')->get();
+        return view('clinic.search', compact('clinics'));
+    }
 }
