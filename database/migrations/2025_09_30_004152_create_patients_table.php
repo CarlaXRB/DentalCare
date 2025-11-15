@@ -18,8 +18,9 @@ return new class extends Migration
             $table->string('name_patient');
             $table->unsignedBigInteger('ci_patient')->unique();
             $table->date('birth_date');
-            $table->enum('gender',['masculino','femenino']);
+            $table->enum('gender',['Masculino','Femenino']);
             $table->integer('patient_contact');
+            $table->foreignId('clinic_id')->constrained();
             $table->timestamps();
         });
     }

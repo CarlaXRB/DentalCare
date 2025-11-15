@@ -9,19 +9,19 @@
     <!-- Search form -->
     <form method="POST" action="{{ route('budgets.search') }}" class="flex gap-3 items-center">
         @csrf
-        <input type="text" name="search" placeholder="{{ __('Buscar presupuesto...') }}"
+        <input type="text" name="search" placeholder="{{ __('Buscar tratamiento...') }}"
             class="px-4 py-2 rounded-full border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-cyan-500" />
         <input class="botton2" type="submit" value="{{ __('Buscar') }}" />
     </form>
 
     <!-- Create budget button -->
     <div class="flex justify-end">
-        <a href="{{ route('budgets.create') }}" class="botton1">{{ __('Crear Presupuesto') }}</a>
+        <a href="{{ route('budgets.create') }}" class="botton1">{{ __('Crear Tratamiento') }}</a>
     </div>
 </div>
 
 <!-- Main title -->
-<h1 class="title1 text-center">{{ __('Lista de Presupuestos') }}</h1>
+<h1 class="title1 text-center">{{ __('Lista de Tratamientos') }}</h1>
 
 <!-- Budgets table -->
 <div class="max-w-6xl mx-auto bg-white rounded-xl p-3 text-gray-900 shadow-md">

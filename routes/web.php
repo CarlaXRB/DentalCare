@@ -11,9 +11,12 @@ use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\TreatmentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\MultimediaFileController;
+use App\Http\Controllers\ClinicController;
 use App\Models\Patient;
 
-Route::get('/', function () { return view('welcome'); });
+Route::get('/', function () {
+    return view('welcome');
+});
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     Route::get('/dashboard', function () {
@@ -33,6 +36,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
                 return view('dashboard.user')->with('error', 'No tienes información de paciente asociada.');
             }
             return view('dashboard.user', compact('patient'));
+        } elseif ($user->role === 'superadmin') {
+            return view('dashboard.superadmin');
         } else {
             abort(403, 'Rol no permitido.');
         }
@@ -89,12 +94,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
     Route::resource('multimedia', MultimediaFileController::class);
     Route::post('multimedia/search', [MultimediaFileController::class, 'search'])->name('multimedia.search');
-    Route::get('/multimedia/image/{studyCode}/{fileName}', [MultimediaFileController::class, 'serveImage'])
-        ->where('fileName', '.*')->name('multimedia.image');
-    Route::get('/multimedia/{id}/measure', [MultimediaFileController::class, 'measure'])
-    ->name('multimedia.measure');
-    Route::get('/multimedia/tool/{id}', [MultimediaFileController::class, 'tool'])
-    ->name('multimedia.tool');
+    Route::get('/multimedia/image/{studyCode}/{fileName}', [MultimediaFileController::class, 'serveImage'])->where('fileName', '.*')->name('multimedia.image');
+    Route::get('/multimedia/{id}/measure', [MultimediaFileController::class, 'measure'])->name('multimedia.measure');
+    Route::get('/multimedia/tool/{id}', [MultimediaFileController::class, 'tool'])->name('multimedia.tool');
 
+    Route::middleware(['auth', 'role:superadmin'])->group(function () {
+        Route::resource('clinics', ClinicController::class);
+    });
 });
-

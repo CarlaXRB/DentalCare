@@ -8,7 +8,7 @@
     <!-- Buscador -->
     <form method="POST" action="{{ route('budgets.search') }}" class="flex gap-3 items-center">
         @csrf
-        <input type="text" name="search" placeholder="{{ __('Buscar presupuesto...') }}" 
+        <input type="text" name="search" placeholder="{{ __('Buscar tratamiento...') }}" 
             class="px-4 py-2 rounded-full border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
         <input class="botton2" type="submit" value="{{ __('Buscar') }}" />
     </form>
@@ -66,7 +66,7 @@
         </div>
     </div>
     @empty
-    <p class="text-gray-600 text-center py-4">{{ __('No results found for your search.') }}</p>
+    <p class="text-gray-600 text-center py-4">{{ __('No se encontraron resultados para la búsqueda.') }}</p>
     @endforelse
 </div>
 @endsection

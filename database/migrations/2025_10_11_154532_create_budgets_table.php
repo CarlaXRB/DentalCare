@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('procedure')->nullable();
             $table->string('description')->nullable();
             $table->decimal('total_amount', 10, 2);
+            $table->foreignId('clinic_id')->constrained();
             $table->timestamps();
         });
     }

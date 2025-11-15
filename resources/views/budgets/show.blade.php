@@ -5,13 +5,13 @@
 @endsection
 @section('content')
 <div class="flex justify-end pt-5 pr-5">
-    <a href="{{ route('budgets.index')}}" class="botton1">{{ __('Presupuestos') }}</a>
+    <a href="{{ route('budgets.index')}}" class="botton1">{{ __('Tratamientos') }}</a>
 </div>
 
 <!-- Contenedor principal -->
 <div class="max-w-5xl pt-2 mx-auto bg-white rounded-xl p-8 text-gray-900">
     <div class="mt-10 mb-5">
-        <h1 class="title1 text-center pb-5">{{ __('Información del Presupuesto') }}</h1>
+        <h1 class="title1 text-center pb-5">{{ __('Información del Tratamiento') }}</h1>
     </div>
 
     <!-- Información general del presupuesto -->
@@ -24,7 +24,7 @@
 
     <!-- Botón presupuesto de tratamiento -->
     <div class="flex justify-center mt-8">
-        <a href="{{ route('treatments.create', $budget->id) }}" class="botton3">{{ __('Crear Tratamiento') }}</a>
+        <a href="{{ route('treatments.create', $budget->id) }}" class="botton3">{{ __('Crear Presupuesto') }}</a>
     </div>
 </div>
 @endsection

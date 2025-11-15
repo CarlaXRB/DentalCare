@@ -9,7 +9,7 @@
     <!-- Search form -->
     <form method="POST" action="{{ route('treatments.search') }}" class="flex gap-3 items-center">
         @csrf
-        <input type="text" name="search" placeholder="{{ __('Search treatment...') }}" 
+        <input type="text" name="search" placeholder="{{ __('Buscar presupuesto...') }}" 
             class="px-4 py-2 rounded-full border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
         <input class="botton2" type="submit" value="{{ __('Buscar') }}" />
     </form>

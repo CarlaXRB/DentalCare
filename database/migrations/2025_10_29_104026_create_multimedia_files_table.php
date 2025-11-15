@@ -23,6 +23,7 @@ return new class extends Migration
             $table->text('study_uri');
             $table->string('description')->nullable();
             $table->integer('image_count')->default(0);
+            $table->foreignId('clinic_id')->constrained();
             $table->timestamps();
         });
     }

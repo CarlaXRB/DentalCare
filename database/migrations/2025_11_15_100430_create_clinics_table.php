@@ -13,14 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('payments', function (Blueprint $table) {
+        Schema::create('clinics', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('treatment_id')->constrained()->cascadeOnDelete();
-            $table->decimal('amount', 10, 2);
-            $table->date('payment_date')->default(now());
-            $table->string('method')->nullable();
-            $table->string('notes')->nullable();
-            $table->foreignId('clinic_id')->constrained();
+            $table->string('name');
+            $table->string('address')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('logo')->nullable();
+            $table->integer('rooms_count')->default(1);
             $table->timestamps();
         });
     }
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payments');
+        Schema::dropIfExists('clinics');
     }
 };

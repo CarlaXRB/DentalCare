@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-                        $table->string('event');
+            $table->string('event');
             $table->datetime('start_date');
             $table->datetime('end_date');
             $table->integer('duration_minutes');
-            $table->enum('room', ['Consultorio 1', 'Consultorio 2']);
+            $table->string('room')->nullable();
             $table->string('details')->nullable();
             $table->unsignedBigInteger('patient_id')->nullable();
             $table->unsignedBigInteger('assigned_doctor')->nullable();
@@ -28,6 +28,7 @@ return new class extends Migration
             $table->foreign('assigned_doctor')->references('id')->on('users')->nullOnDelete();
             $table->foreign('assigned_radiologist')->references('id')->on('users')->nullOnDelete();
             $table->unsignedBigInteger('created_by')->nullable();
+            $table->foreignId('clinic_id')->constrained();
             $table->timestamps();
         });
     }

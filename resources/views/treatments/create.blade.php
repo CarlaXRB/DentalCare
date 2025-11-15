@@ -7,13 +7,13 @@
 
 {{-- Button to go back --}}
 <div class="flex justify-end p-5 pb-1">
-    <a href="{{ route('treatments.index') }}" class="botton1">{{ __('Tratamientos') }}</a>
+    <a href="{{ route('treatments.index') }}" class="botton1">{{ __('Presupuestos') }}</a>
 </div>
 
 <div class="bg-white rounded-lg max-w-5xl mx-auto p-5">
     <form method="POST" id="treatmentForm" action="{{ route('treatments.store') }}" enctype="multipart/form-data" id="treatmentForm">
         @csrf
-        <h1 class="title1 text-center mb-8">{{ __('Información del tratamiento') }}</h1>
+        <h1 class="title1 text-center mb-8">{{ __('Información del Presupuesto') }}</h1>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
                 <label class="title4 block mb-2">{{ __('Nombre del paciente') }}:</label>
@@ -82,7 +82,7 @@
                 @error('details') <p class="error mt-1">{{ $message }}</p> @enderror
         </div>
         <div class="flex justify-center gap-4 mt-6">
-            <button type="submit" class="botton2">{{ __('Crear Tratamiento') }}</button>
+            <button type="submit" class="botton2">{{ __('Crear Presupuesto') }}</button>
         </div>
     </form>
 </div>

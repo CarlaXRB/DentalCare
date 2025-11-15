@@ -5,15 +5,15 @@
 <div class="flex justify-between items-center p-5 pb-1">
     <form method="POST" action="{{ route('treatments.search') }}" class="flex gap-3 items-center">
         @csrf
-        <input type="text" name="search" placeholder="{{ __('Buscar tratamiento...') }}" 
+        <input type="text" name="search" placeholder="{{ __('Buscar presupuesto...') }}" 
             class="px-4 py-2 rounded-full border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
         <input class="botton2" type="submit" value="{{ __('Buscar') }}" />
     </form>
     <div class="flex justify-end">
-        <a href="{{ route('treatments.create') }}" class="botton1">{{ __('Crear tratamiento') }}</a>
+        <a href="{{ route('treatments.create') }}" class="botton1">{{ __('Crear Presupuesto') }}</a>
     </div>
 </div>
-<h1 class="title1 text-center">{{ __('Lista de tratamientos') }}</h1>
+<h1 class="title1 text-center">{{ __('Lista de Presupuestos') }}</h1>
 <div class="max-w-6xl mx-auto bg-white rounded-xl p-3 text-gray-900">
 
     <div class="grid grid-cols-6 gap-4 border-b border-gray-300 pb-2 mb-3 text-center font-semibold">
@@ -47,7 +47,7 @@
         </div>
     </div>
     @empty
-    <p class="text-gray-600 text-center py-4">{{ __('Aún no hay tratamientos registrados.') }}</p>
+    <p class="text-gray-600 text-center py-4">{{ __('Aún no hay presupuestos registrados.') }}</p>
     @endforelse
     <div class="pt-4">
         {{ $treatments->links() }}

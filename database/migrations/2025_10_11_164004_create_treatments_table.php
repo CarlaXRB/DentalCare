@@ -23,6 +23,7 @@ return new class extends Migration
             $table->decimal('amount', 10, 2)->default(0);
             $table->string('pdf_path')->nullable();
             $table->string('details')->nullable();
+            $table->foreignId('clinic_id')->constrained();
             $table->timestamps();
         });
     }

@@ -7,14 +7,14 @@
 
 {{-- Button to go back --}}
 <div class="flex justify-end p-5 pb-1">
-    <a href="{{ route('budgets.index') }}" class="botton1">{{ __('Presupuestos') }}</a>
+    <a href="{{ route('budgets.index') }}" class="botton1">{{ __('Tratamientos') }}</a>
 </div>
 
 <div class="bg-white rounded-lg max-w-5xl mx-auto">
     <form method="POST" action="{{ route('budgets.update', $budget->id) }}">
         @csrf
         @method('PUT')
-        <h1 class="title1 text-center mb-8">{{ __('Información del Presupuesto') }}</h1>
+        <h1 class="title1 text-center mb-8">{{ __('Información del tratamiento') }}</h1>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
                 <label class="title4 block mb-2">{{ __('Código') }}:</label>

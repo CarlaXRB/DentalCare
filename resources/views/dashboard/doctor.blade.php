@@ -26,8 +26,8 @@
                             class="flex items-center p-6 bg-gray-20 rounded-2xl shadow-md hover:shadow-xl transition transform hover:scale-105 duration-300">
                             <img src="{{ asset('assets/images/budget.png') }}" alt="Presupuestos" class="w-32 h-32 object-contain mr-6">
                             <div>
-                                <h5 class="text-2xl font-semibold text-blue-600">{{ __('Tratamientos') }}</h5>
-                                <p class="text-gray-600 mt-2 text-sm">{{ __('Cree y gestione tratamientos de manera eficiente.') }}</p>
+                                <h5 class="text-2xl font-semibold text-blue-600">{{ __('Presupuestos') }}</h5>
+                                <p class="text-gray-600 mt-2 text-sm">{{ __('Cree y gestione presupuestos de manera eficiente.') }}</p>
                             </div>
                         </a>
 

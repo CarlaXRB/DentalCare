@@ -28,6 +28,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'clinic_id',
     ];
 
     /**
@@ -59,4 +60,9 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function clinic()
+    {
+        return $this->belongsTo(Clinic::class);
+    }
 }
