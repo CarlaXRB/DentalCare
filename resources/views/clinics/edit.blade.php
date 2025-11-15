@@ -48,7 +48,7 @@
                 <label class="title4 block mb-2">{{ __('Logo') }}:</label>
                 @if($clinic->logo)
                     <div class="mb-2">
-                        <img src="{{ asset('storage/' . $clinic->logo) }}" alt="Logo" class="h-20">
+                        <img src="{{ asset($clinic->logo) }}" alt="Logo" class="h-20">
                     </div>
                 @endif
                 <input type="file" name="logo" 
