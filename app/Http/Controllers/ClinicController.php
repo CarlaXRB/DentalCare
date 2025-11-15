@@ -30,13 +30,23 @@ class ClinicController extends Controller
             'rooms_count' => 'required|integer|min:1',
         ]);
 
+        // Ruta de almacenamiento seguro en storage/app/public/logos
+        $storagePath = storage_path('app/public/logos');
+
+        if (!File::exists($storagePath)) {
+            File::makeDirectory($storagePath, 0775, true); // crea la carpeta si no existe
+        }
+
         if ($request->hasFile('logo')) {
             $logo = $request->file('logo');
             $filename = time() . '_' . $logo->getClientOriginalName();
-            $logo->move(public_path('logos'), $filename);
-            $validated['logo'] = 'logos/' . $filename;
+            $logo->move($storagePath, $filename);
+            // Guardamos la ruta relativa que funcionará con el link de storage
+            $validated['logo'] = 'storage/logos/' . $filename;
         }
+
         Clinic::create($validated);
+
         return redirect()->route('clinics.index')->with('success', 'Clínica creada exitosamente');
     }
 
@@ -53,22 +63,38 @@ class ClinicController extends Controller
             'rooms_count' => 'required|integer|min:1',
         ]);
 
+        $storagePath = storage_path('app/public/logos');
+
+        if (!File::exists($storagePath)) {
+            File::makeDirectory($storagePath, 0775, true);
+        }
+
         if ($request->hasFile('logo')) {
-            if ($clinic->logo && File::exists(public_path($clinic->logo))) {
-                File::delete(public_path($clinic->logo));
+            // Eliminar logo anterior si existe
+            if ($clinic->logo) {
+                $oldPath = str_replace('storage/', storage_path('app/public/') , $clinic->logo);
+                if (File::exists($oldPath)) {
+                    File::delete($oldPath);
+                }
             }
+
             $logo = $request->file('logo');
             $filename = time() . '_' . $logo->getClientOriginalName();
-            $logo->move(public_path('logos'), $filename);
-            $validated['logo'] = 'logos/' . $filename;
+            $logo->move($storagePath, $filename);
+            $validated['logo'] = 'storage/logos/' . $filename;
         }
+
         $clinic->update($validated);
+
         return redirect()->route('clinics.index')->with('success', 'Clínica actualizada exitosamente');
     }
 
     public function destroy(Clinic $clinic){
-        if ($clinic->logo && File::exists(public_path($clinic->logo))) {
-            File::delete(public_path($clinic->logo));
+        if ($clinic->logo) {
+            $oldPath = str_replace('storage/', storage_path('app/public/') , $clinic->logo);
+            if (File::exists($oldPath)) {
+                File::delete($oldPath);
+            }
         }
         $clinic->delete();
         return redirect()->route('clinics.index')->with('danger', 'Clínica eliminada');
