@@ -97,8 +97,5 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/multimedia/image/{studyCode}/{fileName}', [MultimediaFileController::class, 'serveImage'])->where('fileName', '.*')->name('multimedia.image');
     Route::get('/multimedia/{id}/measure', [MultimediaFileController::class, 'measure'])->name('multimedia.measure');
     Route::get('/multimedia/tool/{id}', [MultimediaFileController::class, 'tool'])->name('multimedia.tool');
-
-    Route::middleware(['auth', 'role:superadmin'])->group(function () {
-        Route::resource('clinics', ClinicController::class);
-    });
+    Route::resource('clinics', ClinicController::class);
 });
