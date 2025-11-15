@@ -12,7 +12,7 @@
 </div>
 
 <div class="bg-white rounded-lg max-w-5xl mx-auto">
-    <form method="POST" action="{{ route('admin.update', $user->id) }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('admin.update', $user->id) }}">
         @csrf
         @method('PUT')
         <h1 class="title1 text-center mb-8">{{ __('Editar Información del Usuario') }}</h1>
@@ -35,7 +35,17 @@
                 @error('email') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
 
-            {{-- Clínica --}}
+            {{-- CI --}}
+            <div>
+                <label class="title4 block mb-2">{{ __('CI del Usuario') }}:</label>
+                <input type="text" name="ci" value="{{ old('ci', $user->ci) }}" 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white" required/>
+                <p class="text-sm text-gray-500 mt-1">{{ __('La contraseña se asignará automáticamente igual al CI si se actualiza') }}</p>
+                @error('ci') <p class="error mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            {{-- Clínica (solo superadmin) --}}
+            @if(Auth::user()->role === 'superadmin')
             <div>
                 <label class="title4 block mb-2">{{ __('Clínica') }}:</label>
                 <select name="clinic_id" class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white">
@@ -48,6 +58,7 @@
                 </select>
                 @error('clinic_id') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
+            @endif
 
             {{-- Rol --}}
             <div>
@@ -63,7 +74,7 @@
             {{-- Contraseña opcional --}}
             <div class="md:col-span-2">
                 <label class="title4 block mb-2">{{ __('Contraseña (opcional)') }}:</label>
-                <input type="password" name="password" placeholder="{{ __('Dejar vacío si no desea cambiarla') }}" 
+                <input type="password" name="password" placeholder="{{ __('Dejar vacío si no desea cambiarla, o se actualizará automáticamente igual al CI') }}" 
                     class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white"/>
                 @error('password') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
