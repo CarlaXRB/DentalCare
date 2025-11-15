@@ -5,8 +5,8 @@
 @endsection
 
 @section('content')
-<div class="flex justify-between items-center p-5 pb
-    <form method="POST" action="{{ route('c</a>ics.search') }}" class="flex gap-3 items-center">
+<div class="flex justify-between items-center p-5 pb">
+    <form method="POST" action="{{ route('clinics.search') }}" class="flex gap-3 items-center">
         @csrf
         <input type="text" name="search" placeholder="{{ __('Buscar clínica...') }}" 
             class="px-4 py-2 rounded-full border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-cyan-500"/>
