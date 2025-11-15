@@ -20,7 +20,8 @@ class UserSeeder extends Seeder
             ['email' => 'superadmin@dentalcare.com'],
             [
                 'name' => 'Super Admin',
-                'password' => Hash::make('carlarendon'),
+                'ci' => '8671485',
+                'password' => Hash::make('8671485'),
                 'role' => 'superadmin',
             ]
         );
