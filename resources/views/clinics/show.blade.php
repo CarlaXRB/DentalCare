@@ -15,6 +15,7 @@
 
     @isset($clinic)
     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 pb-5 text-black dark:text-white">
+
         <div class="flex gap-2">
             <h3 class="title4">{{ __('Nombre:') }}</h3>
             <span class="txt">{{ $clinic->name }}</span>
@@ -37,13 +38,15 @@
 
         <div class="flex gap-2 items-center">
             <h3 class="title4">{{ __('Logo:') }}</h3>
-            @if($clinic->logo && file_exists(public_path($clinic->logo)))
-                <img src="{{ asset($clinic->logo) }}" 
-                     alt="{{ $clinic->name }}" 
+
+            @if($clinic->logo)
+                <img src="{{ asset($clinic->logo) }}"
+                     alt="{{ $clinic->name }}"
                      class="h-24 w-24 object-contain rounded shadow" />
             @else
                 <span class="txt">{{ __('No disponible') }}</span>
             @endif
+
         </div>
     </div>
 
@@ -59,6 +62,7 @@
             <button type="submit" class="bottonDelete cursor-pointer">{{ __('Eliminar Clínica') }}</button>
         </form>
     </div>
+
     @else
         <p class="text-center text-gray-500">{{ __('La información de la clínica no está disponible.') }}</p>
     @endisset
