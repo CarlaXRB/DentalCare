@@ -8,20 +8,24 @@ use Illuminate\Support\Facades\File;
 
 class ClinicController extends Controller
 {
-    public function __construct(){
+    public function __construct()
+    {
         $this->middleware('auth');
     }
 
-    public function index(){
+    public function index()
+    {
         $clinics = Clinic::paginate(10);
         return view('clinics.index', compact('clinics'));
     }
 
-    public function create(){
+    public function create()
+    {
         return view('clinics.create');
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
@@ -47,16 +51,19 @@ class ClinicController extends Controller
         return redirect()->route('clinics.index')->with('success', 'Clínica creada exitosamente');
     }
 
-    public function show(Clinic $clinic){
+    public function show(Clinic $clinic)
+    {
         // Retornamos la vista con la clínica específica
         return view('clinics.show', compact('clinic'));
     }
 
-    public function edit(Clinic $clinic){
+    public function edit(Clinic $clinic)
+    {
         return view('clinics.edit', compact('clinic'));
     }
 
-    public function update(Request $request, Clinic $clinic){
+    public function update(Request $request, Clinic $clinic)
+    {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
@@ -72,7 +79,7 @@ class ClinicController extends Controller
 
         if ($request->hasFile('logo')) {
             if ($clinic->logo) {
-                $oldPath = str_replace('storage/', storage_path('app/public/') , $clinic->logo);
+                $oldPath = str_replace('storage/', storage_path('app/public/'), $clinic->logo);
                 if (File::exists($oldPath)) {
                     File::delete($oldPath);
                 }
@@ -89,9 +96,10 @@ class ClinicController extends Controller
         return redirect()->route('clinics.index')->with('success', 'Clínica actualizada exitosamente');
     }
 
-    public function destroy(Clinic $clinic){
+    public function destroy(Clinic $clinic)
+    {
         if ($clinic->logo) {
-            $oldPath = str_replace('storage/', storage_path('app/public/') , $clinic->logo);
+            $oldPath = str_replace('storage/', storage_path('app/public/'), $clinic->logo);
             if (File::exists($oldPath)) {
                 File::delete($oldPath);
             }
@@ -100,10 +108,11 @@ class ClinicController extends Controller
         return redirect()->route('clinics.index')->with('danger', 'Clínica eliminada');
     }
 
-    public function search(Request $request) {
+    public function search(Request $request)
+    {
         $search = $request->input('search');
-        $clinics = Clinic::where('name', 'LIKE', '%' . $search . '%')
-                ->orWhere('phone', 'LIKE', '%' . $search . '%')->get();
+        $clinics = Clinic::where('name', 'LIKE', "%$search%")
+            ->orWhere('phone', 'LIKE', "%$search%")->paginate(10)->withQueryString();
         return view('clinics.search', compact('clinics'));
     }
 }
