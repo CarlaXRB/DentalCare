@@ -27,7 +27,7 @@ class ClinicController extends Controller
             'address' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:20',
             'logo' => 'nullable|image|max:1024',
-            'rooms' => 'required|integer|min:1',
+            'rooms_count' => 'required|integer|min:1',
         ]);
 
         if ($request->hasFile('logo')) {
@@ -50,7 +50,7 @@ class ClinicController extends Controller
             'address' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:20',
             'logo' => 'nullable|image|max:1024',
-            'rooms' => 'required|integer|min:1',
+            'rooms_count' => 'required|integer|min:1',
         ]);
 
         if ($request->hasFile('logo')) {
