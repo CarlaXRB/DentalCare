@@ -25,15 +25,9 @@ class PatientController extends Controller
     public function store(PatientRequest $request): RedirectResponse
     {
         $data = $request->validated();
-
-        // 👇 Asignamos automáticamente la clínica del usuario
         $data['clinic_id'] = Auth::user()->clinic_id;
-
-        // 👇 Usuario creador
         $data['created_by'] = Auth::id();
-
         Patient::create($data);
-
         return redirect()->route('patient.index')
             ->with('success', 'Paciente creado correctamente');
     }
@@ -51,12 +45,8 @@ class PatientController extends Controller
     public function update(PatientRequest $request, Patient $patient): RedirectResponse
     {
         $data = $request->validated();
-
-        // 👇 Usuario que edita
         $data['edit_by'] = Auth::id();
-
         $patient->update($data);
-
         return redirect()->route('patient.index')
             ->with('success', 'Información actualizada correctamente');
     }
@@ -72,7 +62,6 @@ class PatientController extends Controller
     public function search(Request $request)
     {
         $search = $request->input('search');
-
         $patients = Patient::where('name_patient', 'LIKE', '%' . $search . '%')
             ->orWhere('ci_patient', 'LIKE', '%' . $search . '%')
             ->get();

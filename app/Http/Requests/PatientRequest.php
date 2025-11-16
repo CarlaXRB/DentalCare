@@ -33,7 +33,7 @@ class PatientRequest extends FormRequest
                 Rule::unique('patients', 'ci_patient')->ignore($patientId),
             ],
             'birth_date' => 'required|date',
-            'gender' => 'required|in:masculino,femenino',
+            'gender' => 'required|in:Masculino,Femenino',
             'patient_contact' => 'required|numeric',
         ];
     }

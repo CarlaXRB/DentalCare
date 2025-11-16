@@ -6,41 +6,66 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\Clinic;
 
 class Patient extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     use HasFactory;
-    protected $guarded=[];
+    protected $guarded = [];
 
-    public function setNamePatientAttribute($value){
+    public function setNamePatientAttribute($value)
+    {
         $this->attributes['name_patient'] = ucwords(strtolower($value));
     }
-    public function user(){
+    public function user()
+    {
         return $this->hasOne(User::class, 'email', 'email');
     }
-    public function radiographies():HasMany{
+    public function radiographies(): HasMany
+    {
         return $this->hasMany(Radiography::class, 'ci_patient', 'ci_patient');
     }
-    public function tomographies():HasMany{
+    public function tomographies(): HasMany
+    {
         return $this->hasMany(Tomography::class, 'ci_patient', 'ci_patient');
     }
-    public function tools():HasMany{
+    public function tools(): HasMany
+    {
         return $this->hasMany(Tool::class, 'ci_patient', 'ci_patient');
     }
-    public function events():HasMany{
+    public function events(): HasMany
+    {
         return $this->hasMany(Event::class, 'patient_id', 'id');
     }
-    public function reports():HasMany{
+    public function reports(): HasMany
+    {
         return $this->hasMany(Report::class, 'ci_patient', 'ci_patient');
     }
-    public function payments():HasMany{
+    public function payments(): HasMany
+    {
         return $this->hasMany(Payment::class, 'ci_patient', 'ci_patient');
     }
-    public function treatments():HasMany{
+    public function treatments(): HasMany
+    {
         return $this->hasMany(Treatment::class, 'ci_patient', 'ci_patient');
     }
-    public function multimediaFiles():HasMany{
+    public function multimediaFiles(): HasMany
+    {
         return $this->hasMany(Tool::class, 'ci_patient', 'ci_patient');
+    }
+    public function clinic()
+    {
+        return $this->belongsTo(\App\Models\Clinic::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'created_by');
+    }
+
+    public function editor()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'edit_by');
     }
 }
