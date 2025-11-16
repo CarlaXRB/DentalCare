@@ -13,7 +13,18 @@ class PatientController extends Controller
 {
     public function index(): View
     {
-        $patients = Patient::simplePaginate(10);
+        $user = Auth::user();
+
+        if ($user->role === 'superadmin') {
+            // Superadmin ve todos
+            $patients = Patient::orderBy('name_patient', 'ASC')->paginate(10);
+        } else {
+            // Administradores y otros roles ven solo su clínica
+            $patients = Patient::where('clinic_id', $user->clinic_id)
+                ->orderBy('name_patient', 'ASC')
+                ->paginate(10);
+        }
+
         return view('patient.index', compact('patients'));
     }
 
@@ -27,7 +38,9 @@ class PatientController extends Controller
         $data = $request->validated();
         $data['clinic_id'] = Auth::user()->clinic_id;
         $data['created_by'] = Auth::id();
+
         Patient::create($data);
+
         return redirect()->route('patient.index')
             ->with('success', 'Paciente creado correctamente');
     }
@@ -46,7 +59,9 @@ class PatientController extends Controller
     {
         $data = $request->validated();
         $data['edit_by'] = Auth::id();
+
         $patient->update($data);
+
         return redirect()->route('patient.index')
             ->with('success', 'Información actualizada correctamente');
     }
@@ -54,16 +69,31 @@ class PatientController extends Controller
     public function destroy(Patient $patient): RedirectResponse
     {
         $patient->delete();
+
         return redirect()->route('patient.index')
             ->with('danger', 'Registro borrado');
     }
 
-    public function search(Request $request)
+    public function search(Request $request): View
     {
+        $user = Auth::user();
         $search = $request->input('search');
-        $patients = Patient::where('name_patient', 'LIKE', '%' . $search . '%')
-            ->orWhere('ci_patient', 'LIKE', '%' . $search . '%')
-            ->get();
-        return view('patient.search', compact('patients'));
+
+        $query = Patient::query();
+
+        // Filtro de texto
+        $query->where(function($q) use ($search) {
+            $q->where('name_patient', 'LIKE', "%{$search}%")
+              ->orWhere('ci_patient', 'LIKE', "%{$search}%");
+        });
+
+        // Filtro por clínica excepto para superadmin
+        if ($user->role !== 'superadmin') {
+            $query->where('clinic_id', $user->clinic_id);
+        }
+
+        $patients = $query->paginate(10);
+
+        return view('patient.index', compact('patients'));
     }
 }
