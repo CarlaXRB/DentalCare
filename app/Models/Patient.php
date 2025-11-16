@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use App\Models\Clinic;
+use App\Models\User;
 
 class Patient extends Model implements Auditable
 {
@@ -56,16 +57,14 @@ class Patient extends Model implements Auditable
     }
     public function clinic()
     {
-        return $this->belongsTo(\App\Models\Clinic::class);
+        return $this->belongsTo(Clinic::class);
     }
-
     public function creator()
     {
-        return $this->belongsTo(\App\Models\User::class, 'created_by');
+        return $this->belongsTo(User::class, 'created_by');
     }
-
     public function editor()
     {
-        return $this->belongsTo(\App\Models\User::class, 'edit_by');
+        return $this->belongsTo(User::class, 'edit_by');
     }
 }

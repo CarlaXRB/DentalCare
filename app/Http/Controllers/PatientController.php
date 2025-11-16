@@ -54,7 +54,6 @@ class PatientController extends Controller
     public function destroy(Patient $patient): RedirectResponse
     {
         $patient->delete();
-
         return redirect()->route('patient.index')
             ->with('danger', 'Registro borrado');
     }
@@ -65,7 +64,6 @@ class PatientController extends Controller
         $patients = Patient::where('name_patient', 'LIKE', '%' . $search . '%')
             ->orWhere('ci_patient', 'LIKE', '%' . $search . '%')
             ->get();
-
         return view('patient.search', compact('patients'));
     }
 }
