@@ -19,10 +19,10 @@
     </div>
     @forelse($users as $user)
     <div class="grid grid-cols-5 gap-4 items-center border-b border-gray-200 py-3 text-gray-800 hover:bg-gray-50 transition">
-        <div class="text-center"><a href="{{ route('users.show', $user->id) }}" class="flex justify-center hover:text-cyan-600">{{ $user->name }}</a></div>
-        <div class="text-center"><a href="{{ route('users.show', $user->id) }}" class="flex justify-center hover:text-cyan-600">{{ $user->email }}</a></div>
-        <div class="text-center"><a href="{{ route('users.show', $user->id) }}" class="flex justify-center hover:text-cyan-600">{{ ucfirst($user->role) }}</a></div>
-        <div class="text-center"><a href="{{ route('users.show', $user->id) }}" class="flex justify-center hover:text-cyan-600">{{ $user->clinic ? $user->clinic->name : __('Sin clínica') }}</a></div>
+        <div class="text-center"><a href="{{ route('admin.show', $user->id) }}" class="flex justify-center hover:text-cyan-600">{{ $user->name }}</a></div>
+        <div class="text-center"><a href="{{ route('admin.show', $user->id) }}" class="flex justify-center hover:text-cyan-600">{{ $user->email }}</a></div>
+        <div class="text-center"><a href="{{ route('admin.show', $user->id) }}" class="flex justify-center hover:text-cyan-600">{{ ucfirst($user->role) }}</a></div>
+        <div class="text-center"><a href="{{ route('admin.show', $user->id) }}" class="flex justify-center hover:text-cyan-600">{{ $user->clinic ? $user->clinic->name : __('Sin clínica') }}</a></div>
         <div class="flex justify-center gap-3">
             @auth
                 @if(Auth::user()->role === 'admin' || Auth::user()->role === 'superadmin')

@@ -49,8 +49,8 @@
                 <select name="gender"
                     class="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:border-cyan-500 focus:ring focus:ring-cyan-300 focus:ring-opacity-50 transition duration-200 ease-in-out text-gray-700 bg-white" />
                 <option value="">{{ __('-- Select Gender --') }}</option>
-                <option value="femenino" {{ $patient->gender == 'Femenino' ? 'selected' : '' }}>{{ __('Femenino') }}</option>
-                <option value="masculino" {{ $patient->gender == 'Masculino' ? 'selected' : '' }}>{{ __('Masculino') }}</option>
+                <option value="Femenino" {{ $patient->gender == 'Femenino' ? 'selected' : '' }}>{{ __('Femenino') }}</option>
+                <option value="Masculino" {{ $patient->gender == 'Masculino' ? 'selected' : '' }}>{{ __('Masculino') }}</option>
                 </select>
                 @error('gender') <p class="error mt-1">{{ $message }}</p> @enderror
             </div>
@@ -70,4 +70,4 @@
         </div>
     </form>
 </div>
-@endsection
+@endsectionM
